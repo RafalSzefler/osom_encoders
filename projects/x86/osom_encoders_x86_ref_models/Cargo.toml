@@ -1,0 +1,15 @@
+[package]
+name = "osom_encoders_x86_ref_models"
+edition.workspace = true
+authors.workspace = true
+rust-version.workspace = true
+build = "build/main.rs"
+
+[lib]
+crate-type = ["lib"]
+
+[dependencies]
+xsd-parser = { workspace = true }
+
+[build-dependencies]
+xsd-parser = { workspace = true }
