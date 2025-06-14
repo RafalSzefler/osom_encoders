@@ -2,6 +2,10 @@ use crate::models::{EncodedX86Instruction, Immediate8, Immediate16, Immediate32}
 
 use super::helpers::{OPERAND_SIZE_OVERRIDE_PREFIX, REX_W};
 
+/// # Safety
+/// 
+/// This function is unsafe because it doesn't validate the opcode.
+/// It is up to the caller to ensure that the opcode is valid.
 pub const unsafe fn encode_I_imm8<const T: usize>(opcode: [u8; T], imm8: Immediate8) -> EncodedX86Instruction {
     unsafe {
         let mut instr = EncodedX86Instruction::from_array(opcode);
@@ -10,6 +14,10 @@ pub const unsafe fn encode_I_imm8<const T: usize>(opcode: [u8; T], imm8: Immedia
     }
 }
 
+/// # Safety
+/// 
+/// This function is unsafe because it doesn't validate the opcode.
+/// It is up to the caller to ensure that the opcode is valid.
 pub const unsafe fn encode_I_imm16_operand_size_override<const T: usize>(
     opcode: [u8; T],
     imm16: Immediate16,
@@ -22,6 +30,10 @@ pub const unsafe fn encode_I_imm16_operand_size_override<const T: usize>(
     }
 }
 
+/// # Safety
+/// 
+/// This function is unsafe because it doesn't validate the opcode.
+/// It is up to the caller to ensure that the opcode is valid.
 pub const unsafe fn encode_I_imm16<const T: usize>(opcode: [u8; T], imm16: Immediate16) -> EncodedX86Instruction {
     unsafe {
         let mut instr = EncodedX86Instruction::from_array(opcode);
@@ -30,6 +42,10 @@ pub const unsafe fn encode_I_imm16<const T: usize>(opcode: [u8; T], imm16: Immed
     }
 }
 
+/// # Safety
+/// 
+/// This function is unsafe because it doesn't validate the opcode.
+/// It is up to the caller to ensure that the opcode is valid.
 pub const unsafe fn encode_I_imm32<const T: usize>(opcode: [u8; T], imm32: Immediate32) -> EncodedX86Instruction {
     unsafe {
         let mut instr = EncodedX86Instruction::from_array(opcode);
@@ -38,6 +54,10 @@ pub const unsafe fn encode_I_imm32<const T: usize>(opcode: [u8; T], imm32: Immed
     }
 }
 
+/// # Safety
+/// 
+/// This function is unsafe because it doesn't validate the opcode.
+/// It is up to the caller to ensure that the opcode is valid.
 pub const unsafe fn encode_I_imm32_prefix_rex_w<const T: usize>(
     opcode: [u8; T],
     imm32: Immediate32,

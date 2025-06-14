@@ -30,5 +30,6 @@ pub const fn rex(w: u8, r: u8, x: u8, b: u8) -> u8 {
 
 pub const OPERAND_SIZE_OVERRIDE_PREFIX: u8 = 0x66;
 pub const ADDRESS_SIZE_OVERRIDE_PREFIX: u8 = 0x67;
+pub const REX: u8 = rex(0, 0, 0, 0);
 pub const REX_B: u8 = rex(0, 0, 0, 1);
 pub const REX_W: u8 = rex(1, 0, 0, 0);

@@ -5,10 +5,10 @@ use osom_encoders_common::osom_assert;
 #[repr(u8)]
 #[must_use]
 pub enum Size {
-    Size8 = 1, // We start from 1 to allow Option<Size> optimization
-    Size16,
-    Size32,
-    Size64,
+    Bit8 = 1, // We start from 1 to allow Option<Size> optimization
+    Bit16,
+    Bit32,
+    Bit64,
 }
 
 impl Size {

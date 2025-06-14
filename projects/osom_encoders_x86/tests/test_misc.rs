@@ -1,7 +1,9 @@
 mod common;
 
-use osom_encoders_x86::encoding::*;
 use rstest::rstest;
+
+use osom_encoders_x86::encoding::*;
+use osom_encoders_x86::models::*;
 
 #[test]
 fn test_encode_ret() {
@@ -13,8 +15,6 @@ fn test_encode_ret() {
 #[case(0x00, &[0xC2, 0x00, 0x00])]
 #[case(0x1234, &[0xC2, 0x34, 0x12])]
 fn test_encode_ret_imm16(#[case] imm16: u16, #[case] expected: &[u8]) {
-    use osom_encoders_x86::models::Immediate16;
-
     let imm16 = Immediate16::from_u16(imm16);
     let instr = universal::encode_ret_imm16(imm16);
     common::assert_encoded_instruction_eq(expected, &instr);

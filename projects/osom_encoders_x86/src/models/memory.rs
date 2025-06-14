@@ -66,6 +66,8 @@ impl Displacement {
 ///
 /// Not all combinations of `base`, `index`, `scale`, and `displacement` are valid
 /// for a given instruction. For specifics refer to the Intel x86 manual.
+/// 
+/// In particular the GPRs have to be 32 or 64 bit wide, depending on the architecture.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 #[must_use]
 pub struct Memory {

@@ -70,10 +70,10 @@ impl GPRKind {
     #[inline]
     pub const fn size(self) -> Size {
         match self {
-            GPRKind::Bit8 | GPRKind::Bit8High => Size::Size8,
-            GPRKind::Bit16 => Size::Size16,
-            GPRKind::Bit32 => Size::Size32,
-            GPRKind::Bit64 => Size::Size64,
+            GPRKind::Bit8 | GPRKind::Bit8High => Size::Bit8,
+            GPRKind::Bit16 => Size::Bit16,
+            GPRKind::Bit32 => Size::Bit32,
+            GPRKind::Bit64 => Size::Bit64,
         }
     }
 }
@@ -186,6 +186,7 @@ impl GPR {
     gpr!(DH, Bit8High, 6);
     gpr!(BH, Bit8High, 7);
 
+
     /// Creates a new `GPR` from a `GPRKind` and a `U4` index.
     ///
     /// # Safety
@@ -252,5 +253,11 @@ impl GPR {
     #[must_use]
     pub const fn lower_3_bits_index(self) -> u8 {
         self.index().as_u8() & 0b111
+    }
+
+    #[inline(always)]
+    pub const fn index_matches_bit8_high(self) -> bool {
+        let idx = self.index().as_u8();
+        idx >= 4 && idx <= 7
     }
 }
