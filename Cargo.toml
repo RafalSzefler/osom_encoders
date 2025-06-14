@@ -1,6 +1,7 @@
 [workspace]
 members = [
-    "projects/x86/osom_encoders_x86",
+    "projects/osom_encoders_common",
+    "projects/osom_encoders_x86",
 ]
 resolver = "3"
 
@@ -10,7 +11,11 @@ authors = ["Rafal Szefler <rafael.szefler@gmail.com>"]
 rust-version = "1.85"
 
 [workspace.dependencies]
-xsd-parser = "1"
+const_format = "0.2"
+serde = { version = "1", features = ["derive"] }
+serde-xml-rs = "0.8"
+bitflags = "2"
+strum = { version = "0.27", features = ["derive"] }
 
 # tests
 rstest = "0.25"
