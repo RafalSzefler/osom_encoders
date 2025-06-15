@@ -70,6 +70,16 @@ fn test_add_RAX_imm32(#[case] imm32: i32, #[case] expected: &[u8]) {
 #[case::gpr(GPROrMemory::GPR { gpr: GPR::SPL }, Immediate8::from_i8(0), &[0x40, 0x80, 0xC4, 0x00])]
 #[case::gpr(GPROrMemory::GPR { gpr: GPR::R10B }, Immediate8::from_i8(-1), &[0x41, 0x80, 0xC2, 0xFF])]
 #[case::gpr(GPROrMemory::GPR { gpr: GPR::R15B }, Immediate8::from_i8(-15), &[0x41, 0x80, 0xC7, 0xF1])]
+#[case::memory(GPROrMemory::Memory { memory: Memory::Based { base: GPR::RAX, offset: Offset::None } }, Immediate8::from_i8(1), &[0x80, 0x00, 0x01])]
+#[case::memory(GPROrMemory::Memory { memory: Memory::Based { base: GPR::RDX, offset: Offset::None } }, Immediate8::from_i8(2), &[0x80, 0x02, 0x02])]
+#[case::memory(GPROrMemory::Memory { memory: Memory::Based { base: GPR::R10, offset: Offset::None } }, Immediate8::from_i8(-1), &[0x41, 0x80, 0x02, 0xFF])]
+#[case::memory(GPROrMemory::Memory { memory: Memory::Based { base: GPR::RSP, offset: Offset::None } }, Immediate8::from_i8(3), &[0x80, 0x04, 0x24, 0x03])]
+#[case::memory(GPROrMemory::Memory { memory: Memory::Based { base: GPR::R12, offset: Offset::None } }, Immediate8::from_i8(3), &[0x41, 0x80, 0x04, 0x24, 0x03])]
+#[case::memory(GPROrMemory::Memory { memory: Memory::Based { base: GPR::RBP, offset: Offset::None } }, Immediate8::from_i8(4), &[0x80, 0x45, 0x00, 0x04])]
+#[case::memory(GPROrMemory::Memory { memory: Memory::Based { base: GPR::R13, offset: Offset::None } }, Immediate8::from_i8(4), &[0x41, 0x80, 0x45, 0x00, 0x04])]
+#[case::memory(GPROrMemory::Memory { memory: Memory::RelativeToRIP { offset: Offset::None } }, Immediate8::from_i8(1), &[0x80, 0x05, 0x00, 0x00, 0x00, 0x00, 0x01])]
+#[case::memory(GPROrMemory::Memory { memory: Memory::RelativeToRIP { offset: Offset::Bit8(Immediate8::from_i8(1)) } }, Immediate8::from_i8(-1), &[0x80, 0x05, 0x01, 0x00, 0x00, 0x00, 0xFF])]
+#[case::memory(GPROrMemory::Memory { memory: Memory::RelativeToRIP { offset: Offset::Bit32(Immediate32::from_i32(-2000)) } }, Immediate8::from_i8(3), &[0x80, 0x05, 0x30, 0xF8, 0xFF, 0xFF, 0x03])]
 fn test_add_rm8_imm8(#[case] gpr_or_memory: GPROrMemory, #[case] imm8: Immediate8, #[case] expected: &[u8]) {
     let instr = enc::encode_add_rm8_imm8(gpr_or_memory, imm8);
     common::assert_encoded_instruction_eq(expected, &instr);

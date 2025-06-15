@@ -89,6 +89,7 @@ impl<const CAPACITY: usize> FixedBuffer<CAPACITY> {
         let slice_len = slice.len();
         let mut dst_ptr = unsafe { self.value.as_mut_ptr().add(self.len as usize) };
         let mut src_ptr = slice.as_ptr();
+
         let mut idx = 0;
         while idx < slice_len {
             unsafe {
@@ -98,6 +99,8 @@ impl<const CAPACITY: usize> FixedBuffer<CAPACITY> {
             }
             idx += 1;
         }
+
+        self.len += slice_len as u8;
     }
 
     #[inline(always)]
