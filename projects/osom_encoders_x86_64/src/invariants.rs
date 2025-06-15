@@ -1,7 +1,7 @@
 use core::mem::size_of;
 
 use crate::models::{
-    Displacement, GPR, GPRKind, GPROrMemory, Immediate8, Immediate16, Immediate32, Immediate64, Memory, Scale, Size,
+    GPR, GPRKind, GPROrMemory, Immediate8, Immediate16, Immediate32, Immediate64, Memory, Offset, Scale, Size,
 };
 
 const _INVARIANTS: () = {
@@ -17,9 +17,9 @@ const _INVARIANTS: () = {
 
     assert!(size_of::<Scale>() == 1, "Expected Scale to be 1 byte");
     assert!(size_of::<Option<Scale>>() == 1, "Expected Option<Scale> to be 1 byte");
-    assert!(size_of::<Displacement>() == 8, "Expected Displacement to be 8 bytes");
+    assert!(size_of::<Offset>() == 8, "Expected Displacement to be 8 bytes");
     assert!(
-        size_of::<Option<Displacement>>() == 8,
+        size_of::<Option<Offset>>() == 8,
         "Expected Option<Displacement> to be 8 bytes"
     );
     assert!(size_of::<Memory>() <= 16, "Expected Memory to be at most 16 bytes");

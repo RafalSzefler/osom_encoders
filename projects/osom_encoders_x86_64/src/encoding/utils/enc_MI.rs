@@ -37,15 +37,15 @@ pub const unsafe fn encode_MI_rm8_imm8<const T: usize>(
                 instr.push_array(imm8.encode());
             }
             GPROrMemory::Memory { memory } => {
-                let extended_base = memory.extended_base();
-                let extended_index = memory.extended_index();
+                let base_is_extended = memory.base_is_extended();
+                let index_is_extended = memory.index_is_extended();
 
-                if extended_base || extended_index {
+                if base_is_extended || index_is_extended {
                     let rex = rex(
                         0,
                         0,
-                        if extended_index { 1 } else { 0 },
-                        if extended_base { 1 } else { 0 },
+                        if index_is_extended { 1 } else { 0 },
+                        if base_is_extended { 1 } else { 0 },
                     );
 
                     instr.push_array([rex]);

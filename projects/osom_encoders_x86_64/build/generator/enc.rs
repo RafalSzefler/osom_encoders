@@ -1,6 +1,6 @@
 use crate::{
     globals::ENCODING_OUT_DIR,
-    models::{Instruction, InstructionSet, OperandEncoding, OperandKind, Variant, VariantProperty},
+    models::{Instruction, InstructionSet, Operand, OperandEncoding, Variant, VariantProperty},
     rustfmt,
 };
 
@@ -78,7 +78,7 @@ pub const fn {name}() -> EncodedX86_64Instruction {{
 }
 
 fn generate_variant_i(instruction: &Instruction, variant: &Variant) -> String {
-    if variant.operand_sequence.operands.len() != 1 {
+    if variant.operands.len() != 1 {
         panic!(
             "Encoding I supports only one operand. Not the case for a variant in mnemonic: {:?}",
             instruction.mnemonic
@@ -93,18 +93,18 @@ fn generate_variant_i(instruction: &Instruction, variant: &Variant) -> String {
     let has_oso_prefix = variant.additional_properties.contains(VariantProperty::PrefixOSO);
     let has_rex_w_prefix = variant.additional_properties.contains(VariantProperty::PrefixRexW);
 
-    let operand = &variant.operand_sequence.operands[0];
+    let operand = &variant.operands[0];
 
-    let suffix = format!("_{:?}", operand.kind);
+    let suffix = format!("_{:?}", operand);
     name.push_str(suffix.as_str());
 
-    let (arg, call) = match operand.kind {
-        OperandKind::imm8 => {
+    let (arg, call) = match operand {
+        Operand::imm8 => {
             let arg = "imm8: Immediate8";
             let call = format!("unsafe {{ utils::enc_I::encode_I_imm8([{opcode}], imm8) }}");
             (arg, call)
         }
-        OperandKind::imm16 => {
+        Operand::imm16 => {
             let arg = "imm16: Immediate16";
             let call = if has_oso_prefix {
                 format!("unsafe {{ utils::enc_I::encode_I_imm16_operand_size_override([{opcode}], imm16) }}")
@@ -113,7 +113,7 @@ fn generate_variant_i(instruction: &Instruction, variant: &Variant) -> String {
             };
             (arg, call)
         }
-        OperandKind::imm32 => {
+        Operand::imm32 => {
             let arg = "imm32: Immediate32";
             let call = if has_rex_w_prefix {
                 format!("unsafe {{ utils::enc_I::encode_I_imm32_prefix_rex_w([{opcode}], imm32) }}")
@@ -124,7 +124,7 @@ fn generate_variant_i(instruction: &Instruction, variant: &Variant) -> String {
         }
         _ => panic!(
             "Encoding I supports only imm8, imm16, imm32 operands. Not the case for {:?} for a variant in mnemonic: {:?}",
-            operand.kind, instruction.mnemonic
+            operand, instruction.mnemonic
         ),
     };
 
@@ -141,7 +141,7 @@ pub const fn {name}({arg}) -> EncodedX86_64Instruction {{
 
 #[allow(unused_variables)]
 fn generate_variant_mi(instruction: &Instruction, variant: &Variant) -> String {
-    if variant.operand_sequence.operands.len() != 2 {
+    if variant.operands.len() != 2 {
         panic!(
             "Encoding MI supports two operands only. Not the case for a variant in mnemonic: {:?}",
             instruction.mnemonic
@@ -159,14 +159,14 @@ fn generate_variant_mi(instruction: &Instruction, variant: &Variant) -> String {
     let extended_opcode = to_hex(&[extended_opcode]);
     let description = &variant.description;
 
-    let rm_operand = &variant.operand_sequence.operands[0];
-    let imm_operand = &variant.operand_sequence.operands[1];
+    let rm_operand = &variant.operands[0];
+    let imm_operand = &variant.operands[1];
 
     let name = function_name(instruction, variant);
-    let name = format!("{}_{:#?}_{:#?}", name, rm_operand.kind, imm_operand.kind);
+    let name = format!("{}_{:#?}_{:#?}", name, rm_operand, imm_operand);
 
-    let (args, body) = match (&rm_operand.kind, &imm_operand.kind) {
-        (OperandKind::rm8, OperandKind::imm8) => {
+    let (args, body) = match (&rm_operand, &imm_operand) {
+        (Operand::rm8, Operand::imm8) => {
             let args = "rm8: GPROrMemory, imm8: Immediate8";
             let body =
                 format!("unsafe {{ utils::enc_MI::encode_MI_rm8_imm8([{opcode}], {extended_opcode}, rm8, imm8) }}");

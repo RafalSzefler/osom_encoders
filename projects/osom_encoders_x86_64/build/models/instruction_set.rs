@@ -5,8 +5,8 @@ use strum::EnumString;
 
 use super::VariantProperty;
 
-#[derive(Debug, Deserialize, EnumString)]
-pub enum OperandKind {
+#[derive(Debug, EnumString)]
+pub enum Operand {
     /// Immediate 8-bit.
     imm8,
 
@@ -63,18 +63,6 @@ pub enum OperandEncoding {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct Operand {
-    #[serde(rename = "#text")]
-    pub kind: OperandKind,
-}
-
-#[derive(Debug, Deserialize, Default)]
-pub struct OperandSequence {
-    #[serde(rename = "operand")]
-    pub operands: Vec<Operand>,
-}
-
-#[derive(Debug, Deserialize)]
 pub struct Variant {
     #[serde(deserialize_with = "super::deserialize_opcode")]
     pub opcode: Vec<u8>,
@@ -84,8 +72,8 @@ pub struct Variant {
 
     pub extended_opcode: Option<u8>,
 
-    #[serde(default = "Default::default")]
-    pub operand_sequence: OperandSequence,
+    #[serde(deserialize_with = "super::deserialize_operands", default = "Vec::new")]
+    pub operands: Vec<Operand>,
 
     #[serde(rename = "operand_encoding")]
     pub encoding: OperandEncoding,

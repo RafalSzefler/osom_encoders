@@ -17,19 +17,18 @@
             - variant: A specific variant for the given instruction.
                 - opcode: The hexadecimal opcode byte(s) for this variant. Mandatory, at most 4 bytes (8 hexes).
                 - name: Optional name of the variant. Typically empty.
-                - operand_sequence: List of operands for this variant. Optional.
-                    - operand: Defines a single operand. One of:
-                        * imm8: 8-bit immediate value
-                        * imm16: 16-bit immediate value
-                        * imm32: 32-bit immediate value
-                        * r8: 8-bit register
-                        * r16: 16-bit register
-                        * r32: 32-bit register
-                        * r64: 64-bit register
-                        * rm8: 8-bit memory or register
-                        * rm16: 16-bit memory or register
-                        * rm32: 32-bit memory or register
-                        * rm64: 64-bit memory or register
+                - operands: List of operands for this variant. Optional, comma-separated list of operand names. Allowed values are:
+                    * imm8: 8-bit immediate value
+                    * imm16: 16-bit immediate value
+                    * imm32: 32-bit immediate value
+                    * r8: 8-bit register
+                    * r16: 16-bit register
+                    * r32: 32-bit register
+                    * r64: 64-bit register
+                    * rm8: 8-bit memory or register
+                    * rm16: 16-bit memory or register
+                    * rm32: 32-bit memory or register
+                    * rm64: 64-bit memory or register
                 - operand_encoding: The encoding scheme for operands. Mandatory. One of:
                     * ZO: Zero operands (e.g., nop)
                     * I: Immediate value encoding
@@ -73,18 +72,14 @@
             <variant>
                 <opcode>04</opcode>
                 <name>AL</name>
-                <operand_sequence>
-                    <operand>imm8</operand>
-                </operand_sequence>
+                <operands>imm8</operands>
                 <operand_encoding>I</operand_encoding>
                 <description>Add imm8 to AL.</description>
             </variant>
             <variant>
                 <opcode>05</opcode>
                 <name>AX</name>
-                <operand_sequence>
-                    <operand>imm16</operand>
-                </operand_sequence>
+                <operands>imm16</operands>
                 <operand_encoding>I</operand_encoding>
                 <additional_properties>PrefixOSO</additional_properties>
                 <description>Add imm16 to AX.</description>
@@ -92,18 +87,14 @@
             <variant>
                 <opcode>05</opcode>
                 <name>EAX</name>
-                <operand_sequence>
-                    <operand>imm32</operand>
-                </operand_sequence>
+                <operands>imm32</operands>
                 <operand_encoding>I</operand_encoding>
                 <description>Add imm32 to EAX.</description>
             </variant>
             <variant>
                 <opcode>05</opcode>
                 <name>RAX</name>
-                <operand_sequence>
-                    <operand>imm32</operand>
-                </operand_sequence>
+                <operands>imm32</operands>
                 <operand_encoding>I</operand_encoding>
                 <additional_properties>PrefixRexW</additional_properties>
                 <description>Add imm32 sign-extended to RAX.</description>
@@ -111,10 +102,7 @@
             <variant>
                 <opcode>80</opcode>
                 <extended_opcode>0</extended_opcode>
-                <operand_sequence>
-                    <operand>rm8</operand>
-                    <operand>imm8</operand>
-                </operand_sequence>
+                <operands>rm8, imm8</operands>
                 <operand_encoding>MI</operand_encoding>
                 <description>Add imm8 to memory or 8-bit register.</description>
             </variant>
@@ -131,9 +119,7 @@
             </variant>
             <variant>
                 <opcode>C2</opcode>
-                <operand_sequence>
-                    <operand>imm16</operand>
-                </operand_sequence>
+                <operands>imm16</operands>
                 <operand_encoding>I</operand_encoding>
                 <description>Return to calling procedure and pop imm16 bytes from stack.</description>
             </variant>

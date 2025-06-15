@@ -1,6 +1,4 @@
-use osom_encoders_common::osom_debug_assert;
-
-use crate::models::{GPR, Immediate8, Immediate32, Size};
+use crate::models::{GPR, Immediate8, Immediate32};
 
 /// Represents the scale factor for the index register in a memory operand.
 ///
@@ -20,32 +18,35 @@ pub enum Scale {
     Scale8,
 }
 
-/// Represents the displacement for a memory operand.
+/// Represents the offset for a memory operand.
 ///
 /// # Values
 ///
-/// - `None` - No displacement.
-/// - `Imm8` - 8-bit immediate displacement.
-/// - `Imm16` - 16-bit immediate displacement.
-/// - `Imm32` - 32-bit immediate displacement.
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+/// - `None` - No offset.
+/// - `Imm8` - 8-bit signed immediate offset.
+/// - `Imm32` - 32-bit signed immediate offset.
+///
+/// # Notes
+///
+/// The offset is always understood as signed integer.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[repr(u8)]
 #[must_use]
-pub enum Displacement {
+pub enum Offset {
     None,
-    Imm8(Immediate8),
-    Imm32(Immediate32),
+    Bit8(Immediate8),
+    Bit32(Immediate32),
 }
 
-impl Displacement {
+impl Offset {
     #[inline(always)]
-    pub const fn from_u8(value: u8) -> Self {
-        Self::Imm8(Immediate8::from_u8(value))
+    pub const fn from_i8(value: i8) -> Self {
+        Self::Bit8(Immediate8::from_i8(value))
     }
 
     #[inline(always)]
-    pub const fn from_u32(value: u32) -> Self {
-        Self::Imm32(Immediate32::from_u32(value))
+    pub const fn from_i32(value: i32) -> Self {
+        Self::Bit32(Immediate32::from_i32(value))
     }
 
     #[inline(always)]
@@ -56,102 +57,53 @@ impl Displacement {
 
 /// Represents a memory operand.
 ///
-/// # Values
-///
-/// - `base` - The base register, 64-bit wide.
-/// - `index` - The index register, 64-bit wide.
-/// - `scale` - The scale factor for the index register.
-/// - `displacement` - The displacement for the memory operand.
-///
 /// # Safety
 ///
-/// Not all combinations of `base`, `index`, `scale`, and `displacement` are valid
-/// for a given instruction. For specifics refer to the Intel x86 manual.
+/// Not all combinations of are valid for a given instruction.
+/// For specifics refer to the Intel x86 manual.
 ///
-/// In particular the GPRs have to be 64-bit wide.
+/// In particular all the GPRs have to be 64-bit wide.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 #[must_use]
-pub struct Memory {
-    base: Option<GPR>,
-    index: Option<GPR>,
-    scale: Option<Scale>,
-    displacement: Displacement,
+pub enum Memory {
+    Based {
+        base: GPR,
+        offset: Offset,
+    },
+    Scaled {
+        index: GPR,
+        scale: Scale,
+        offset: Offset,
+    },
+    BasedScaled {
+        base: GPR,
+        index: GPR,
+        scale: Scale,
+        offset: Offset,
+    },
+    RelativeToRIP {
+        offset: Offset,
+    },
 }
 
 impl Memory {
-    /// Creates a new memory operand.
-    ///
-    /// # Safety
-    ///
-    /// The caller *must* ensure that the memory operand is valid for the given instruction.
-    /// Also the encoder supports 64-bit memory addressing only. In particular all the GPRs
-    /// have to be 64-bit wide.
     #[inline(always)]
-    pub const unsafe fn new(
-        base: Option<GPR>,
-        index: Option<GPR>,
-        scale: Option<Scale>,
-        displacement: Displacement,
-    ) -> Self {
-        osom_debug_assert!(base.is_none() || base.unwrap().size().equals(Size::Bit64));
-        osom_debug_assert!(index.is_none() || index.unwrap().size().equals(Size::Bit64));
-        osom_debug_assert!(base.is_some() || index.is_some());
-        osom_debug_assert!(index.is_none() || scale.is_some());
-
-        Self {
-            base,
-            index,
-            scale,
-            displacement,
+    #[must_use]
+    pub const fn base_is_extended(&self) -> bool {
+        match self {
+            Self::Based { base, .. } => base.is_extended(),
+            Self::BasedScaled { base, .. } => base.is_extended(),
+            _ => false,
         }
     }
 
     #[inline(always)]
     #[must_use]
-    pub const fn base(&self) -> Option<GPR> {
-        unsafe { core::hint::assert_unchecked(self.base.is_none() || self.base.unwrap().size().equals(Size::Bit64)) };
-        self.base
-    }
-
-    #[inline(always)]
-    #[must_use]
-    pub const fn index(&self) -> Option<GPR> {
-        unsafe { core::hint::assert_unchecked(self.index.is_none() || self.index.unwrap().size().equals(Size::Bit64)) };
-        self.index
-    }
-
-    #[inline(always)]
-    #[must_use]
-    pub const fn scale(&self) -> Option<Scale> {
-        self.scale
-    }
-
-    #[inline(always)]
-    pub const fn displacement(&self) -> &Displacement {
-        &self.displacement
-    }
-
-    /// Returns true if the base register is set and extended
-    /// (i.e. R8 to R15).
-    #[inline(always)]
-    #[must_use]
-    pub const fn extended_base(&self) -> bool {
-        if let Some(base) = self.base() {
-            base.is_extended()
-        } else {
-            false
-        }
-    }
-
-    /// Returns true if the index register is set and extended
-    /// (i.e. R8 to R15).
-    #[inline(always)]
-    #[must_use]
-    pub const fn extended_index(&self) -> bool {
-        if let Some(index) = self.index() {
-            index.is_extended()
-        } else {
-            false
+    pub const fn index_is_extended(&self) -> bool {
+        match self {
+            Self::Scaled { index, .. } => index.is_extended(),
+            Self::BasedScaled { index, .. } => index.is_extended(),
+            _ => false,
         }
     }
 }

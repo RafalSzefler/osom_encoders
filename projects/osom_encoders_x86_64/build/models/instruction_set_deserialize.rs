@@ -1,5 +1,7 @@
 use serde::{Deserialize, Deserializer};
 
+use crate::models::Operand;
+
 use super::{OperandEncoding, VariantProperty};
 
 impl<'de> Deserialize<'de> for VariantProperty {
@@ -115,4 +117,25 @@ where
     }
 
     Ok(s.to_string())
+}
+
+pub(super) fn deserialize_operands<'de, D>(value: D) -> Result<Vec<Operand>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let text = String::deserialize(value)?;
+    let pieces = text.split(',').map(|s| s.trim()).collect::<Vec<_>>();
+    if pieces.is_empty() {
+        return Ok(Vec::new());
+    }
+
+    let mut result = Vec::with_capacity(pieces.len());
+    for piece in pieces {
+        match Operand::try_from(piece) {
+            Ok(operand) => result.push(operand),
+            Err(_) => return Err(serde::de::Error::custom(format!("Invalid operand name: {}", piece))),
+        }
+    }
+
+    Ok(result)
 }

@@ -19,8 +19,5 @@ pub mod macros;
 mod fixed_buffer;
 pub use fixed_buffer::*;
 
-mod u4;
-pub use u4::*;
-
 #[doc(hidden)]
 pub mod _hidden;

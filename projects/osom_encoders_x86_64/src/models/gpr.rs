@@ -1,6 +1,6 @@
 use core::num::NonZero;
 
-use osom_encoders_common::{U4, osom_debug_assert};
+use osom_encoders_common::osom_debug_assert;
 
 use super::Size;
 
@@ -30,7 +30,7 @@ impl GPRKind {
     #[must_use]
     pub const fn as_u8(self) -> u8 {
         let result = self as u8;
-        unsafe { core::hint::assert_unchecked(result > 0 && result <= 15) };
+        unsafe { core::hint::assert_unchecked(result > 0 && result < 8) };
         result
     }
 
@@ -41,7 +41,7 @@ impl GPRKind {
     /// The index must be in the range `1..=5`, otherwise the behavior is undefined.
     #[inline(always)]
     pub const unsafe fn from_u8_unchecked(value: u8) -> Self {
-        osom_debug_assert!(value > 0 && value <= 5);
+        osom_debug_assert!(value > 0 && value < 8);
         unsafe { core::mem::transmute(value) }
     }
 
@@ -53,7 +53,7 @@ impl GPRKind {
     /// - `None` if the `u8` is 0 or greater than 5
     #[must_use]
     pub const fn from_u8(value: u8) -> Option<Self> {
-        if value == 0 || value > 5 {
+        if value == 0 || value >= 8 {
             return None;
         }
 
@@ -101,14 +101,22 @@ pub struct GPR {
     value: NonZero<u8>,
 }
 
-/// Error when creating a new `GPR` from a [`GPRKind::Bit8High`] and a `index`
-/// outside the `4..=7` range.
+const GPR_KIND_SHIFT: u8 = 5;
+
+/// Error when creating a new `GPR`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct NewGPRError;
+#[repr(u8)]
+pub enum NewGPRError {
+    /// Error when creating a new `GPR` from a [`GPRKind::Bit8High`] and `index` outside of the `4..=7` range.
+    InvalidBit8HighIndex,
+
+    /// Error when creating a new `GPR` from a `kind` and `index` outside of the `0..=31` range.
+    IndexOutOfRange,
+}
 
 macro_rules! gpr {
     ($name: ident, $kind: ident, $index: literal) => {
-        pub const $name: Self = unsafe { Self::new_unchecked(GPRKind::$kind, U4::new_unchecked($index)) };
+        pub const $name: Self = unsafe { Self::new_unchecked(GPRKind::$kind, $index) };
     };
 }
 
@@ -186,7 +194,7 @@ impl GPR {
     gpr!(DH, Bit8High, 6);
     gpr!(BH, Bit8High, 7);
 
-    /// Creates a new `GPR` from a `GPRKind` and a `U4` index.
+    /// Creates a new `GPR` from a `GPRKind` and an `index`.
     ///
     /// # Safety
     ///
@@ -194,13 +202,13 @@ impl GPR {
     /// These represent AH, CH, DH and BH registers. All other combinations
     /// are valid.
     #[inline(always)]
-    pub const unsafe fn new_unchecked(kind: GPRKind, index: U4) -> Self {
-        osom_debug_assert!(!kind.equals(GPRKind::Bit8High) || (index.as_u8() >= 4 && index.as_u8() <= 7));
+    pub const unsafe fn new_unchecked(kind: GPRKind, index: u8) -> Self {
+        osom_debug_assert!(!kind.equals(GPRKind::Bit8High) || (index >= 4 && index <= 7));
+        osom_debug_assert!(index < 32);
 
         let kind_u8 = kind.as_u8();
-        let index_u8 = index.as_u8();
 
-        let value = (kind_u8 << 4) | index_u8;
+        let value = (kind_u8 << GPR_KIND_SHIFT) | index;
 
         unsafe {
             Self {
@@ -209,17 +217,21 @@ impl GPR {
         }
     }
 
-    /// Creates a new `GPR` from a `GPRKind` and a `U4` index.
+    /// Creates a new `GPR` from a `GPRKind` and an `index`.
     ///
     /// # Returns
     ///
-    /// - `Ok(GPR)` if the `GPRKind` and `U4` index are valid
+    /// - `Ok(GPR)` if the `GPRKind` and `index` are valid
     /// - `Err(NewGPRError)` if the `kind` is [`GPRKind::Bit8High`] and
     ///   `index` is outside the `4..=7` range
     #[inline(always)]
-    pub const fn new(kind: GPRKind, index: U4) -> Result<Self, NewGPRError> {
-        if kind.equals(GPRKind::Bit8High) && (index.as_u8() < 4 || index.as_u8() > 7) {
-            return Err(NewGPRError);
+    pub const fn new(kind: GPRKind, index: u8) -> Result<Self, NewGPRError> {
+        if kind.equals(GPRKind::Bit8High) && (index < 4 || index > 7) {
+            return Err(NewGPRError::InvalidBit8HighIndex);
+        }
+
+        if index >= 32 {
+            return Err(NewGPRError::IndexOutOfRange);
         }
 
         Ok(unsafe { Self::new_unchecked(kind, index) })
@@ -227,7 +239,7 @@ impl GPR {
 
     #[inline(always)]
     pub const fn kind(self) -> GPRKind {
-        let kind_u8 = self.value.get() >> 4;
+        let kind_u8 = self.value.get() >> GPR_KIND_SHIFT;
         unsafe { GPRKind::from_u8_unchecked(kind_u8) }
     }
 
@@ -237,21 +249,29 @@ impl GPR {
     }
 
     #[inline(always)]
-    pub const fn index(self) -> U4 {
-        let index_u8 = self.value.get() & 0b1111;
-        unsafe { U4::new_unchecked(index_u8) }
+    pub const fn index(self) -> u8 {
+        self.value.get() & 0b11111
     }
 
+    /// Returns true if the GPR is an extended X64 register.
     #[inline(always)]
     #[must_use]
     pub const fn is_extended(self) -> bool {
-        self.index().as_u8() > 0b111
+        self.index() > 0b111
+    }
+
+    /// Returns true if the GPR is an extended register
+    /// from Advanced Performance Extensions. Implies [`Self::is_extended`].
+    #[inline(always)]
+    #[must_use]
+    pub const fn is_apx(self) -> bool {
+        self.index() > 0b1111
     }
 
     #[inline(always)]
     #[must_use]
     pub const fn lower_3_bits_index(self) -> u8 {
-        self.index().as_u8() & 0b111
+        self.index() & 0b111
     }
 
     /// This function verifies that the index of given GPR matches
@@ -263,7 +283,7 @@ impl GPR {
     #[inline(always)]
     #[must_use]
     pub const fn index_matches_bit8_high(self) -> bool {
-        let idx = self.index().as_u8();
+        let idx = self.index();
         idx >= 4 && idx <= 7
     }
 
