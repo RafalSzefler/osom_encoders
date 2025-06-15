@@ -23,7 +23,7 @@ impl EncodedX86_64Instruction {
     #[inline(always)]
     pub(crate) const unsafe fn new() -> Self {
         Self {
-            value: unsafe { FixedBuffer::new() },
+            value: FixedBuffer::new(),
         }
     }
 
