@@ -11,8 +11,7 @@ use crate::{
 /// * It doesn't validate the `opcode` and `extended_opcode`
 /// * It doesn't validate `gpr_or_memory`, in particular:
 /// * * `gpr` has to be a 8-bit register
-/// * * `memory` has to be a valid memory operand, meaning 32-bit or 64-bit depending on the architecture
-///     (even though the `gpr_or_memory` is 8-bit as a whole, this applies to `gpr` only, not `memory`)
+/// * * `memory` has to be a valid memory operand
 ///
 /// It is up to the caller to ensure that these are valid.
 pub const unsafe fn encode_MI_rm8_imm8<const T: usize>(
