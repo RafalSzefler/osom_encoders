@@ -1,6 +1,6 @@
 use osom_encoders_common::osom_debug_assert;
 
-use crate::models::{GPR, Immediate8, Immediate16, Immediate32, Size};
+use crate::models::{GPR, Immediate8, Immediate32, Size};
 
 /// Represents the scale factor for the index register in a memory operand.
 ///
