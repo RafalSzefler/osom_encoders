@@ -130,4 +130,28 @@ impl Memory {
     pub const fn displacement(&self) -> &Displacement {
         &self.displacement
     }
+
+    /// Returns true if the base register is set and extended
+    /// (i.e. R8 to R15).
+    #[inline(always)]
+    #[must_use]
+    pub const fn extended_base(&self) -> bool {
+        if let Some(base) = self.base() {
+            base.is_extended()
+        } else {
+            false
+        }
+    }
+
+    /// Returns true if the index register is set and extended
+    /// (i.e. R8 to R15).
+    #[inline(always)]
+    #[must_use]
+    pub const fn extended_index(&self) -> bool {
+        if let Some(index) = self.index() {
+            index.is_extended()
+        } else {
+            false
+        }
+    }
 }

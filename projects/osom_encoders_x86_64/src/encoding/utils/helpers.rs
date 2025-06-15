@@ -27,7 +27,7 @@ pub const fn sib(scale: u8, index: u8, base: u8) -> u8 {
 }
 
 #[inline(always)]
-const fn rex(w: u8, r: u8, x: u8, b: u8) -> u8 {
+pub const fn rex(w: u8, r: u8, x: u8, b: u8) -> u8 {
     osom_debug_assert!(w < 2);
     osom_debug_assert!(r < 2);
     osom_debug_assert!(x < 2);
@@ -36,18 +36,11 @@ const fn rex(w: u8, r: u8, x: u8, b: u8) -> u8 {
     0b0100_0000 | (w << 3) | (r << 2) | (x << 1) | b
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct EncodeMemoryResult {
-    pub encoded_memory: FixedBuffer<5>,
-    pub prefix: FixedBuffer<1>,
-}
-
-pub const fn encode_memory(reg_field: u8, memory: Memory) -> EncodeMemoryResult {
+pub const fn encode_memory(reg_field: u8, memory: &Memory) -> FixedBuffer<5> {
     osom_debug_assert!(memory.base().is_some() || memory.index().is_some());
     osom_debug_assert!(reg_field < 8);
 
     let mut buffer = FixedBuffer::new();
-    let mut prefix = FixedBuffer::new();
 
     unsafe {
         if let Some(_index) = memory.index() {
@@ -57,10 +50,6 @@ pub const fn encode_memory(reg_field: u8, memory: Memory) -> EncodeMemoryResult 
             match memory.displacement() {
                 Displacement::None => {
                     // Handles `[REG]` kind of addressing.
-
-                    if base.is_extended() {
-                        prefix.push_array([REX_B]);
-                    }
 
                     if base.equals(&GPR::RSP) || base.equals(&GPR::R12) {
                         // RSP and R12 require SIB byte. They can be efficiently encoded
@@ -87,8 +76,5 @@ pub const fn encode_memory(reg_field: u8, memory: Memory) -> EncodeMemoryResult 
         };
     }
 
-    EncodeMemoryResult {
-        encoded_memory: buffer,
-        prefix,
-    }
+    buffer
 }

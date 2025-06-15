@@ -66,6 +66,7 @@ fn test_add_RAX_imm32(#[case] imm32: i32, #[case] expected: &[u8]) {
 #[rstest]
 #[case::gpr(GPROrMemory::GPR { gpr: GPR::AL }, Immediate8::from_i8(1), &[0x80, 0xC0, 0x01])]
 #[case::gpr(GPROrMemory::GPR { gpr: GPR::BL }, Immediate8::from_i8(5), &[0x80, 0xC3, 0x05])]
+#[case::gpr(GPROrMemory::GPR { gpr: GPR::AH }, Immediate8::from_i8(0), &[0x80, 0xC4, 0x00])]
 #[case::gpr(GPROrMemory::GPR { gpr: GPR::SPL }, Immediate8::from_i8(0), &[0x40, 0x80, 0xC4, 0x00])]
 #[case::gpr(GPROrMemory::GPR { gpr: GPR::R10B }, Immediate8::from_i8(-1), &[0x41, 0x80, 0xC2, 0xFF])]
 #[case::gpr(GPROrMemory::GPR { gpr: GPR::R15B }, Immediate8::from_i8(-15), &[0x41, 0x80, 0xC7, 0xF1])]

@@ -1,7 +1,7 @@
 use osom_encoders_common::osom_debug_assert;
 
 use crate::{
-    encoding::utils::helpers::{REX, REX_B, encode_memory, mod_rm},
+    encoding::utils::helpers::{REX, REX_B, encode_memory, mod_rm, rex},
     models::{EncodedX86_64Instruction, GPRKind, GPROrMemory, Immediate8, Size},
 };
 
@@ -23,7 +23,7 @@ pub const unsafe fn encode_MI_rm8_imm8<const T: usize>(
     unsafe {
         let mut instr = EncodedX86_64Instruction::new();
 
-        match gpr_or_memory {
+        match &gpr_or_memory {
             GPROrMemory::GPR { gpr } => {
                 osom_debug_assert!(gpr.size().equals(Size::Bit8));
 
@@ -37,10 +37,24 @@ pub const unsafe fn encode_MI_rm8_imm8<const T: usize>(
                 instr.push_array(imm8.encode());
             }
             GPROrMemory::Memory { memory } => {
-                let result = encode_memory(extended_opcode, memory);
-                instr.push_slice(result.prefix.as_slice());
+                let extended_base = memory.extended_base();
+                let extended_index = memory.extended_index();
+
+                if extended_base || extended_index {
+                    let rex = rex(
+                        0,
+                        0,
+                        if extended_index { 1 } else { 0 },
+                        if extended_base { 1 } else { 0 },
+                    );
+
+                    instr.push_array([rex]);
+                }
+
                 instr.push_array(opcode);
-                instr.push_slice(result.encoded_memory.as_slice());
+
+                let result = encode_memory(extended_opcode, memory);
+                instr.push_slice(result.as_slice());
                 instr.push_array(imm8.encode());
             }
         }
