@@ -12,7 +12,7 @@
 #![allow(unused_imports)]
 
 use crate::encoding::utils;
-use crate::models::{EncodedX86_64Instruction, Immediate8, Immediate16, Immediate32};
+use crate::models::{EncodedX86_64Instruction, GPROrMemory, Immediate8, Immediate16, Immediate32};
 
 /// No operation.
 #[inline(always)]
@@ -48,6 +48,12 @@ pub const fn encode_add_EAX_imm32(imm32: Immediate32) -> EncodedX86_64Instructio
 #[inline(always)]
 pub const fn encode_add_RAX_imm32(imm32: Immediate32) -> EncodedX86_64Instruction {
     unsafe { utils::enc_I::encode_I_imm32_prefix_rex_w([0x05], imm32) }
+}
+
+/// Add imm8 to memory or 8-bit register.
+#[inline(always)]
+pub const fn encode_add_rm8_imm8(rm8: GPROrMemory, imm8: Immediate8) -> EncodedX86_64Instruction {
+    unsafe { utils::enc_MI::encode_MI_rm8_imm8([0x80], 0x00, rm8, imm8) }
 }
 
 /// Return to calling procedure.

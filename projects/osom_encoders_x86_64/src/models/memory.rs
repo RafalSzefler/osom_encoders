@@ -34,7 +34,6 @@ pub enum Scale {
 pub enum Displacement {
     None,
     Imm8(Immediate8),
-    Imm16(Immediate16),
     Imm32(Immediate32),
 }
 
@@ -45,13 +44,13 @@ impl Displacement {
     }
 
     #[inline(always)]
-    pub const fn from_u16(value: u16) -> Self {
-        Self::Imm16(Immediate16::from_u16(value))
+    pub const fn from_u32(value: u32) -> Self {
+        Self::Imm32(Immediate32::from_u32(value))
     }
 
     #[inline(always)]
-    pub const fn from_u32(value: u32) -> Self {
-        Self::Imm32(Immediate32::from_u32(value))
+    pub const fn is_none(&self) -> bool {
+        matches!(self, Self::None)
     }
 }
 
@@ -96,6 +95,8 @@ impl Memory {
     ) -> Self {
         osom_debug_assert!(base.is_none() || base.unwrap().size().equals(Size::Bit64));
         osom_debug_assert!(index.is_none() || index.unwrap().size().equals(Size::Bit64));
+        osom_debug_assert!(base.is_some() || index.is_some());
+        osom_debug_assert!(index.is_none() || scale.is_some());
 
         Self {
             base,

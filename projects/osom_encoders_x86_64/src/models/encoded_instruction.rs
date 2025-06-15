@@ -1,4 +1,4 @@
-use osom_encoders_common::EncodedInstruction;
+use osom_encoders_common::FixedBuffer;
 
 /// Represents a binary encoded x86/x86-64 instruction.
 ///
@@ -9,7 +9,7 @@ use osom_encoders_common::EncodedInstruction;
 #[repr(transparent)]
 #[must_use]
 pub struct EncodedX86_64Instruction {
-    value: EncodedInstruction<15>,
+    value: FixedBuffer<15>,
 }
 
 impl EncodedX86_64Instruction {
@@ -23,7 +23,7 @@ impl EncodedX86_64Instruction {
     #[inline(always)]
     pub(crate) const unsafe fn new() -> Self {
         Self {
-            value: unsafe { EncodedInstruction::new() },
+            value: unsafe { FixedBuffer::new() },
         }
     }
 
@@ -39,7 +39,7 @@ impl EncodedX86_64Instruction {
     #[inline(always)]
     pub(crate) const unsafe fn from_array<const N: usize>(array: [u8; N]) -> Self {
         Self {
-            value: unsafe { EncodedInstruction::from_array(array) },
+            value: unsafe { FixedBuffer::from_array(array) },
         }
     }
 
@@ -53,6 +53,18 @@ impl EncodedX86_64Instruction {
     #[inline(always)]
     pub(crate) const unsafe fn push_array<const N: usize>(&mut self, array: [u8; N]) {
         unsafe { self.value.push_array(array) };
+    }
+
+    /// Pushes slice to the instruction.
+    ///
+    /// # Safety
+    ///
+    /// This function is unsafe because it doesn't check whether
+    /// the underlying buffer has enough space to fit the slice.
+    /// It is up to the caller to ensure that.
+    #[inline(always)]
+    pub(crate) const unsafe fn push_slice(&mut self, slice: &[u8]) {
+        unsafe { self.value.push_slice(slice) };
     }
 
     #[inline(always)]

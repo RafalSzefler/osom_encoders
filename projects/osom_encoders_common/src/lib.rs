@@ -16,8 +16,8 @@
 
 pub mod macros;
 
-mod encoded_instruction;
-pub use encoded_instruction::*;
+mod fixed_buffer;
+pub use fixed_buffer::*;
 
 mod u4;
 pub use u4::*;

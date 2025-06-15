@@ -15,7 +15,7 @@ pub fn generate_enc(instruction_set: &InstructionSet) {
 #![allow(unused_imports)]
 
 use crate::{{
-    models::{{EncodedX86_64Instruction, Immediate8, Immediate16, Immediate32}},
+    models::{{GPROrMemory, EncodedX86_64Instruction, Immediate8, Immediate16, Immediate32}},
 }};
 use crate::encoding::utils;
 "
@@ -141,7 +141,52 @@ pub const fn {name}({arg}) -> EncodedX86_64Instruction {{
 
 #[allow(unused_variables)]
 fn generate_variant_mi(instruction: &Instruction, variant: &Variant) -> String {
-    String::new()
+    if variant.operand_sequence.operands.len() != 2 {
+        panic!(
+            "Encoding MI supports two operands only. Not the case for a variant in mnemonic: {:?}",
+            instruction.mnemonic
+        );
+    }
+
+    let Some(extended_opcode) = variant.extended_opcode else {
+        panic!(
+            "Encoding MI requires extended opcode. Not the case for a variant in mnemonic: {:?}",
+            instruction.mnemonic
+        );
+    };
+
+    let opcode = to_hex(&variant.opcode);
+    let extended_opcode = to_hex(&[extended_opcode]);
+    let description = &variant.description;
+
+    let rm_operand = &variant.operand_sequence.operands[0];
+    let imm_operand = &variant.operand_sequence.operands[1];
+
+    let name = function_name(instruction, variant);
+    let name = format!("{}_{:#?}_{:#?}", name, rm_operand.kind, imm_operand.kind);
+
+    let (args, body) = match (&rm_operand.kind, &imm_operand.kind) {
+        (OperandKind::rm8, OperandKind::imm8) => {
+            let args = "rm8: GPROrMemory, imm8: Immediate8";
+            let body =
+                format!("unsafe {{ utils::enc_MI::encode_MI_rm8_imm8([{opcode}], {extended_opcode}, rm8, imm8) }}");
+            (args, body)
+        }
+        _ => panic!(
+            "Encoding MI requires rm and imm operands to be of the same size. Not the case for a variant in mnemonic: {:?}",
+            instruction.mnemonic
+        ),
+    };
+
+    format!(
+        "
+/// {description}
+#[inline(always)]
+pub const fn {name}({args}) -> EncodedX86_64Instruction {{
+    {body}
+}}
+"
+    )
 }
 
 #[allow(unused_variables)]

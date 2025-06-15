@@ -1,7 +1,7 @@
 use osom_encoders_common::osom_debug_assert;
 
 use crate::{
-    encoding::utils::helpers::{REX, REX_B, mod_rm},
+    encoding::utils::helpers::{REX, REX_B, encode_memory, mod_rm},
     models::{EncodedX86_64Instruction, GPRKind, GPROrMemory, Immediate8, Size},
 };
 
@@ -33,11 +33,15 @@ pub const unsafe fn encode_MI_rm8_imm8<const T: usize>(
                     instr.push_array([REX]);
                 }
                 instr.push_array(opcode);
-                instr.push_array([mod_rm(0b11, extended_opcode, gpr.index().as_u8())]);
+                instr.push_array([mod_rm(0b11, extended_opcode, gpr.lower_3_bits_index())]);
                 instr.push_array(imm8.encode());
             }
             GPROrMemory::Memory { memory } => {
-                todo!()
+                let result = encode_memory(extended_opcode, memory);
+                instr.push_slice(result.prefix.as_slice());
+                instr.push_array(opcode);
+                instr.push_slice(result.encoded_memory.as_slice());
+                instr.push_array(imm8.encode());
             }
         }
 

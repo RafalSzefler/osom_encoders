@@ -266,4 +266,10 @@ impl GPR {
         let idx = self.index().as_u8();
         idx >= 4 && idx <= 7
     }
+
+    #[inline(always)]
+    #[must_use]
+    pub const fn equals(&self, other: &Self) -> bool {
+        self.value.get() == other.value.get()
+    }
 }

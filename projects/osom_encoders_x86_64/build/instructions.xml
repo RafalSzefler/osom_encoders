@@ -108,6 +108,16 @@
                 <additional_properties>PrefixRexW</additional_properties>
                 <description>Add imm32 sign-extended to RAX.</description>
             </variant>
+            <variant>
+                <opcode>80</opcode>
+                <extended_opcode>0</extended_opcode>
+                <operand_sequence>
+                    <operand>rm8</operand>
+                    <operand>imm8</operand>
+                </operand_sequence>
+                <operand_encoding>MI</operand_encoding>
+                <description>Add imm8 to memory or 8-bit register.</description>
+            </variant>
         </variant_set>
     </instruction>
 
