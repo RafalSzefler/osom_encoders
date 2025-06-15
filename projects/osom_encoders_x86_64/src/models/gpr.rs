@@ -5,12 +5,15 @@ use osom_encoders_common::{U4, osom_debug_assert};
 use super::Size;
 
 /// Represents the kind of a general purpose register.
-#[derive(Debug, Clone, Copy, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, Copy, Eq)]
 #[repr(u8)]
 #[must_use]
 pub enum GPRKind {
+    /// Represents AH, BH, CH and DH registers.
+    Bit8High = 1, // We start from 1 to allow Option<GPRKind> optimization
+
     /// Represents AL, CL, DL, BL, SPL, BPL, SIL, DIL, R8B, R9B, R10B, R11B, R12B, R13B, R14B and R15B registers.
-    Bit8 = 1, // We start from 1 to allow Option<GPRKind> optimization
+    Bit8,
 
     /// Represents AX, CX, DX, BX, SP, BP, SI, DI, R8W, R9W, R10W, R11W, R12W, R13W, R14W and R15W registers.
     Bit16,
@@ -20,9 +23,6 @@ pub enum GPRKind {
 
     /// Represents RAX, RCX, RDX, RBX, RSP, RBP, RSI, RDI, R8, R9, R10, R11, R12, R13, R14 and R15 registers.
     Bit64,
-
-    /// Represents AH, BH, CH and DH registers.
-    Bit8High,
 }
 
 impl GPRKind {
@@ -30,7 +30,7 @@ impl GPRKind {
     #[must_use]
     pub const fn as_u8(self) -> u8 {
         let result = self as u8;
-        unsafe { core::hint::assert_unchecked(result <= 15) };
+        unsafe { core::hint::assert_unchecked(result > 0 && result <= 15) };
         result
     }
 
@@ -67,7 +67,7 @@ impl GPRKind {
         self.as_u8() == other.as_u8()
     }
 
-    #[inline]
+    #[inline(always)]
     pub const fn size(self) -> Size {
         match self {
             GPRKind::Bit8 | GPRKind::Bit8High => Size::Bit8,
@@ -254,6 +254,12 @@ impl GPR {
         self.index().as_u8() & 0b111
     }
 
+    /// This function verifies that the index of given GPR matches
+    /// the index of AH, CH, DH or BH registers. Meaning it is in
+    /// the `4..=7` range. This is important, since those registers
+    /// share the index with SPL, BPL, SIL and DIL registers (which
+    /// are of the same size). And have to be encoded differently,
+    /// typically by using Operand Size Override prefix.
     #[inline(always)]
     #[must_use]
     pub const fn index_matches_bit8_high(self) -> bool {
