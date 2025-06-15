@@ -139,14 +139,17 @@ pub const fn {name}({arg}) -> EncodedX86_64Instruction {{
     )
 }
 
+#[allow(unused_variables)]
 fn generate_variant_mi(instruction: &Instruction, variant: &Variant) -> String {
     String::new()
 }
 
+#[allow(unused_variables)]
 fn generate_variant_mr(instruction: &Instruction, variant: &Variant) -> String {
     String::new()
 }
 
+#[allow(unused_variables)]
 fn generate_variant_rm(instruction: &Instruction, variant: &Variant) -> String {
     String::new()
 }

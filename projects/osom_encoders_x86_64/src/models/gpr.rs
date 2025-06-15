@@ -1,6 +1,6 @@
 use core::num::NonZero;
 
-use osom_encoders_common::{U4, osom_assert};
+use osom_encoders_common::{U4, osom_debug_assert};
 
 use super::Size;
 
@@ -41,7 +41,7 @@ impl GPRKind {
     /// The index must be in the range `1..=5`, otherwise the behavior is undefined.
     #[inline(always)]
     pub const unsafe fn from_u8_unchecked(value: u8) -> Self {
-        osom_assert!(value > 0 && value <= 5);
+        osom_debug_assert!(value > 0 && value <= 5);
         unsafe { core::mem::transmute(value) }
     }
 
@@ -195,7 +195,7 @@ impl GPR {
     /// are valid.
     #[inline(always)]
     pub const unsafe fn new_unchecked(kind: GPRKind, index: U4) -> Self {
-        osom_assert!(!kind.equals(GPRKind::Bit8High) || (index.as_u8() >= 4 && index.as_u8() <= 7));
+        osom_debug_assert!(!kind.equals(GPRKind::Bit8High) || (index.as_u8() >= 4 && index.as_u8() <= 7));
 
         let kind_u8 = kind.as_u8();
         let index_u8 = index.as_u8();
@@ -255,6 +255,7 @@ impl GPR {
     }
 
     #[inline(always)]
+    #[must_use]
     pub const fn index_matches_bit8_high(self) -> bool {
         let idx = self.index().as_u8();
         idx >= 4 && idx <= 7

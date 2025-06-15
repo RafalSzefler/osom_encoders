@@ -1,4 +1,4 @@
-use crate::macros::osom_assert;
+use crate::macros::osom_debug_assert;
 
 /// Represents a binary encoded instruction.
 ///
@@ -60,8 +60,8 @@ impl<const BYTE_SIZE: usize> EncodedInstruction<BYTE_SIZE> {
     /// It is up to the caller to ensure that.
     #[inline(always)]
     pub const unsafe fn push_array<const N: usize>(&mut self, array: [u8; N]) {
-        osom_assert!(N <= BYTE_SIZE);
-        osom_assert!(self.len as usize + N <= BYTE_SIZE);
+        osom_debug_assert!(N <= BYTE_SIZE);
+        osom_debug_assert!(self.len as usize + N <= BYTE_SIZE);
 
         let mut ptr = unsafe { self.value.as_mut_ptr().add(self.len as usize) };
         let mut idx = 0;

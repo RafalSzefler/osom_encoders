@@ -1,4 +1,4 @@
-use crate::macros::osom_assert;
+use crate::macros::osom_debug_assert;
 
 /// Representation of a 4-bit unsigned integer. Internally stored as a `u8`,
 /// but with value validation.
@@ -20,7 +20,7 @@ impl U4 {
     /// The value must be in the range `0..=15`, otherwise the behavior is undefined.
     #[inline(always)]
     pub const unsafe fn new_unchecked(value: u8) -> Self {
-        osom_assert!(value <= 15);
+        osom_debug_assert!(value <= 15);
         unsafe { core::hint::assert_unchecked(value <= 15) };
         Self { value }
     }

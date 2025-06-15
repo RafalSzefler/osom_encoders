@@ -5,7 +5,7 @@
 
 pub use super::enc_gen::*;
 
-use osom_encoders_common::osom_assert;
+use osom_encoders_common::osom_debug_assert;
 
 use crate::models::EncodedX86_64Instruction;
 
@@ -21,7 +21,7 @@ use crate::models::EncodedX86_64Instruction;
 /// Otherwise the behaviour is undefined.
 #[inline]
 pub const unsafe fn encode_nop_with_length(length: u8) -> EncodedX86_64Instruction {
-    osom_assert!(length >= 1 && length <= 9);
+    osom_debug_assert!(length >= 1 && length <= 9);
     unsafe {
         match length {
             1 => EncodedX86_64Instruction::from_array([0x90]),

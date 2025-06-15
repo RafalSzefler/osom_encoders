@@ -1,4 +1,6 @@
-use crate::models::{GPR, Immediate8, Immediate16, Immediate32};
+use osom_encoders_common::osom_debug_assert;
+
+use crate::models::{GPR, Immediate8, Immediate16, Immediate32, Size};
 
 /// Represents the scale factor for the index register in a memory operand.
 ///
@@ -57,8 +59,8 @@ impl Displacement {
 ///
 /// # Values
 ///
-/// - `base` - The base register.
-/// - `index` - The index register.
+/// - `base` - The base register, 64-bit wide.
+/// - `index` - The index register, 64-bit wide.
 /// - `scale` - The scale factor for the index register.
 /// - `displacement` - The displacement for the memory operand.
 ///
@@ -67,7 +69,7 @@ impl Displacement {
 /// Not all combinations of `base`, `index`, `scale`, and `displacement` are valid
 /// for a given instruction. For specifics refer to the Intel x86 manual.
 ///
-/// In particular the GPRs have to be 32 or 64 bit wide, depending on the architecture.
+/// In particular the GPRs have to be 64-bit wide.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 #[must_use]
 pub struct Memory {
@@ -78,8 +80,23 @@ pub struct Memory {
 }
 
 impl Memory {
+    /// Creates a new memory operand.
+    ///
+    /// # Safety
+    ///
+    /// The caller *must* ensure that the memory operand is valid for the given instruction.
+    /// Also the encoder supports 64-bit memory addressing only. In particular all the GPRs
+    /// have to be 64-bit wide.
     #[inline(always)]
-    pub const fn new(base: Option<GPR>, index: Option<GPR>, scale: Option<Scale>, displacement: Displacement) -> Self {
+    pub const unsafe fn new(
+        base: Option<GPR>,
+        index: Option<GPR>,
+        scale: Option<Scale>,
+        displacement: Displacement,
+    ) -> Self {
+        osom_debug_assert!(base.is_none() || base.unwrap().size().equals(Size::Bit64));
+        osom_debug_assert!(index.is_none() || index.unwrap().size().equals(Size::Bit64));
+
         Self {
             base,
             index,
@@ -91,12 +108,14 @@ impl Memory {
     #[inline(always)]
     #[must_use]
     pub const fn base(&self) -> Option<GPR> {
+        unsafe { core::hint::assert_unchecked(self.base.is_none() || self.base.unwrap().size().equals(Size::Bit64)) };
         self.base
     }
 
     #[inline(always)]
     #[must_use]
     pub const fn index(&self) -> Option<GPR> {
+        unsafe { core::hint::assert_unchecked(self.index.is_none() || self.index.unwrap().size().equals(Size::Bit64)) };
         self.index
     }
 

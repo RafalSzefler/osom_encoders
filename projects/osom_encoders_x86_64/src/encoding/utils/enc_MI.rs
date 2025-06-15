@@ -1,4 +1,4 @@
-use osom_encoders_common::osom_assert;
+use osom_encoders_common::osom_debug_assert;
 
 use crate::{
     encoding::utils::helpers::{REX, REX_B, mod_rm},
@@ -26,7 +26,7 @@ pub const unsafe fn encode_MI_rm8_imm8<const T: usize>(
 
         match gpr_or_memory {
             GPROrMemory::GPR { gpr } => {
-                osom_assert!(gpr.size().equals(Size::Bit8));
+                osom_debug_assert!(gpr.size().equals(Size::Bit8));
 
                 if gpr.is_extended() {
                     instr.push_array([REX_B]);

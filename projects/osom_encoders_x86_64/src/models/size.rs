@@ -1,4 +1,4 @@
-use osom_encoders_common::osom_assert;
+use osom_encoders_common::osom_debug_assert;
 
 /// Represents all the possible sizes used in x86/x86-64 ISA.
 #[derive(Debug, Clone, Copy, Eq, PartialOrd, Ord)]
@@ -27,7 +27,7 @@ impl Size {
     /// The index must be in the range `1..=4`, otherwise the behavior is undefined.
     #[inline(always)]
     pub const unsafe fn from_u8_unchecked(index: u8) -> Self {
-        osom_assert!(index > 0 && index <= 4);
+        osom_debug_assert!(index > 0 && index <= 4);
         unsafe { core::mem::transmute(index) }
     }
 
