@@ -24,6 +24,7 @@ pub enum Mnemonic {
     sub = 9,
     xor = 10,
     call = 11,
+    cpuid = 12,
 }
 
 impl Mnemonic {
@@ -42,6 +43,7 @@ impl Mnemonic {
             Self::sub => "sub",
             Self::xor => "xor",
             Self::call => "call",
+            Self::cpuid => "cpuid",
         }
     }
 
@@ -59,6 +61,7 @@ impl Mnemonic {
             "sub" => Ok(Self::sub),
             "xor" => Ok(Self::xor),
             "call" => Ok(Self::call),
+            "cpuid" => Ok(Self::cpuid),
 
             _ => Err(InvalidMnemonicError),
         }

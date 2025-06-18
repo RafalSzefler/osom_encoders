@@ -31,6 +31,12 @@ pub mod singleton {
     pub const fn encode_lock() -> EncodedX86_64Instruction {
         unsafe { EncodedX86_64Instruction::from_array([0xF0]) }
     }
+
+    /// Returns processor identification and feature information to the EAX, EBX, ECX, and EDX registers, as determined by input entered in EAX (in some cases, ECX as well).
+    #[inline(always)]
+    pub const fn encode_cpuid() -> EncodedX86_64Instruction {
+        unsafe { EncodedX86_64Instruction::from_array([0x0F, 0xA2]) }
+    }
 }
 
 /// Holds encoders for variants of `mov` instruction.

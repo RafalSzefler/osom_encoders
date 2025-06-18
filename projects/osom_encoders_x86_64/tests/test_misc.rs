@@ -69,3 +69,9 @@ fn test_encode_lock() {
     let instr = singleton::encode_lock();
     assert_encoded_instruction_eq(&[0xF0], &instr);
 }
+
+#[test]
+fn test_encode_cpuid() {
+    let instr = singleton::encode_cpuid();
+    assert_encoded_instruction_eq(&[0x0F, 0xA2], &instr);
+}
