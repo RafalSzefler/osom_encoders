@@ -21,6 +21,8 @@ pub enum Mnemonic {
     jmp = 6,
     jcc = 7,
     ret = 8,
+    sub = 9,
+    xor = 10,
 }
 
 impl Mnemonic {
@@ -36,6 +38,8 @@ impl Mnemonic {
             Self::jmp => "jmp",
             Self::jcc => "jcc",
             Self::ret => "ret",
+            Self::sub => "sub",
+            Self::xor => "xor",
         }
     }
 
@@ -50,6 +54,8 @@ impl Mnemonic {
             "jmp" => Ok(Self::jmp),
             "jcc" => Ok(Self::jcc),
             "ret" => Ok(Self::ret),
+            "sub" => Ok(Self::sub),
+            "xor" => Ok(Self::xor),
 
             _ => Err(InvalidMnemonicError),
         }

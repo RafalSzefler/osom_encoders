@@ -843,3 +843,391 @@ pub mod ret {
         unsafe { utils::enc_I::encode_I_imm16([0xC2], imm16) }
     }
 }
+
+/// Holds encoders for variants of `sub` instruction.
+pub mod sub {
+    use super::*;
+
+    /// Subtract 8-bit immediate from AL register.
+    #[inline(always)]
+    pub const fn encode_sub_AL_imm8(imm8: Immediate8) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_I::encode_I_imm8([0x2C], imm8) }
+    }
+
+    /// Subtract 16-bit immediate from AX register.
+    #[inline(always)]
+    pub const fn encode_sub_AX_imm16(imm16: Immediate16) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_I::encode_I_imm16_operand_size_override([0x2D], imm16) }
+    }
+
+    /// Subtract 32-bit immediate from EAX register.
+    #[inline(always)]
+    pub const fn encode_sub_EAX_imm32(imm32: Immediate32) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_I::encode_I_imm32([0x2D], imm32) }
+    }
+
+    /// Subtract 32-bit immediate from RAX register (sign-extended to 64 bits).
+    #[inline(always)]
+    pub const fn encode_sub_RAX_imm32(imm32: Immediate32) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_I::encode_I_imm32_prefix_rex_w([0x2D], imm32) }
+    }
+
+    /// Subtract 8-bit immediate from 8-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_sub_rm8_imm8(rm8: GPROrMemory, imm8: Immediate8) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MI::encode_MI_rm8_imm8([0x80], 0x05, &rm8, imm8) }
+    }
+
+    /// Subtract 16-bit immediate from 16-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_sub_rm16_imm16(rm16: GPROrMemory, imm16: Immediate16) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MI::encode_MI_rm16_imm16([0x81], 0x05, &rm16, imm16) }
+    }
+
+    /// Subtract 32-bit immediate from 32-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_sub_rm32_imm32(rm32: GPROrMemory, imm32: Immediate32) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MI::encode_MI_rm32_imm32([0x81], 0x05, &rm32, imm32) }
+    }
+
+    /// Subtract 32-bit immediate from 64-bit register or memory (sign-extended to 64 bits).
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_sub_rm64_imm32(rm64: GPROrMemory, imm32: Immediate32) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MI::encode_MI_rm64_imm32([0x81], 0x05, &rm64, imm32) }
+    }
+
+    /// Subtract 8-bit immediate (sign-extended) from 16-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_sub_rm16_imm8(rm16: GPROrMemory, imm8: Immediate8) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MI::encode_MI_rm16_imm8([0x83], 0x05, &rm16, imm8) }
+    }
+
+    /// Subtract 8-bit immediate (sign-extended) from 32-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_sub_rm32_imm8(rm32: GPROrMemory, imm8: Immediate8) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MI::encode_MI_rm32_imm8([0x83], 0x05, &rm32, imm8) }
+    }
+
+    /// Subtract 8-bit immediate (sign-extended) from 64-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_sub_rm64_imm8(rm64: GPROrMemory, imm8: Immediate8) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MI::encode_MI_rm64_imm8([0x83], 0x05, &rm64, imm8) }
+    }
+
+    /// Subtract 8-bit register from 8-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_sub_rm8_reg8(rm8: GPROrMemory, reg8: GPR) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MR::encode_MR([0x28], &rm8, reg8) }
+    }
+
+    /// Subtract 16-bit register from 16-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_sub_rm16_reg16(rm16: GPROrMemory, reg16: GPR) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MR::encode_MR([0x29], &rm16, reg16) }
+    }
+
+    /// Subtract 32-bit register from 32-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_sub_rm32_reg32(rm32: GPROrMemory, reg32: GPR) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MR::encode_MR([0x29], &rm32, reg32) }
+    }
+
+    /// Subtract 64-bit register from 64-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_sub_rm64_reg64(rm64: GPROrMemory, reg64: GPR) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MR::encode_MR([0x29], &rm64, reg64) }
+    }
+
+    /// Subtract 8-bit register or memory from 8-bit register.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_sub_reg8_rm8(reg8: GPR, rm8: GPROrMemory) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MR::encode_MR([0x2A], &rm8, reg8) }
+    }
+
+    /// Subtract 16-bit register or memory from 16-bit register.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_sub_reg16_rm16(reg16: GPR, rm16: GPROrMemory) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MR::encode_MR([0x2B], &rm16, reg16) }
+    }
+
+    /// Subtract 32-bit register or memory from 32-bit register.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_sub_reg32_rm32(reg32: GPR, rm32: GPROrMemory) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MR::encode_MR([0x2B], &rm32, reg32) }
+    }
+
+    /// Subtract 64-bit register or memory from 64-bit register.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_sub_reg64_rm64(reg64: GPR, rm64: GPROrMemory) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MR::encode_MR([0x2B], &rm64, reg64) }
+    }
+}
+
+/// Holds encoders for variants of `xor` instruction.
+pub mod xor {
+    use super::*;
+
+    /// Bitwise XOR 8-bit immediate with AL register.
+    #[inline(always)]
+    pub const fn encode_xor_AL_imm8(imm8: Immediate8) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_I::encode_I_imm8([0x34], imm8) }
+    }
+
+    /// Bitwise XOR 16-bit immediate with AX register.
+    #[inline(always)]
+    pub const fn encode_xor_AX_imm16(imm16: Immediate16) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_I::encode_I_imm16_operand_size_override([0x35], imm16) }
+    }
+
+    /// Bitwise XOR 32-bit immediate with EAX register.
+    #[inline(always)]
+    pub const fn encode_xor_EAX_imm32(imm32: Immediate32) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_I::encode_I_imm32([0x35], imm32) }
+    }
+
+    /// Bitwise XOR 32-bit immediate with RAX register (sign-extended to 64 bits).
+    #[inline(always)]
+    pub const fn encode_xor_RAX_imm32(imm32: Immediate32) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_I::encode_I_imm32_prefix_rex_w([0x35], imm32) }
+    }
+
+    /// Bitwise XOR 8-bit immediate with 8-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_xor_rm8_imm8(rm8: GPROrMemory, imm8: Immediate8) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MI::encode_MI_rm8_imm8([0x80], 0x06, &rm8, imm8) }
+    }
+
+    /// Bitwise XOR 16-bit immediate with 16-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_xor_rm16_imm16(rm16: GPROrMemory, imm16: Immediate16) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MI::encode_MI_rm16_imm16([0x81], 0x06, &rm16, imm16) }
+    }
+
+    /// Bitwise XOR 32-bit immediate with 32-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_xor_rm32_imm32(rm32: GPROrMemory, imm32: Immediate32) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MI::encode_MI_rm32_imm32([0x81], 0x06, &rm32, imm32) }
+    }
+
+    /// Bitwise XOR 32-bit immediate with 64-bit register or memory (sign-extended to 64 bits).
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_xor_rm64_imm32(rm64: GPROrMemory, imm32: Immediate32) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MI::encode_MI_rm64_imm32([0x81], 0x06, &rm64, imm32) }
+    }
+
+    /// Bitwise XOR 8-bit immediate (sign-extended) with 16-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_xor_rm16_imm8(rm16: GPROrMemory, imm8: Immediate8) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MI::encode_MI_rm16_imm8([0x83], 0x06, &rm16, imm8) }
+    }
+
+    /// Bitwise XOR 8-bit immediate (sign-extended) with 32-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_xor_rm32_imm8(rm32: GPROrMemory, imm8: Immediate8) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MI::encode_MI_rm32_imm8([0x83], 0x06, &rm32, imm8) }
+    }
+
+    /// Bitwise XOR 8-bit immediate (sign-extended) with 64-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_xor_rm64_imm8(rm64: GPROrMemory, imm8: Immediate8) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MI::encode_MI_rm64_imm8([0x83], 0x06, &rm64, imm8) }
+    }
+
+    /// Bitwise XOR 8-bit register with 8-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_xor_rm8_reg8(rm8: GPROrMemory, reg8: GPR) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MR::encode_MR([0x30], &rm8, reg8) }
+    }
+
+    /// Bitwise XOR 16-bit register with 16-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_xor_rm16_reg16(rm16: GPROrMemory, reg16: GPR) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MR::encode_MR([0x31], &rm16, reg16) }
+    }
+
+    /// Bitwise XOR 32-bit register with 32-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_xor_rm32_reg32(rm32: GPROrMemory, reg32: GPR) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MR::encode_MR([0x31], &rm32, reg32) }
+    }
+
+    /// Bitwise XOR 64-bit register with 64-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_xor_rm64_reg64(rm64: GPROrMemory, reg64: GPR) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MR::encode_MR([0x31], &rm64, reg64) }
+    }
+
+    /// Bitwise XOR 8-bit register or memory with 8-bit register.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_xor_reg8_rm8(reg8: GPR, rm8: GPROrMemory) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MR::encode_MR([0x32], &rm8, reg8) }
+    }
+
+    /// Bitwise XOR 16-bit register or memory with 16-bit register.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_xor_reg16_rm16(reg16: GPR, rm16: GPROrMemory) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MR::encode_MR([0x33], &rm16, reg16) }
+    }
+
+    /// Bitwise XOR 32-bit register or memory with 32-bit register.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_xor_reg32_rm32(reg32: GPR, rm32: GPROrMemory) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MR::encode_MR([0x33], &rm32, reg32) }
+    }
+
+    /// Bitwise XOR 64-bit register or memory with 64-bit register.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_xor_reg64_rm64(reg64: GPR, rm64: GPROrMemory) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MR::encode_MR([0x33], &rm64, reg64) }
+    }
+}

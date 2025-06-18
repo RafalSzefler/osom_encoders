@@ -720,4 +720,286 @@
         </variant_set>
     </instruction>
 
+    <instruction>
+        <mnemonic>sub</mnemonic>
+        <variant_set>
+            <variant>
+                <opcode>2C</opcode>
+                <name>AL</name>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Subtract 8-bit immediate from AL register.</description>
+            </variant>
+            <variant>
+                <opcode>2D</opcode>
+                <name>AX</name>
+                <operands>imm16</operands>
+                <operand_encoding>I</operand_encoding>
+                <additional_properties>PrefixOSO</additional_properties>
+                <description>Subtract 16-bit immediate from AX register.</description>
+            </variant>
+            <variant>
+                <opcode>2D</opcode>
+                <name>EAX</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Subtract 32-bit immediate from EAX register.</description>
+            </variant>
+            <variant>
+                <opcode>2D</opcode>
+                <name>RAX</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <additional_properties>PrefixRexW</additional_properties>
+                <description>Subtract 32-bit immediate from RAX register (sign-extended to 64 bits).</description>
+            </variant>
+            <variant>
+                <opcode>80</opcode>
+                <extended_opcode>5</extended_opcode>
+                <operands>rm8, imm8</operands>
+                <operand_encoding>MI</operand_encoding>
+                <description>Subtract 8-bit immediate from 8-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>81</opcode>
+                <extended_opcode>5</extended_opcode>
+                <operands>rm16, imm16</operands>
+                <operand_encoding>MI</operand_encoding>
+                <additional_properties>PrefixOSO</additional_properties>
+                <description>Subtract 16-bit immediate from 16-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>81</opcode>
+                <extended_opcode>5</extended_opcode>
+                <operands>rm32, imm32</operands>
+                <operand_encoding>MI</operand_encoding>
+                <description>Subtract 32-bit immediate from 32-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>81</opcode>
+                <extended_opcode>5</extended_opcode>
+                <operands>rm64, imm32</operands>
+                <operand_encoding>MI</operand_encoding>
+                <additional_properties>PrefixRexW</additional_properties>
+                <description>Subtract 32-bit immediate from 64-bit register or memory (sign-extended to 64 bits).</description>
+            </variant>
+            <variant>
+                <opcode>83</opcode>
+                <extended_opcode>5</extended_opcode>
+                <operands>rm16, imm8</operands>
+                <operand_encoding>MI</operand_encoding>
+                <additional_properties>PrefixOSO</additional_properties>
+                <description>Subtract 8-bit immediate (sign-extended) from 16-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>83</opcode>
+                <extended_opcode>5</extended_opcode>
+                <operands>rm32, imm8</operands>
+                <operand_encoding>MI</operand_encoding>
+                <description>Subtract 8-bit immediate (sign-extended) from 32-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>83</opcode>
+                <extended_opcode>5</extended_opcode>
+                <operands>rm64, imm8</operands>
+                <operand_encoding>MI</operand_encoding>
+                <additional_properties>PrefixRexW</additional_properties>
+                <description>Subtract 8-bit immediate (sign-extended) from 64-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>28</opcode>
+                <operands>rm8, reg8</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Subtract 8-bit register from 8-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>29</opcode>
+                <operands>rm16, reg16</operands>
+                <operand_encoding>MR</operand_encoding>
+                <additional_properties>PrefixOSO</additional_properties>
+                <description>Subtract 16-bit register from 16-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>29</opcode>
+                <operands>rm32, reg32</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Subtract 32-bit register from 32-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>29</opcode>
+                <operands>rm64, reg64</operands>
+                <operand_encoding>MR</operand_encoding>
+                <additional_properties>PrefixRexW</additional_properties>
+                <description>Subtract 64-bit register from 64-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>2A</opcode>
+                <operands>reg8, rm8</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Subtract 8-bit register or memory from 8-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>2B</opcode>
+                <operands>reg16, rm16</operands>
+                <operand_encoding>MR</operand_encoding>
+                <additional_properties>PrefixOSO</additional_properties>
+                <description>Subtract 16-bit register or memory from 16-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>2B</opcode>
+                <operands>reg32, rm32</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Subtract 32-bit register or memory from 32-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>2B</opcode>
+                <operands>reg64, rm64</operands>
+                <operand_encoding>MR</operand_encoding>
+                <additional_properties>PrefixRexW</additional_properties>
+                <description>Subtract 64-bit register or memory from 64-bit register.</description>
+            </variant>
+        </variant_set>
+    </instruction>
+
+    <instruction>
+        <mnemonic>xor</mnemonic>
+        <variant_set>
+            <variant>
+                <opcode>34</opcode>
+                <name>AL</name>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Bitwise XOR 8-bit immediate with AL register.</description>
+            </variant>
+            <variant>
+                <opcode>35</opcode>
+                <name>AX</name>
+                <operands>imm16</operands>
+                <operand_encoding>I</operand_encoding>
+                <additional_properties>PrefixOSO</additional_properties>
+                <description>Bitwise XOR 16-bit immediate with AX register.</description>
+            </variant>
+            <variant>
+                <opcode>35</opcode>
+                <name>EAX</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Bitwise XOR 32-bit immediate with EAX register.</description>
+            </variant>
+            <variant>
+                <opcode>35</opcode>
+                <name>RAX</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <additional_properties>PrefixRexW</additional_properties>
+                <description>Bitwise XOR 32-bit immediate with RAX register (sign-extended to 64 bits).</description>
+            </variant>
+            <variant>
+                <opcode>80</opcode>
+                <extended_opcode>6</extended_opcode>
+                <operands>rm8, imm8</operands>
+                <operand_encoding>MI</operand_encoding>
+                <description>Bitwise XOR 8-bit immediate with 8-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>81</opcode>
+                <extended_opcode>6</extended_opcode>
+                <operands>rm16, imm16</operands>
+                <operand_encoding>MI</operand_encoding>
+                <additional_properties>PrefixOSO</additional_properties>
+                <description>Bitwise XOR 16-bit immediate with 16-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>81</opcode>
+                <extended_opcode>6</extended_opcode>
+                <operands>rm32, imm32</operands>
+                <operand_encoding>MI</operand_encoding>
+                <description>Bitwise XOR 32-bit immediate with 32-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>81</opcode>
+                <extended_opcode>6</extended_opcode>
+                <operands>rm64, imm32</operands>
+                <operand_encoding>MI</operand_encoding>
+                <additional_properties>PrefixRexW</additional_properties>
+                <description>Bitwise XOR 32-bit immediate with 64-bit register or memory (sign-extended to 64 bits).</description>
+            </variant>
+            <variant>
+                <opcode>83</opcode>
+                <extended_opcode>6</extended_opcode>
+                <operands>rm16, imm8</operands>
+                <operand_encoding>MI</operand_encoding>
+                <additional_properties>PrefixOSO</additional_properties>
+                <description>Bitwise XOR 8-bit immediate (sign-extended) with 16-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>83</opcode>
+                <extended_opcode>6</extended_opcode>
+                <operands>rm32, imm8</operands>
+                <operand_encoding>MI</operand_encoding>
+                <description>Bitwise XOR 8-bit immediate (sign-extended) with 32-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>83</opcode>
+                <extended_opcode>6</extended_opcode>
+                <operands>rm64, imm8</operands>
+                <operand_encoding>MI</operand_encoding>
+                <additional_properties>PrefixRexW</additional_properties>
+                <description>Bitwise XOR 8-bit immediate (sign-extended) with 64-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>30</opcode>
+                <operands>rm8, reg8</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Bitwise XOR 8-bit register with 8-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>31</opcode>
+                <operands>rm16, reg16</operands>
+                <operand_encoding>MR</operand_encoding>
+                <additional_properties>PrefixOSO</additional_properties>
+                <description>Bitwise XOR 16-bit register with 16-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>31</opcode>
+                <operands>rm32, reg32</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Bitwise XOR 32-bit register with 32-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>31</opcode>
+                <operands>rm64, reg64</operands>
+                <operand_encoding>MR</operand_encoding>
+                <additional_properties>PrefixRexW</additional_properties>
+                <description>Bitwise XOR 64-bit register with 64-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>32</opcode>
+                <operands>reg8, rm8</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Bitwise XOR 8-bit register or memory with 8-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>33</opcode>
+                <operands>reg16, rm16</operands>
+                <operand_encoding>MR</operand_encoding>
+                <additional_properties>PrefixOSO</additional_properties>
+                <description>Bitwise XOR 16-bit register or memory with 16-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>33</opcode>
+                <operands>reg32, rm32</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Bitwise XOR 32-bit register or memory with 32-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>33</opcode>
+                <operands>reg64, rm64</operands>
+                <operand_encoding>MR</operand_encoding>
+                <additional_properties>PrefixRexW</additional_properties>
+                <description>Bitwise XOR 64-bit register or memory with 64-bit register.</description>
+            </variant>
+        </variant_set>
+    </instruction>
+
 </instruction_set>
