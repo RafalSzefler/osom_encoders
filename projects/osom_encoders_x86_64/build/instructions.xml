@@ -22,10 +22,10 @@
                     * imm16: 16-bit immediate value
                     * imm32: 32-bit immediate value
                     * imm64: 64-bit immediate value
-                    * r8: 8-bit register
-                    * r16: 16-bit register
-                    * r32: 32-bit register
-                    * r64: 64-bit register
+                    * reg8: 8-bit register
+                    * reg16: 16-bit register
+                    * reg32: 32-bit register
+                    * reg64: 64-bit register
                     * rm8: 8-bit memory or register
                     * rm16: 16-bit memory or register
                     * rm32: 32-bit memory or register
@@ -34,7 +34,8 @@
                 - operand_encoding: The encoding scheme for operands. Mandatory. One of:
                     * ZO: Zero operands (e.g., nop)
                     * I: Immediate value encoding
-                    * OI: Immediate to reg
+                    * O: Reg (gets added to the opcode)
+                    * OI: Immediate to reg (the register gets added to the opcode)
                     * MI: Immediate to reg/mem
                     * MR: Reg to reg/mem (or vice versa)
                     * M: Reg/mem
@@ -199,6 +200,91 @@
                 <operands>reg64, rm64</operands>
                 <operand_encoding>MR</operand_encoding>
                 <description>Move 64-bit register or memory to 64-bit register.</description>
+            </variant>
+        </variant_set>
+    </instruction>
+
+    <instruction>
+        <mnemonic>push</mnemonic>
+        <variant_set>
+            <variant>
+                <opcode>FF</opcode>
+                <extended_opcode>6</extended_opcode>
+                <operands>rm16</operands>
+                <operand_encoding>M</operand_encoding>
+                <additional_properties>PrefixOSO</additional_properties>
+                <description>Push 16-bit register or memory onto the stack.</description>
+            </variant>
+            <variant>
+                <opcode>FF</opcode>
+                <extended_opcode>6</extended_opcode>
+                <operands>rm64</operands>
+                <operand_encoding>M</operand_encoding>
+                <description>Push 64-bit register or memory onto the stack.</description>
+            </variant>
+            <variant>
+                <opcode>50</opcode>
+                <operands>reg16</operands>
+                <operand_encoding>O</operand_encoding>
+                <description>Push 16-bit register onto the stack.</description>
+            </variant>
+            <variant>
+                <opcode>50</opcode>
+                <operands>reg64</operands>
+                <operand_encoding>O</operand_encoding>
+                <description>Push 64-bit register onto the stack.</description>
+            </variant>
+            <variant>
+                <opcode>6A</opcode>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Push 8-bit immediate onto the stack (sign-extended).</description>
+            </variant>
+            <variant>
+                <opcode>68</opcode>
+                <operands>imm16</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Push 16-bit immediate onto the stack (sign-extended).</description>
+                <additional_properties>PrefixOSO</additional_properties>
+            </variant>
+            <variant>
+                <opcode>68</opcode>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Push 32-bit immediate onto the stack (sign-extended).</description>
+            </variant>
+        </variant_set>
+    </instruction>
+
+    <instruction>
+        <mnemonic>pop</mnemonic>
+        <variant_set>
+            <variant>
+                <opcode>8F</opcode>
+                <extended_opcode>0</extended_opcode>
+                <operands>rm16</operands>
+                <operand_encoding>M</operand_encoding>
+                <additional_properties>PrefixOSO</additional_properties>
+                <description>Pop 16-bit value from the stack into register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>8F</opcode>
+                <extended_opcode>0</extended_opcode>
+                <operands>rm64</operands>
+                <operand_encoding>M</operand_encoding>
+                <description>Pop 64-bit value from the stack into register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>58</opcode>
+                <operands>reg16</operands>
+                <operand_encoding>O</operand_encoding>
+                <description>Pop 16-bit value from the stack into register.</description>
+            </variant>
+            <variant>
+                <opcode>58</opcode>
+                <operands>reg64</operands>
+                <operand_encoding>O</operand_encoding>
+                <description>Pop 64-bit value from the stack into register.</description>
             </variant>
         </variant_set>
     </instruction>

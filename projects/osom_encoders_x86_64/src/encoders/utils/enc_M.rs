@@ -1,7 +1,7 @@
 use core::num::NonZero;
 
 use crate::{
-    encoders::utils::helpers::{REX, REX_B, REX_W, encode_memory, mod_rm, rex},
+    encoders::utils::helpers::{OPERAND_SIZE_OVERRIDE_PREFIX, REX, REX_B, REX_W, encode_memory, mod_rm, rex},
     models::{EncodedX86_64Instruction, GPRKind, GPROrMemory, Size},
 };
 
@@ -10,12 +10,17 @@ pub const unsafe fn encode_M_gpr_or_memory<const T: usize>(
     extended_opcode: u8,
     gpr_or_memory: &GPROrMemory,
     bit64_requires_rex_w: bool,
+    bit16_requires_os_prefix: bool,
 ) -> EncodedX86_64Instruction {
     unsafe {
         let mut result_instr = EncodedX86_64Instruction::new();
 
         match gpr_or_memory {
             GPROrMemory::GPR { gpr } => {
+                if bit16_requires_os_prefix && gpr.size().equals(Size::Bit16) {
+                    result_instr.push_array([OPERAND_SIZE_OVERRIDE_PREFIX]);
+                }
+
                 let rex = {
                     const fn unwrap_rex(val: Option<NonZero<u8>>) -> u8 {
                         (if let Some(val) = val { val } else { REX }).get()

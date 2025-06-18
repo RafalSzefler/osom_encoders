@@ -236,7 +236,15 @@ fn test_execution_sum_through_lea(#[case] a: i64, #[case] b: i64, #[case] expect
         // According to sysv64 calling convention, the first argument is in RDI, second RSI.
         // While the return value is in RAX.
         let rmc = RawMachineCode::from_code(&[
-            lea::encode_lea_reg64_m(GPR::RAX, Memory::BasedScaled { base: GPR::RDI, index: GPR::RSI, scale: Scale::Scale1, offset: Offset::None }),
+            lea::encode_lea_reg64_m(
+                GPR::RAX,
+                Memory::BasedScaled {
+                    base: GPR::RDI,
+                    index: GPR::RSI,
+                    scale: Scale::Scale1,
+                    offset: Offset::None,
+                },
+            ),
             ret::encode_ret(),
         ]);
         let func = compile!(rmc, 0, "sysv64", (a: i64, b: i64));

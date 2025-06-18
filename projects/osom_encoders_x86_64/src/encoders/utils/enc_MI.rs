@@ -34,7 +34,7 @@ pub const unsafe fn encode_MI_rm8_imm8<const T: usize>(
     osom_debug_assert!(gpr_size_is_valid(gpr_or_memory, Size::Bit8));
     unsafe {
         let mut instr = EncodedX86_64Instruction::new();
-        instr.push_slice(encode_M_gpr_or_memory(opcode, extended_opcode, gpr_or_memory, true).as_slice());
+        instr.push_slice(encode_M_gpr_or_memory(opcode, extended_opcode, gpr_or_memory, true, false).as_slice());
         instr.push_array(imm8.encode());
         instr
     }
@@ -59,7 +59,7 @@ pub const unsafe fn encode_MI_rm16_imm16<const T: usize>(
     unsafe {
         let mut instr = EncodedX86_64Instruction::new();
         instr.push_array([OPERAND_SIZE_OVERRIDE_PREFIX]);
-        instr.push_slice(encode_M_gpr_or_memory(opcode, extended_opcode, gpr_or_memory, true).as_slice());
+        instr.push_slice(encode_M_gpr_or_memory(opcode, extended_opcode, gpr_or_memory, true, false).as_slice());
         instr.push_array(imm16.encode());
         instr
     }
@@ -84,7 +84,7 @@ pub const unsafe fn encode_MI_rm16_imm8<const T: usize>(
     unsafe {
         let mut instr = EncodedX86_64Instruction::new();
         instr.push_array([OPERAND_SIZE_OVERRIDE_PREFIX]);
-        instr.push_slice(encode_M_gpr_or_memory(opcode, extended_opcode, gpr_or_memory, true).as_slice());
+        instr.push_slice(encode_M_gpr_or_memory(opcode, extended_opcode, gpr_or_memory, true, false).as_slice());
         instr.push_array(imm8.encode());
         instr
     }
@@ -108,7 +108,7 @@ pub const unsafe fn encode_MI_rm32_imm32<const T: usize>(
     osom_debug_assert!(gpr_size_is_valid(gpr_or_memory, Size::Bit32));
     unsafe {
         let mut instr = EncodedX86_64Instruction::new();
-        instr.push_slice(encode_M_gpr_or_memory(opcode, extended_opcode, gpr_or_memory, true).as_slice());
+        instr.push_slice(encode_M_gpr_or_memory(opcode, extended_opcode, gpr_or_memory, true, false).as_slice());
         instr.push_array(imm32.encode());
         instr
     }
@@ -132,7 +132,7 @@ pub const unsafe fn encode_MI_rm32_imm8<const T: usize>(
     osom_debug_assert!(gpr_size_is_valid(gpr_or_memory, Size::Bit32));
     unsafe {
         let mut instr = EncodedX86_64Instruction::new();
-        instr.push_slice(encode_M_gpr_or_memory(opcode, extended_opcode, gpr_or_memory, true).as_slice());
+        instr.push_slice(encode_M_gpr_or_memory(opcode, extended_opcode, gpr_or_memory, true, false).as_slice());
         instr.push_array(imm8.encode());
         instr
     }
@@ -159,7 +159,7 @@ pub const unsafe fn encode_MI_rm64_imm32<const T: usize>(
         // The `encode_M_gpr_or_memory` function already handles
         // 64-bit register encoding.
         let mut instr = EncodedX86_64Instruction::new();
-        instr.push_slice(encode_M_gpr_or_memory(opcode, extended_opcode, gpr_or_memory, true).as_slice());
+        instr.push_slice(encode_M_gpr_or_memory(opcode, extended_opcode, gpr_or_memory, true, false).as_slice());
         instr.push_array(imm32.encode());
         instr
     }
@@ -186,7 +186,7 @@ pub const unsafe fn encode_MI_rm64_imm8<const T: usize>(
         // The `encode_M_gpr_or_memory` function already handles
         // 64-bit register encoding.
         let mut instr = EncodedX86_64Instruction::new();
-        instr.push_slice(encode_M_gpr_or_memory(opcode, extended_opcode, gpr_or_memory, true).as_slice());
+        instr.push_slice(encode_M_gpr_or_memory(opcode, extended_opcode, gpr_or_memory, true, false).as_slice());
         instr.push_array(imm8.encode());
         instr
     }

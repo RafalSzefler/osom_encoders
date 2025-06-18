@@ -30,4 +30,3 @@ fn test_lea_reg64_m(#[case] reg64: GPR, #[case] m: Memory, #[case] expected: &[u
     let instr = unsafe { lea::encode_lea_reg64_m(reg64, m) };
     assert_encoded_instruction_eq(expected, &instr);
 }
- 

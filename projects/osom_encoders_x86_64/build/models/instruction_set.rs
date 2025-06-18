@@ -61,7 +61,10 @@ pub enum OperandEncoding {
     /// Reg to reg/mem (or vice versa).
     MR,
 
-    /// Immediate to reg.
+    /// Reg (added to opcode).
+    O,
+
+    /// Immediate to reg (added to opcode).
     OI,
 
     /// Reg/mem.

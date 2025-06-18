@@ -91,6 +91,7 @@ fn generate_variant(instruction: &Instruction, variant: &Variant) -> String {
         OperandEncoding::I => generate_variant_i(instruction, variant),
         OperandEncoding::MI => generate_variant_mi(instruction, variant),
         OperandEncoding::MR => generate_variant_mr(instruction, variant),
+        OperandEncoding::O => generate_variant_o(instruction, variant),
         OperandEncoding::OI => generate_variant_oi(instruction, variant),
         OperandEncoding::M => generate_variant_m(instruction, variant),
     }
@@ -452,21 +453,96 @@ fn generate_variant_m(instruction: &Instruction, variant: &Variant) -> String {
     let opcode = to_hex(&variant.opcode);
     let description = &variant.description;
 
+    let has_rex_w_prefix = if variant.additional_properties.contains(VariantProperty::PrefixRexW) {
+        "true"
+    } else {
+        "false"
+    };
+
+    let has_oso_prefix = if variant.additional_properties.contains(VariantProperty::PrefixOSO) {
+        "true"
+    } else {
+        "false"
+    };
+
     let rm_operand = &variant.operands[0];
 
     let name = function_name(instruction, variant);
     let name = format!("{}_{:#?}", name, rm_operand);
 
     let (args, body) = match &rm_operand {
+        Operand::rm16 => {
+            let args = "rm16: GPROrMemory";
+            let body = format!(
+                "unsafe {{ utils::enc_M::encode_M_gpr_or_memory([{opcode}], {extended_opcode}, &rm16, {has_rex_w_prefix}, {has_oso_prefix}) }}"
+            );
+            (args, body)
+        }
         Operand::rm64 => {
             let args = "rm64: GPROrMemory";
             let body = format!(
-                "unsafe {{ utils::enc_M::encode_M_gpr_or_memory([{opcode}], {extended_opcode}, &rm64, false) }}"
+                "unsafe {{ utils::enc_M::encode_M_gpr_or_memory([{opcode}], {extended_opcode}, &rm64, {has_rex_w_prefix}, {has_oso_prefix}) }}"
             );
             (args, body)
         }
         _ => panic!(
             "Encoding M requires rm operand and of appropriate size. Not the case for a variant in mnemonic: {:?}",
+            instruction.mnemonic
+        ),
+    };
+
+    format!(
+        "
+/// {description}
+///
+/// # Safety
+///
+/// The caller has to ensure that the operands are valid,
+/// in particular the function does not check register sizes.
+#[inline(always)]
+pub const unsafe fn {name}({args}) -> EncodedX86_64Instruction {{
+    {body}
+}}
+"
+    )
+}
+
+fn generate_variant_o(instruction: &Instruction, variant: &Variant) -> String {
+    if variant.operands.len() != 1 {
+        panic!(
+            "Encoding O supports single reg operand only. Not the case for a variant in mnemonic: {:?}",
+            instruction.mnemonic
+        );
+    }
+
+    if variant.extended_opcode.is_some() {
+        panic!(
+            "Encoding O doesn't use extended opcode. Not the case for a variant in mnemonic: {:?}",
+            instruction.mnemonic
+        );
+    };
+
+    let opcode = to_hex(&variant.opcode);
+    let description = &variant.description;
+
+    let reg_operand = &variant.operands[0];
+
+    let name = function_name(instruction, variant);
+    let name = format!("{}_{:#?}", name, reg_operand);
+
+    let (args, body) = match &reg_operand {
+        Operand::reg16 => {
+            let args = "reg16: GPR";
+            let body = format!("unsafe {{ utils::enc_O::encode_O({opcode}, reg16) }}");
+            (args, body)
+        }
+        Operand::reg64 => {
+            let args = "reg64: GPR";
+            let body = format!("unsafe {{ utils::enc_O::encode_O({opcode}, reg64) }}");
+            (args, body)
+        }
+        _ => panic!(
+            "Encoding O supports only reg16 and reg64 operands. Not the case for a variant in mnemonic: {:?}",
             instruction.mnemonic
         ),
     };

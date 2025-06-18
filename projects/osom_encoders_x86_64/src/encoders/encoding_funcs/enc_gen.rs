@@ -239,6 +239,122 @@ pub mod mov {
     }
 }
 
+/// Holds encoders for variants of `push` instruction.
+pub mod push {
+    use super::*;
+
+    /// Push 16-bit register or memory onto the stack.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_push_rm16(rm16: GPROrMemory) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_M::encode_M_gpr_or_memory([0xFF], 0x06, &rm16, false, true) }
+    }
+
+    /// Push 64-bit register or memory onto the stack.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_push_rm64(rm64: GPROrMemory) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_M::encode_M_gpr_or_memory([0xFF], 0x06, &rm64, false, false) }
+    }
+
+    /// Push 16-bit register onto the stack.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_push_reg16(reg16: GPR) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_O::encode_O(0x50, reg16) }
+    }
+
+    /// Push 64-bit register onto the stack.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_push_reg64(reg64: GPR) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_O::encode_O(0x50, reg64) }
+    }
+
+    /// Push 8-bit immediate onto the stack (sign-extended).
+    #[inline(always)]
+    pub const fn encode_push_imm8(imm8: Immediate8) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_I::encode_I_imm8([0x6A], imm8) }
+    }
+
+    /// Push 16-bit immediate onto the stack (sign-extended).
+    #[inline(always)]
+    pub const fn encode_push_imm16(imm16: Immediate16) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_I::encode_I_imm16_operand_size_override([0x68], imm16) }
+    }
+
+    /// Push 32-bit immediate onto the stack (sign-extended).
+    #[inline(always)]
+    pub const fn encode_push_imm32(imm32: Immediate32) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_I::encode_I_imm32([0x68], imm32) }
+    }
+}
+
+/// Holds encoders for variants of `pop` instruction.
+pub mod pop {
+    use super::*;
+
+    /// Pop 16-bit value from the stack into register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_pop_rm16(rm16: GPROrMemory) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_M::encode_M_gpr_or_memory([0x8F], 0x00, &rm16, false, true) }
+    }
+
+    /// Pop 64-bit value from the stack into register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_pop_rm64(rm64: GPROrMemory) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_M::encode_M_gpr_or_memory([0x8F], 0x00, &rm64, false, false) }
+    }
+
+    /// Pop 16-bit value from the stack into register.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_pop_reg16(reg16: GPR) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_O::encode_O(0x58, reg16) }
+    }
+
+    /// Pop 64-bit value from the stack into register.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_pop_reg64(reg64: GPR) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_O::encode_O(0x58, reg64) }
+    }
+}
+
 /// Holds encoders for variants of `lea` instruction.
 pub mod lea {
     use super::*;
@@ -1077,7 +1193,7 @@ pub mod jmp {
     /// in particular the function does not check register sizes.
     #[inline(always)]
     pub const unsafe fn encode_jmp_rm64(rm64: GPROrMemory) -> EncodedX86_64Instruction {
-        unsafe { utils::enc_M::encode_M_gpr_or_memory([0xFF], 0x04, &rm64, false) }
+        unsafe { utils::enc_M::encode_M_gpr_or_memory([0xFF], 0x04, &rm64, false, false) }
     }
 }
 
@@ -1296,6 +1412,6 @@ pub mod call {
     /// in particular the function does not check register sizes.
     #[inline(always)]
     pub const unsafe fn encode_call_rm64(rm64: GPROrMemory) -> EncodedX86_64Instruction {
-        unsafe { utils::enc_M::encode_M_gpr_or_memory([0xFF], 0x02, &rm64, false) }
+        unsafe { utils::enc_M::encode_M_gpr_or_memory([0xFF], 0x02, &rm64, false, false) }
     }
 }
