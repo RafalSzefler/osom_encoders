@@ -21,6 +21,7 @@ fn test_push_rm64(#[case] rm64: GPROrMemory, #[case] expected: &[u8]) {
 
 #[rstest]
 #[case(GPR::RAX, &[0x50])]
+#[case(GPR::R10, &[0x41, 0x52])]
 fn test_push_reg64(#[case] reg64: GPR, #[case] expected: &[u8]) {
     let instr = unsafe { push::encode_push_reg64(reg64) };
     assert_encoded_instruction_eq(expected, &instr);
@@ -60,6 +61,7 @@ fn test_pop_rm64(#[case] rm64: GPROrMemory, #[case] expected: &[u8]) {
 
 #[rstest]
 #[case(GPR::RAX, &[0x58])]
+#[case(GPR::R10, &[0x41, 0x5A])]
 fn test_pop_reg64(#[case] reg64: GPR, #[case] expected: &[u8]) {
     let instr = unsafe { pop::encode_pop_reg64(reg64) };
     assert_encoded_instruction_eq(expected, &instr);
