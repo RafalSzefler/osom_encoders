@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    X86_64 Instructions definitions
+    
+    This XML file defines the x86_64 instruction set for the encoder. It does
+    not support 32-bit mode.
+    Each instruction can have multiple variants with different operand combinations.
+
+    The document roughly follows Intel's manual.
+    
+    Document structure:
+    - instruction_set: Root element containing all instruction definitions
+    
+    - instruction: Defines a single instruction mnemonic
+        - mnemonic: The instruction name (e.g., "add", "nop"), a unique, alhpanumeric identifier for the instruction. Mandatory.
+        - variant_set: Collection of different forms of the instruction, necessarily non-empty.
+            - variant: A specific variant for the given instruction.
+                - opcode: The hexadecimal opcode byte(s) for this variant. Mandatory, at most 4 bytes (8 hexes).
+                - name: Optional name of the variant. Typically empty.
+                - operands: List of operands for this variant. Optional, comma-separated list of operand names. Allowed values are:
+                    * imm8: 8-bit immediate value
+                    * imm16: 16-bit immediate value
+                    * imm32: 32-bit immediate value
+                    * imm64: 64-bit immediate value
+                    * r8: 8-bit register
+                    * r16: 16-bit register
+                    * r32: 32-bit register
+                    * r64: 64-bit register
+                    * rm8: 8-bit memory or register
+                    * rm16: 16-bit memory or register
+                    * rm32: 32-bit memory or register
+                    * rm64: 64-bit memory or register
+                - operand_encoding: The encoding scheme for operands. Mandatory. One of:
+                    * ZO: Zero operands (e.g., nop)
+                    * I: Immediate value encoding
+                    * OI: Immediate to reg
+                    * MI: Immediate to reg/mem
+                    * MR: Reg to reg/mem (or vice versa)
+                    * M: Reg/mem
+                - additional_properties: Special properties for the variant. Optional. Values are comma-separated fixed strings from the following list:
+                    * PrefixOSO: Requires operand size override prefix (66h)
+                    * PrefixRex: Requires REX prefix
+                    * PrefixRexW: Requires REX.W prefix
+                - description: Human-readable description of the instruction variant. Mandatory.
+-->
+
+<instruction_set>
+
+    <instruction>
+        <mnemonic>nop</mnemonic>
+        <variant_set>
+            <variant>
+                <opcode>90</opcode>
+                <operand_encoding>ZO</operand_encoding>
+                <description>No operation.</description>
+            </variant>
+        </variant_set>
+    </instruction>
+    
+    <instruction>
+        <mnemonic>lock</mnemonic>
+        <variant_set>
+            <variant>
+                <opcode>F0</opcode>
+                <operand_encoding>ZO</operand_encoding>
+                <description>Lock prefix used for atomic operations.</description>
+            </variant>
+        </variant_set>
+    </instruction>
+
+    <instruction>
+        <mnemonic>mov</mnemonic>
+        <variant_set>
+            <variant>
+                <opcode>C6</opcode>
+                <extended_opcode>0</extended_opcode>
+                <operands>rm8, imm8</operands>
+                <operand_encoding>MI</operand_encoding>
+                <description>Move 8-bit immediate to 8-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>C7</opcode>
+                <extended_opcode>0</extended_opcode>
+                <operands>rm16, imm16</operands>
+                <operand_encoding>MI</operand_encoding>
+                <description>Move 16-bit immediate to 16-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>C7</opcode>
+                <extended_opcode>0</extended_opcode>
+                <operands>rm32, imm32</operands>
+                <operand_encoding>MI</operand_encoding>
+                <description>Move 32-bit immediate to 32-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>C7</opcode>
+                <extended_opcode>0</extended_opcode>
+                <operands>rm64, imm32</operands>
+                <operand_encoding>MI</operand_encoding>
+                <description>Move 32-bit immediate to 64-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>B0</opcode>
+                <operands>reg8, imm8</operands>
+                <operand_encoding>OI</operand_encoding>
+                <description>Move 8-bit immediate to 8-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>B8</opcode>
+                <operands>reg16, imm16</operands>
+                <operand_encoding>OI</operand_encoding>
+                <description>Move 16-bit immediate to 16-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>B8</opcode>
+                <operands>reg32, imm32</operands>
+                <operand_encoding>OI</operand_encoding>
+                <description>Move 32-bit immediate to 32-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>B8</opcode>
+                <operands>reg64, imm64</operands>
+                <operand_encoding>OI</operand_encoding>
+                <description>Move 64-bit immediate to 64-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>88</opcode>
+                <operands>rm8, reg8</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Move 8-bit register to 8-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>89</opcode>
+                <operands>rm16, reg16</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Move 16-bit register to 16-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>89</opcode>
+                <operands>rm32, reg32</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Move 32-bit register to 32-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>89</opcode>
+                <operands>rm64, reg64</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Move 64-bit register to 64-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>8A</opcode>
+                <operands>reg8, rm8</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Move 8-bit register or memory to 8-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>8B</opcode>
+                <operands>reg16, rm16</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Move 16-bit register or memory to 16-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>8B</opcode>
+                <operands>reg32, rm32</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Move 32-bit register or memory to 32-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>8B</opcode>
+                <operands>reg64, rm64</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Move 64-bit register or memory to 64-bit register.</description>
+            </variant>
+        </variant_set>
+    </instruction>
+
+    <instruction>
+        <mnemonic>add</mnemonic>
+        <variant_set>
+            <variant>
+                <opcode>04</opcode>
+                <name>AL</name>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Add 8-bit immediate to AL register.</description>
+            </variant>
+            <variant>
+                <opcode>05</opcode>
+                <name>AX</name>
+                <operands>imm16</operands>
+                <operand_encoding>I</operand_encoding>
+                <additional_properties>PrefixOSO</additional_properties>
+                <description>Add 16-bit immediate to AX register.</description>
+            </variant>
+            <variant>
+                <opcode>05</opcode>
+                <name>EAX</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Add 32-bit immediate to EAX register.</description>
+            </variant>
+            <variant>
+                <opcode>05</opcode>
+                <name>RAX</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <additional_properties>PrefixRexW</additional_properties>
+                <description>Add 32-bit immediate to RAX register (sign-extended to 64 bits).</description>
+            </variant>
+            <variant>
+                <opcode>80</opcode>
+                <extended_opcode>0</extended_opcode>
+                <operands>rm8, imm8</operands>
+                <operand_encoding>MI</operand_encoding>
+                <description>Add 8-bit immediate to 8-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>81</opcode>
+                <extended_opcode>0</extended_opcode>
+                <operands>rm16, imm16</operands>
+                <operand_encoding>MI</operand_encoding>
+                <additional_properties>PrefixOSO</additional_properties>
+                <description>Add 16-bit immediate to 16-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>81</opcode>
+                <extended_opcode>0</extended_opcode>
+                <operands>rm32, imm32</operands>
+                <operand_encoding>MI</operand_encoding>
+                <description>Add 32-bit immediate to 32-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>81</opcode>
+                <extended_opcode>0</extended_opcode>
+                <operands>rm64, imm32</operands>
+                <operand_encoding>MI</operand_encoding>
+                <additional_properties>PrefixRexW</additional_properties>
+                <description>Add 32-bit immediate to 64-bit register or memory (sign-extended to 64 bits).</description>
+            </variant>
+            <variant>
+                <opcode>83</opcode>
+                <extended_opcode>0</extended_opcode>
+                <operands>rm16, imm8</operands>
+                <operand_encoding>MI</operand_encoding>
+                <additional_properties>PrefixOSO</additional_properties>
+                <description>Add 8-bit immediate (sign-extended) to 16-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>83</opcode>
+                <extended_opcode>0</extended_opcode>
+                <operands>rm32, imm8</operands>
+                <operand_encoding>MI</operand_encoding>
+                <description>Add 8-bit immediate (sign-extended) to 32-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>83</opcode>
+                <extended_opcode>0</extended_opcode>
+                <operands>rm64, imm8</operands>
+                <operand_encoding>MI</operand_encoding>
+                <additional_properties>PrefixRexW</additional_properties>
+                <description>Add 8-bit immediate (sign-extended) to 64-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>00</opcode>
+                <operands>rm8, reg8</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Add 8-bit register to 8-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>01</opcode>
+                <operands>rm16, reg16</operands>
+                <operand_encoding>MR</operand_encoding>
+                <additional_properties>PrefixOSO</additional_properties>
+                <description>Add 16-bit register to 16-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>01</opcode>
+                <operands>rm32, reg32</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Add 32-bit register to 32-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>01</opcode>
+                <operands>rm64, reg64</operands>
+                <operand_encoding>MR</operand_encoding>
+                <additional_properties>PrefixRexW</additional_properties>
+                <description>Add 64-bit register to 64-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>02</opcode>
+                <operands>reg8, rm8</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Add 8-bit register or memory to 8-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>03</opcode>
+                <operands>reg16, rm16</operands>
+                <operand_encoding>MR</operand_encoding>
+                <additional_properties>PrefixOSO</additional_properties>
+                <description>Add 16-bit register or memory to 16-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>03</opcode>
+                <operands>reg32, rm32</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Add 32-bit register or memory to 32-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>03</opcode>
+                <operands>reg64, rm64</operands>
+                <operand_encoding>MR</operand_encoding>
+                <additional_properties>PrefixRexW</additional_properties>
+                <description>Add 64-bit register or memory to 64-bit register.</description>
+            </variant>
+        </variant_set>
+    </instruction>
+
+    <instruction>
+        <mnemonic>cmp</mnemonic>
+        <variant_set>
+            <variant>
+                <opcode>3C</opcode>
+                <name>AL</name>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Compare 8-bit immediate with AL register.</description>
+            </variant>
+            <variant>
+                <opcode>3D</opcode>
+                <name>AX</name>
+                <operands>imm16</operands>
+                <operand_encoding>I</operand_encoding>
+                <additional_properties>PrefixOSO</additional_properties>
+                <description>Compare 16-bit immediate with AX register.</description>
+            </variant>
+            <variant>
+                <opcode>3D</opcode>
+                <name>EAX</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Compare 32-bit immediate with EAX register.</description>
+            </variant>
+            <variant>
+                <opcode>3D</opcode>
+                <name>RAX</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <additional_properties>PrefixRexW</additional_properties>
+                <description>Compare 32-bit immediate sign-extended with RAX register.</description>
+            </variant>
+            <variant>
+                <opcode>80</opcode>
+                <extended_opcode>7</extended_opcode>
+                <operands>rm8, imm8</operands>
+                <operand_encoding>MI</operand_encoding>
+                <description>Compare 8-bit immediate with 8-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>81</opcode>
+                <extended_opcode>7</extended_opcode>
+                <operands>rm16, imm16</operands>
+                <operand_encoding>MI</operand_encoding>
+                <description>Compare 16-bit immediate with 16-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>81</opcode>
+                <extended_opcode>7</extended_opcode>
+                <operands>rm32, imm32</operands>
+                <operand_encoding>MI</operand_encoding>
+                <description>Compare 32-bit immediate with 32-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>81</opcode>
+                <extended_opcode>7</extended_opcode>
+                <operands>rm64, imm32</operands>
+                <operand_encoding>MI</operand_encoding>
+                <description>Compare 32-bit immediate with 64-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>83</opcode>
+                <extended_opcode>7</extended_opcode>
+                <operands>rm16, imm8</operands>
+                <operand_encoding>MI</operand_encoding>
+                <description>Compare 8-bit immediate (sign-extended) with 16-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>83</opcode>
+                <extended_opcode>7</extended_opcode>
+                <operands>rm32, imm8</operands>
+                <operand_encoding>MI</operand_encoding>
+                <description>Compare 8-bit immediate (sign-extended) with 32-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>83</opcode>
+                <extended_opcode>7</extended_opcode>
+                <operands>rm64, imm8</operands>
+                <operand_encoding>MI</operand_encoding>
+                <description>Compare 8-bit immediate (sign-extended) with 64-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>38</opcode>
+                <operands>rm8, reg8</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Compare 8-bit register with 8-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>39</opcode>
+                <operands>rm16, reg16</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Compare 16-bit register with 16-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>39</opcode>
+                <operands>rm32, reg32</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Compare 32-bit register with 32-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>39</opcode>
+                <operands>rm64, reg64</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Compare 64-bit register with 64-bit register or memory.</description>
+            </variant>
+            <variant>
+                <opcode>3A</opcode>
+                <operands>reg8, rm8</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Compare 8-bit register or memory with 8-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>3B</opcode>
+                <operands>reg16, rm16</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Compare 16-bit register or memory with 16-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>3B</opcode>
+                <operands>reg32, rm32</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Compare 32-bit register or memory with 32-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>3B</opcode>
+                <operands>reg64, rm64</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Compare 64-bit register or memory with 64-bit register.</description>
+            </variant>
+        </variant_set>
+    </instruction>
+
+    <instruction>
+        <mnemonic>jmp</mnemonic>
+        <variant_set>
+            <variant>
+                <opcode>EB</opcode>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Short jump to RIP-relative address. Takes 2 bytes only.</description>
+            </variant>
+            <variant>
+                <opcode>E9</opcode>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Long jump to RIP-relative address. Takes 5 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>FF</opcode>
+                <extended_opcode>4</extended_opcode>
+                <operands>rm64</operands>
+                <operand_encoding>M</operand_encoding>
+                <description>Jump to 64-bit register or memory.</description>
+            </variant>
+        </variant_set>
+    </instruction>
+
+    <instruction>
+        <mnemonic>jcc</mnemonic>
+        <variant_set>
+            <variant>
+                <opcode>77</opcode>
+                <name>A</name>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional short jump to RIP-relative address. Condition: Above. Takes 2 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>0F87</opcode>
+                <name>A</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional long jump to RIP-relative address. Condition: Above. Takes 6 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>73</opcode>
+                <name>AE</name>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional short jump to RIP-relative address. Condition: Above Or Equal. Takes 2 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>0F83</opcode>
+                <name>AE</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional long jump to RIP-relative address. Condition: Above Or Equal. Takes 6 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>72</opcode>
+                <name>B</name>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional short jump to RIP-relative address. Condition: Below. Takes 2 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>0F82</opcode>
+                <name>B</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional long jump to RIP-relative address. Condition: Below. Takes 6 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>76</opcode>
+                <name>BE</name>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional short jump to RIP-relative address. Condition: Below Or Equal. Takes 2 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>0F86</opcode>
+                <name>BE</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional long jump to RIP-relative address. Condition: Below Or Equal. Takes 6 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>74</opcode>
+                <name>E</name>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional short jump to RIP-relative address. Condition: Equal. Takes 2 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>0F84</opcode>
+                <name>E</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional long jump to RIP-relative address. Condition: Equal. Takes 6 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>7F</opcode>
+                <name>G</name>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional short jump to RIP-relative address. Condition: Greater. Takes 2 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>0F8F</opcode>
+                <name>G</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional long jump to RIP-relative address. Condition: Greater. Takes 6 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>7D</opcode>
+                <name>GE</name>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional short jump to RIP-relative address. Condition: Greater Or Equal. Takes 2 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>0F8D</opcode>
+                <name>GE</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional long jump to RIP-relative address. Condition: Greater Or Equal. Takes 6 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>7C</opcode>
+                <name>L</name>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional short jump to RIP-relative address. Condition: Less. Takes 2 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>0F8C</opcode>
+                <name>L</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional long jump to RIP-relative address. Condition: Less. Takes 6 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>7E</opcode>
+                <name>LE</name>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional short jump to RIP-relative address. Condition: Less Or Equal. Takes 2 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>0F8E</opcode>
+                <name>LE</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional long jump to RIP-relative address. Condition: Less Or Equal. Takes 6 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>75</opcode>
+                <name>NE</name>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional short jump to RIP-relative address. Condition: Not Equal. Takes 2 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>0F85</opcode>
+                <name>NE</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional long jump to RIP-relative address. Condition: Not Equal. Takes 6 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>71</opcode>
+                <name>NO</name>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional short jump to RIP-relative address. Condition: No Overflow. Takes 2 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>0F81</opcode>
+                <name>NO</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional long jump to RIP-relative address. Condition: No Overflow. Takes 6 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>7B</opcode>
+                <name>NP</name>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional short jump to RIP-relative address. Condition: No Parity. Takes 2 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>0F8B</opcode>
+                <name>NP</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional long jump to RIP-relative address. Condition: No Parity. Takes 6 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>79</opcode>
+                <name>NS</name>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional short jump to RIP-relative address. Condition: No Sign. Takes 2 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>0F89</opcode>
+                <name>NS</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional long jump to RIP-relative address. Condition: No Sign. Takes 6 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>70</opcode>
+                <name>O</name>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional short jump to RIP-relative address. Condition: Overflow. Takes 2 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>0F80</opcode>
+                <name>O</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional long jump to RIP-relative address. Condition: Overflow. Takes 6 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>7A</opcode>
+                <name>P</name>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional short jump to RIP-relative address. Condition: Parity. Takes 2 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>0F8A</opcode>
+                <name>P</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional long jump to RIP-relative address. Condition: Parity. Takes 6 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>78</opcode>
+                <name>S</name>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional short jump to RIP-relative address. Condition: Sign. Takes 2 bytes.</description>
+            </variant>
+            <variant>
+                <opcode>0F88</opcode>
+                <name>S</name>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Conditional long jump to RIP-relative address. Condition: Sign. Takes 6 bytes.</description>
+            </variant>
+        </variant_set>
+    </instruction>
+
+    <instruction>
+        <mnemonic>ret</mnemonic>
+        <variant_set>
+            <variant>
+                <opcode>C3</opcode>
+                <operand_encoding>ZO</operand_encoding>
+                <description>Return to calling procedure.</description>
+            </variant>
+            <variant>
+                <opcode>C2</opcode>
+                <operands>imm16</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Pop [16-bit immediate] bytes from stack and return to calling procedure.</description>
+            </variant>
+        </variant_set>
+    </instruction>
+
+</instruction_set>
