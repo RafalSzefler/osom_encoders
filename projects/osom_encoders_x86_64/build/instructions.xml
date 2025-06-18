@@ -210,23 +210,9 @@
             <variant>
                 <opcode>FF</opcode>
                 <extended_opcode>6</extended_opcode>
-                <operands>rm16</operands>
-                <operand_encoding>M</operand_encoding>
-                <additional_properties>PrefixOSO</additional_properties>
-                <description>Push 16-bit register or memory onto the stack.</description>
-            </variant>
-            <variant>
-                <opcode>FF</opcode>
-                <extended_opcode>6</extended_opcode>
                 <operands>rm64</operands>
                 <operand_encoding>M</operand_encoding>
                 <description>Push 64-bit register or memory onto the stack.</description>
-            </variant>
-            <variant>
-                <opcode>50</opcode>
-                <operands>reg16</operands>
-                <operand_encoding>O</operand_encoding>
-                <description>Push 16-bit register onto the stack.</description>
             </variant>
             <variant>
                 <opcode>50</opcode>
@@ -262,23 +248,9 @@
             <variant>
                 <opcode>8F</opcode>
                 <extended_opcode>0</extended_opcode>
-                <operands>rm16</operands>
-                <operand_encoding>M</operand_encoding>
-                <additional_properties>PrefixOSO</additional_properties>
-                <description>Pop 16-bit value from the stack into register or memory.</description>
-            </variant>
-            <variant>
-                <opcode>8F</opcode>
-                <extended_opcode>0</extended_opcode>
                 <operands>rm64</operands>
                 <operand_encoding>M</operand_encoding>
                 <description>Pop 64-bit value from the stack into register or memory.</description>
-            </variant>
-            <variant>
-                <opcode>58</opcode>
-                <operands>reg16</operands>
-                <operand_encoding>O</operand_encoding>
-                <description>Pop 16-bit value from the stack into register.</description>
             </variant>
             <variant>
                 <opcode>58</opcode>

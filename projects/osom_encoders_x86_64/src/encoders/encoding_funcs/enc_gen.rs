@@ -243,17 +243,6 @@ pub mod mov {
 pub mod push {
     use super::*;
 
-    /// Push 16-bit register or memory onto the stack.
-    ///
-    /// # Safety
-    ///
-    /// The caller has to ensure that the operands are valid,
-    /// in particular the function does not check register sizes.
-    #[inline(always)]
-    pub const unsafe fn encode_push_rm16(rm16: GPROrMemory) -> EncodedX86_64Instruction {
-        unsafe { utils::enc_M::encode_M_gpr_or_memory([0xFF], 0x06, &rm16, false, true) }
-    }
-
     /// Push 64-bit register or memory onto the stack.
     ///
     /// # Safety
@@ -263,17 +252,6 @@ pub mod push {
     #[inline(always)]
     pub const unsafe fn encode_push_rm64(rm64: GPROrMemory) -> EncodedX86_64Instruction {
         unsafe { utils::enc_M::encode_M_gpr_or_memory([0xFF], 0x06, &rm64, false, false) }
-    }
-
-    /// Push 16-bit register onto the stack.
-    ///
-    /// # Safety
-    ///
-    /// The caller has to ensure that the operands are valid,
-    /// in particular the function does not check register sizes.
-    #[inline(always)]
-    pub const unsafe fn encode_push_reg16(reg16: GPR) -> EncodedX86_64Instruction {
-        unsafe { utils::enc_O::encode_O(0x50, reg16) }
     }
 
     /// Push 64-bit register onto the stack.
@@ -310,17 +288,6 @@ pub mod push {
 pub mod pop {
     use super::*;
 
-    /// Pop 16-bit value from the stack into register or memory.
-    ///
-    /// # Safety
-    ///
-    /// The caller has to ensure that the operands are valid,
-    /// in particular the function does not check register sizes.
-    #[inline(always)]
-    pub const unsafe fn encode_pop_rm16(rm16: GPROrMemory) -> EncodedX86_64Instruction {
-        unsafe { utils::enc_M::encode_M_gpr_or_memory([0x8F], 0x00, &rm16, false, true) }
-    }
-
     /// Pop 64-bit value from the stack into register or memory.
     ///
     /// # Safety
@@ -330,17 +297,6 @@ pub mod pop {
     #[inline(always)]
     pub const unsafe fn encode_pop_rm64(rm64: GPROrMemory) -> EncodedX86_64Instruction {
         unsafe { utils::enc_M::encode_M_gpr_or_memory([0x8F], 0x00, &rm64, false, false) }
-    }
-
-    /// Pop 16-bit value from the stack into register.
-    ///
-    /// # Safety
-    ///
-    /// The caller has to ensure that the operands are valid,
-    /// in particular the function does not check register sizes.
-    #[inline(always)]
-    pub const unsafe fn encode_pop_reg16(reg16: GPR) -> EncodedX86_64Instruction {
-        unsafe { utils::enc_O::encode_O(0x58, reg16) }
     }
 
     /// Pop 64-bit value from the stack into register.

@@ -10,25 +10,12 @@ use rstest::rstest;
 use osom_encoders_x86_64::encoders::*;
 use osom_encoders_x86_64::models::*;
 
-// PUSH tests
-#[rstest]
-#[case(GPROrMemory::GPR { gpr: GPR::AX }, &[0x66, 0xFF, 0xF0])]
-fn test_push_rm16(#[case] rm16: GPROrMemory, #[case] expected: &[u8]) {
-    let instr = unsafe { push::encode_push_rm16(rm16) };
-    assert_encoded_instruction_eq(expected, &instr);
-}
 
 #[rstest]
 #[case(GPROrMemory::GPR { gpr: GPR::RAX }, &[0xFF, 0xF0])]
+#[case::memory(GPROrMemory::Memory { memory: Memory::BasedScaled { base: GPR::RAX, index: GPR::RBX, scale: Scale::Scale4, offset: Offset::from_i8(1) } }, &[0xFF, 0x74, 0x98, 0x01])]
 fn test_push_rm64(#[case] rm64: GPROrMemory, #[case] expected: &[u8]) {
     let instr = unsafe { push::encode_push_rm64(rm64) };
-    assert_encoded_instruction_eq(expected, &instr);
-}
-
-#[rstest]
-#[case(GPR::AX, &[0x66, 0x50])]
-fn test_push_reg16(#[case] reg16: GPR, #[case] expected: &[u8]) {
-    let instr = unsafe { push::encode_push_reg16(reg16) };
     assert_encoded_instruction_eq(expected, &instr);
 }
 
@@ -63,25 +50,11 @@ fn test_push_imm32(#[case] imm32: i32, #[case] expected: &[u8]) {
     assert_encoded_instruction_eq(expected, &instr);
 }
 
-// POP tests
-#[rstest]
-#[case(GPROrMemory::GPR { gpr: GPR::AX }, &[0x66, 0x8F, 0xC0])]
-fn test_pop_rm16(#[case] rm16: GPROrMemory, #[case] expected: &[u8]) {
-    let instr = unsafe { pop::encode_pop_rm16(rm16) };
-    assert_encoded_instruction_eq(expected, &instr);
-}
-
 #[rstest]
 #[case(GPROrMemory::GPR { gpr: GPR::RAX }, &[0x8F, 0xC0])]
+#[case::memory(GPROrMemory::Memory { memory: Memory::BasedScaled { base: GPR::RAX, index: GPR::RBX, scale: Scale::Scale4, offset: Offset::from_i8(1) } }, &[0x8F, 0x44, 0x98, 0x01])]
 fn test_pop_rm64(#[case] rm64: GPROrMemory, #[case] expected: &[u8]) {
     let instr = unsafe { pop::encode_pop_rm64(rm64) };
-    assert_encoded_instruction_eq(expected, &instr);
-}
-
-#[rstest]
-#[case(GPR::AX, &[0x66, 0x58])]
-fn test_pop_reg16(#[case] reg16: GPR, #[case] expected: &[u8]) {
-    let instr = unsafe { pop::encode_pop_reg16(reg16) };
     assert_encoded_instruction_eq(expected, &instr);
 }
 
