@@ -1002,4 +1002,23 @@
         </variant_set>
     </instruction>
 
+    <instruction>
+        <mnemonic>call</mnemonic>
+        <variant_set>
+            <variant>
+                <opcode>E8</opcode>
+                <operands>imm32</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Call to RIP-relative address.</description>
+            </variant>
+            <variant>
+                <opcode>FF</opcode>
+                <extended_opcode>2</extended_opcode>
+                <operands>rm64</operands>
+                <operand_encoding>M</operand_encoding>
+                <description>Call to address in 64-bit register or memory.</description>
+            </variant>
+        </variant_set>
+    </instruction>
+
 </instruction_set>

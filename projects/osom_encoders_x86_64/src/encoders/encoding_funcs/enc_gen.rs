@@ -1231,3 +1231,25 @@ pub mod xor {
         unsafe { utils::enc_MR::encode_MR([0x33], &rm64, reg64) }
     }
 }
+
+/// Holds encoders for variants of `call` instruction.
+pub mod call {
+    use super::*;
+
+    /// Call to RIP-relative address.
+    #[inline(always)]
+    pub const fn encode_call_imm32(imm32: Immediate32) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_I::encode_I_imm32([0xE8], imm32) }
+    }
+
+    /// Call to address in 64-bit register or memory.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_call_rm64(rm64: GPROrMemory) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_M::encode_M_gpr_or_memory([0xFF], 0x02, &rm64, false) }
+    }
+}

@@ -23,6 +23,7 @@ pub enum Mnemonic {
     ret = 8,
     sub = 9,
     xor = 10,
+    call = 11,
 }
 
 impl Mnemonic {
@@ -40,6 +41,7 @@ impl Mnemonic {
             Self::ret => "ret",
             Self::sub => "sub",
             Self::xor => "xor",
+            Self::call => "call",
         }
     }
 
@@ -56,6 +58,7 @@ impl Mnemonic {
             "ret" => Ok(Self::ret),
             "sub" => Ok(Self::sub),
             "xor" => Ok(Self::xor),
+            "call" => Ok(Self::call),
 
             _ => Err(InvalidMnemonicError),
         }
