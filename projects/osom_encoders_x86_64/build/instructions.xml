@@ -30,6 +30,7 @@
                     * rm16: 16-bit memory or register
                     * rm32: 32-bit memory or register
                     * rm64: 64-bit memory or register
+                    * m: memory (always 64-bit)
                 - operand_encoding: The encoding scheme for operands. Mandatory. One of:
                     * ZO: Zero operands (e.g., nop)
                     * I: Immediate value encoding
@@ -198,6 +199,30 @@
                 <operands>reg64, rm64</operands>
                 <operand_encoding>MR</operand_encoding>
                 <description>Move 64-bit register or memory to 64-bit register.</description>
+            </variant>
+        </variant_set>
+    </instruction>
+
+    <instruction>
+        <mnemonic>lea</mnemonic>
+        <variant_set>
+            <variant>
+                <opcode>8D</opcode>
+                <operands>reg16, m</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Load effective address from memory into 16-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>8D</opcode>
+                <operands>reg32, m</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Load effective address from memory into 32-bit register.</description>
+            </variant>
+            <variant>
+                <opcode>8D</opcode>
+                <operands>reg64, m</operands>
+                <operand_encoding>MR</operand_encoding>
+                <description>Load effective address from memory into 64-bit register.</description>
             </variant>
         </variant_set>
     </instruction>

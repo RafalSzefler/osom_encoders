@@ -55,6 +55,13 @@ macro_rules! compile {
             std::mem::transmute::<*const u8, unsafe extern $abi fn($arg: $arg_type) -> u64>(ptr)
         }
     };
+
+    ( $rmc: expr, $offset: expr, $abi: literal, ($arg1: ident : $arg_type1: ty, $arg2: ident : $arg_type2: ty) ) => {
+        unsafe {
+            let ptr = $rmc.raw_ptr($offset);
+            std::mem::transmute::<*const u8, unsafe extern $abi fn($arg1: $arg_type1, $arg2: $arg_type2) -> u64>(ptr)
+        }
+    };
 }
 
 pub use compile;

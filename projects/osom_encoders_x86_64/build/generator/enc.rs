@@ -17,7 +17,7 @@ pub fn generate_enc(instruction_set: &InstructionSet) {
 #![allow(clippy::wildcard_imports)]
 
 use crate::{{
-    models::{{GPR, GPROrMemory, EncodedX86_64Instruction, Immediate8, Immediate16, Immediate32, Immediate64}},
+    models::{{GPR, GPROrMemory, Memory, EncodedX86_64Instruction, Immediate8, Immediate16, Immediate32, Immediate64}},
 }};
 use crate::encoders::utils;
 "
@@ -310,6 +310,7 @@ fn generate_variant_mr(instruction: &Instruction, variant: &Variant) -> String {
             Operand::reg16 => "reg16: GPR",
             Operand::reg32 => "reg32: GPR",
             Operand::reg64 => "reg64: GPR",
+            Operand::m => "m: Memory",
             _ => panic!("Operand {:?} is not supported for MR encoding", operand),
         }
     }
@@ -324,6 +325,7 @@ fn generate_variant_mr(instruction: &Instruction, variant: &Variant) -> String {
             Operand::reg16 => "reg16",
             Operand::reg32 => "reg32",
             Operand::reg64 => "reg64",
+            Operand::m => "m",
             _ => panic!("Operand {:?} is not supported for MR encoding", operand),
         }
     }
@@ -338,7 +340,11 @@ fn generate_variant_mr(instruction: &Instruction, variant: &Variant) -> String {
     }
 
     let args = format!("{first_full_arg}, {second_full_arg}");
-    let body = format!("unsafe {{ utils::enc_MR::encode_MR([{opcode}], &{first_arg_name}, {second_arg_name}) }}");
+    let body = if second_arg_name == "m" {
+        format!("unsafe {{ utils::enc_MR::encode_MR_m([{opcode}], &{second_arg_name}, {first_arg_name}) }}")
+    } else {
+        format!("unsafe {{ utils::enc_MR::encode_MR([{opcode}], &{first_arg_name}, {second_arg_name}) }}")
+    };
 
     let name = function_name(instruction, variant);
     let name = format!("{}_{:#?}_{:#?}", name, first_operand, second_operand);

@@ -42,6 +42,9 @@ pub enum Operand {
 
     /// 64-bit general-purpose register.
     reg64,
+
+    /// 64-bit memory.
+    m,
 }
 
 #[derive(Debug, EnumString)]

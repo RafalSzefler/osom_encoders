@@ -219,3 +219,28 @@ fn test_execution_jcc_and_cmp(#[case] arg: i64, #[case] expected: i64) {
         assert_eq!(call_result, expected);
     }
 }
+
+#[rstest]
+#[case(1, 2, 3)]
+#[case(-1, 1, 0)]
+#[case(1, -1, 0)]
+#[case(1, 1, 2)]
+#[case(-1, -1, -2)]
+#[case(0, 0, 0)]
+#[case(123, 456, 579)]
+#[case(-123, -456, -579)]
+#[case(123, -456, -333)]
+#[case(-123, 456, 333)]
+fn test_execution_sum_through_lea(#[case] a: i64, #[case] b: i64, #[case] expected: i64) {
+    unsafe {
+        // According to sysv64 calling convention, the first argument is in RDI, second RSI.
+        // While the return value is in RAX.
+        let rmc = RawMachineCode::from_code(&[
+            lea::encode_lea_reg64_m(GPR::RAX, Memory::BasedScaled { base: GPR::RDI, index: GPR::RSI, scale: Scale::Scale1, offset: Offset::None }),
+            ret::encode_ret(),
+        ]);
+        let func = compile!(rmc, 0, "sysv64", (a: i64, b: i64));
+        let call_result = func(a, b) as i64;
+        assert_eq!(call_result, expected);
+    }
+}

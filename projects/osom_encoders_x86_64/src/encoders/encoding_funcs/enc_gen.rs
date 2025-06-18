@@ -14,7 +14,9 @@
 #![allow(clippy::wildcard_imports)]
 
 use crate::encoders::utils;
-use crate::models::{EncodedX86_64Instruction, GPR, GPROrMemory, Immediate8, Immediate16, Immediate32, Immediate64};
+use crate::models::{
+    EncodedX86_64Instruction, GPR, GPROrMemory, Immediate8, Immediate16, Immediate32, Immediate64, Memory,
+};
 
 /// Holds encoders for instructions that have only one variant.
 pub mod singleton {
@@ -234,6 +236,44 @@ pub mod mov {
     #[inline(always)]
     pub const unsafe fn encode_mov_reg64_rm64(reg64: GPR, rm64: GPROrMemory) -> EncodedX86_64Instruction {
         unsafe { utils::enc_MR::encode_MR([0x8B], &rm64, reg64) }
+    }
+}
+
+/// Holds encoders for variants of `lea` instruction.
+pub mod lea {
+    use super::*;
+
+    /// Load effective address from memory into 16-bit register.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_lea_reg16_m(reg16: GPR, m: Memory) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MR::encode_MR_m([0x8D], &m, reg16) }
+    }
+
+    /// Load effective address from memory into 32-bit register.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_lea_reg32_m(reg32: GPR, m: Memory) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MR::encode_MR_m([0x8D], &m, reg32) }
+    }
+
+    /// Load effective address from memory into 64-bit register.
+    ///
+    /// # Safety
+    ///
+    /// The caller has to ensure that the operands are valid,
+    /// in particular the function does not check register sizes.
+    #[inline(always)]
+    pub const unsafe fn encode_lea_reg64_m(reg64: GPR, m: Memory) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_MR::encode_MR_m([0x8D], &m, reg64) }
     }
 }
 
