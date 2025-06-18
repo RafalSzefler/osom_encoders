@@ -634,49 +634,49 @@ pub mod jmp {
 pub mod jcc {
     use super::*;
 
-    /// Conditional short jump to RIP-relative address. Condition: Above. Takes 2 bytes.
+    /// Conditional short jump to RIP-relative address. Condition: Above (in unsigned sense). Takes 2 bytes.
     #[inline(always)]
     pub const fn encode_jcc_A_imm8(imm8: Immediate8) -> EncodedX86_64Instruction {
         unsafe { utils::enc_I::encode_I_imm8([0x77], imm8) }
     }
 
-    /// Conditional long jump to RIP-relative address. Condition: Above. Takes 6 bytes.
+    /// Conditional long jump to RIP-relative address. Condition: Above (in unsigned sense). Takes 6 bytes.
     #[inline(always)]
     pub const fn encode_jcc_A_imm32(imm32: Immediate32) -> EncodedX86_64Instruction {
         unsafe { utils::enc_I::encode_I_imm32([0x0F, 0x87], imm32) }
     }
 
-    /// Conditional short jump to RIP-relative address. Condition: Above Or Equal. Takes 2 bytes.
+    /// Conditional short jump to RIP-relative address. Condition: Above Or Equal (in unsigned sense). Takes 2 bytes.
     #[inline(always)]
     pub const fn encode_jcc_AE_imm8(imm8: Immediate8) -> EncodedX86_64Instruction {
         unsafe { utils::enc_I::encode_I_imm8([0x73], imm8) }
     }
 
-    /// Conditional long jump to RIP-relative address. Condition: Above Or Equal. Takes 6 bytes.
+    /// Conditional long jump to RIP-relative address. Condition: Above Or Equal (in unsigned sense). Takes 6 bytes.
     #[inline(always)]
     pub const fn encode_jcc_AE_imm32(imm32: Immediate32) -> EncodedX86_64Instruction {
         unsafe { utils::enc_I::encode_I_imm32([0x0F, 0x83], imm32) }
     }
 
-    /// Conditional short jump to RIP-relative address. Condition: Below. Takes 2 bytes.
+    /// Conditional short jump to RIP-relative address. Condition: Below (in unsigned sense). Takes 2 bytes.
     #[inline(always)]
     pub const fn encode_jcc_B_imm8(imm8: Immediate8) -> EncodedX86_64Instruction {
         unsafe { utils::enc_I::encode_I_imm8([0x72], imm8) }
     }
 
-    /// Conditional long jump to RIP-relative address. Condition: Below. Takes 6 bytes.
+    /// Conditional long jump to RIP-relative address. Condition: Below (in unsigned sense). Takes 6 bytes.
     #[inline(always)]
     pub const fn encode_jcc_B_imm32(imm32: Immediate32) -> EncodedX86_64Instruction {
         unsafe { utils::enc_I::encode_I_imm32([0x0F, 0x82], imm32) }
     }
 
-    /// Conditional short jump to RIP-relative address. Condition: Below Or Equal. Takes 2 bytes.
+    /// Conditional short jump to RIP-relative address. Condition: Below Or Equal (in unsigned sense). Takes 2 bytes.
     #[inline(always)]
     pub const fn encode_jcc_BE_imm8(imm8: Immediate8) -> EncodedX86_64Instruction {
         unsafe { utils::enc_I::encode_I_imm8([0x76], imm8) }
     }
 
-    /// Conditional long jump to RIP-relative address. Condition: Below Or Equal. Takes 6 bytes.
+    /// Conditional long jump to RIP-relative address. Condition: Below Or Equal (in unsigned sense). Takes 6 bytes.
     #[inline(always)]
     pub const fn encode_jcc_BE_imm32(imm32: Immediate32) -> EncodedX86_64Instruction {
         unsafe { utils::enc_I::encode_I_imm32([0x0F, 0x86], imm32) }
@@ -694,49 +694,49 @@ pub mod jcc {
         unsafe { utils::enc_I::encode_I_imm32([0x0F, 0x84], imm32) }
     }
 
-    /// Conditional short jump to RIP-relative address. Condition: Greater. Takes 2 bytes.
+    /// Conditional short jump to RIP-relative address. Condition: Greater (in signed sense). Takes 2 bytes.
     #[inline(always)]
     pub const fn encode_jcc_G_imm8(imm8: Immediate8) -> EncodedX86_64Instruction {
         unsafe { utils::enc_I::encode_I_imm8([0x7F], imm8) }
     }
 
-    /// Conditional long jump to RIP-relative address. Condition: Greater. Takes 6 bytes.
+    /// Conditional long jump to RIP-relative address. Condition: Greater (in signed sense). Takes 6 bytes.
     #[inline(always)]
     pub const fn encode_jcc_G_imm32(imm32: Immediate32) -> EncodedX86_64Instruction {
         unsafe { utils::enc_I::encode_I_imm32([0x0F, 0x8F], imm32) }
     }
 
-    /// Conditional short jump to RIP-relative address. Condition: Greater Or Equal. Takes 2 bytes.
+    /// Conditional short jump to RIP-relative address. Condition: Greater Or Equal (in signed sense). Takes 2 bytes.
     #[inline(always)]
     pub const fn encode_jcc_GE_imm8(imm8: Immediate8) -> EncodedX86_64Instruction {
         unsafe { utils::enc_I::encode_I_imm8([0x7D], imm8) }
     }
 
-    /// Conditional long jump to RIP-relative address. Condition: Greater Or Equal. Takes 6 bytes.
+    /// Conditional long jump to RIP-relative address. Condition: Greater Or Equal (in signed sense). Takes 6 bytes.
     #[inline(always)]
     pub const fn encode_jcc_GE_imm32(imm32: Immediate32) -> EncodedX86_64Instruction {
         unsafe { utils::enc_I::encode_I_imm32([0x0F, 0x8D], imm32) }
     }
 
-    /// Conditional short jump to RIP-relative address. Condition: Less. Takes 2 bytes.
+    /// Conditional short jump to RIP-relative address. Condition: Less (in signed sense). Takes 2 bytes.
     #[inline(always)]
     pub const fn encode_jcc_L_imm8(imm8: Immediate8) -> EncodedX86_64Instruction {
         unsafe { utils::enc_I::encode_I_imm8([0x7C], imm8) }
     }
 
-    /// Conditional long jump to RIP-relative address. Condition: Less. Takes 6 bytes.
+    /// Conditional long jump to RIP-relative address. Condition: Less (in signed sense). Takes 6 bytes.
     #[inline(always)]
     pub const fn encode_jcc_L_imm32(imm32: Immediate32) -> EncodedX86_64Instruction {
         unsafe { utils::enc_I::encode_I_imm32([0x0F, 0x8C], imm32) }
     }
 
-    /// Conditional short jump to RIP-relative address. Condition: Less Or Equal. Takes 2 bytes.
+    /// Conditional short jump to RIP-relative address. Condition: Less Or Equal (in signed sense). Takes 2 bytes.
     #[inline(always)]
     pub const fn encode_jcc_LE_imm8(imm8: Immediate8) -> EncodedX86_64Instruction {
         unsafe { utils::enc_I::encode_I_imm8([0x7E], imm8) }
     }
 
-    /// Conditional long jump to RIP-relative address. Condition: Less Or Equal. Takes 6 bytes.
+    /// Conditional long jump to RIP-relative address. Condition: Less Or Equal (in signed sense). Takes 6 bytes.
     #[inline(always)]
     pub const fn encode_jcc_LE_imm32(imm32: Immediate32) -> EncodedX86_64Instruction {
         unsafe { utils::enc_I::encode_I_imm32([0x0F, 0x8E], imm32) }

@@ -481,56 +481,56 @@
                 <name>A</name>
                 <operands>imm8</operands>
                 <operand_encoding>I</operand_encoding>
-                <description>Conditional short jump to RIP-relative address. Condition: Above. Takes 2 bytes.</description>
+                <description>Conditional short jump to RIP-relative address. Condition: Above (in unsigned sense). Takes 2 bytes.</description>
             </variant>
             <variant>
                 <opcode>0F87</opcode>
                 <name>A</name>
                 <operands>imm32</operands>
                 <operand_encoding>I</operand_encoding>
-                <description>Conditional long jump to RIP-relative address. Condition: Above. Takes 6 bytes.</description>
+                <description>Conditional long jump to RIP-relative address. Condition: Above (in unsigned sense). Takes 6 bytes.</description>
             </variant>
             <variant>
                 <opcode>73</opcode>
                 <name>AE</name>
                 <operands>imm8</operands>
                 <operand_encoding>I</operand_encoding>
-                <description>Conditional short jump to RIP-relative address. Condition: Above Or Equal. Takes 2 bytes.</description>
+                <description>Conditional short jump to RIP-relative address. Condition: Above Or Equal (in unsigned sense). Takes 2 bytes.</description>
             </variant>
             <variant>
                 <opcode>0F83</opcode>
                 <name>AE</name>
                 <operands>imm32</operands>
                 <operand_encoding>I</operand_encoding>
-                <description>Conditional long jump to RIP-relative address. Condition: Above Or Equal. Takes 6 bytes.</description>
+                <description>Conditional long jump to RIP-relative address. Condition: Above Or Equal (in unsigned sense). Takes 6 bytes.</description>
             </variant>
             <variant>
                 <opcode>72</opcode>
                 <name>B</name>
                 <operands>imm8</operands>
                 <operand_encoding>I</operand_encoding>
-                <description>Conditional short jump to RIP-relative address. Condition: Below. Takes 2 bytes.</description>
+                <description>Conditional short jump to RIP-relative address. Condition: Below (in unsigned sense). Takes 2 bytes.</description>
             </variant>
             <variant>
                 <opcode>0F82</opcode>
                 <name>B</name>
                 <operands>imm32</operands>
                 <operand_encoding>I</operand_encoding>
-                <description>Conditional long jump to RIP-relative address. Condition: Below. Takes 6 bytes.</description>
+                <description>Conditional long jump to RIP-relative address. Condition: Below (in unsigned sense). Takes 6 bytes.</description>
             </variant>
             <variant>
                 <opcode>76</opcode>
                 <name>BE</name>
                 <operands>imm8</operands>
                 <operand_encoding>I</operand_encoding>
-                <description>Conditional short jump to RIP-relative address. Condition: Below Or Equal. Takes 2 bytes.</description>
+                <description>Conditional short jump to RIP-relative address. Condition: Below Or Equal (in unsigned sense). Takes 2 bytes.</description>
             </variant>
             <variant>
                 <opcode>0F86</opcode>
                 <name>BE</name>
                 <operands>imm32</operands>
                 <operand_encoding>I</operand_encoding>
-                <description>Conditional long jump to RIP-relative address. Condition: Below Or Equal. Takes 6 bytes.</description>
+                <description>Conditional long jump to RIP-relative address. Condition: Below Or Equal (in unsigned sense). Takes 6 bytes.</description>
             </variant>
             <variant>
                 <opcode>74</opcode>
@@ -551,56 +551,56 @@
                 <name>G</name>
                 <operands>imm8</operands>
                 <operand_encoding>I</operand_encoding>
-                <description>Conditional short jump to RIP-relative address. Condition: Greater. Takes 2 bytes.</description>
+                <description>Conditional short jump to RIP-relative address. Condition: Greater (in signed sense). Takes 2 bytes.</description>
             </variant>
             <variant>
                 <opcode>0F8F</opcode>
                 <name>G</name>
                 <operands>imm32</operands>
                 <operand_encoding>I</operand_encoding>
-                <description>Conditional long jump to RIP-relative address. Condition: Greater. Takes 6 bytes.</description>
+                <description>Conditional long jump to RIP-relative address. Condition: Greater (in signed sense). Takes 6 bytes.</description>
             </variant>
             <variant>
                 <opcode>7D</opcode>
                 <name>GE</name>
                 <operands>imm8</operands>
                 <operand_encoding>I</operand_encoding>
-                <description>Conditional short jump to RIP-relative address. Condition: Greater Or Equal. Takes 2 bytes.</description>
+                <description>Conditional short jump to RIP-relative address. Condition: Greater Or Equal (in signed sense). Takes 2 bytes.</description>
             </variant>
             <variant>
                 <opcode>0F8D</opcode>
                 <name>GE</name>
                 <operands>imm32</operands>
                 <operand_encoding>I</operand_encoding>
-                <description>Conditional long jump to RIP-relative address. Condition: Greater Or Equal. Takes 6 bytes.</description>
+                <description>Conditional long jump to RIP-relative address. Condition: Greater Or Equal (in signed sense). Takes 6 bytes.</description>
             </variant>
             <variant>
                 <opcode>7C</opcode>
                 <name>L</name>
                 <operands>imm8</operands>
                 <operand_encoding>I</operand_encoding>
-                <description>Conditional short jump to RIP-relative address. Condition: Less. Takes 2 bytes.</description>
+                <description>Conditional short jump to RIP-relative address. Condition: Less (in signed sense). Takes 2 bytes.</description>
             </variant>
             <variant>
                 <opcode>0F8C</opcode>
                 <name>L</name>
                 <operands>imm32</operands>
                 <operand_encoding>I</operand_encoding>
-                <description>Conditional long jump to RIP-relative address. Condition: Less. Takes 6 bytes.</description>
+                <description>Conditional long jump to RIP-relative address. Condition: Less (in signed sense). Takes 6 bytes.</description>
             </variant>
             <variant>
                 <opcode>7E</opcode>
                 <name>LE</name>
                 <operands>imm8</operands>
                 <operand_encoding>I</operand_encoding>
-                <description>Conditional short jump to RIP-relative address. Condition: Less Or Equal. Takes 2 bytes.</description>
+                <description>Conditional short jump to RIP-relative address. Condition: Less Or Equal (in signed sense). Takes 2 bytes.</description>
             </variant>
             <variant>
                 <opcode>0F8E</opcode>
                 <name>LE</name>
                 <operands>imm32</operands>
                 <operand_encoding>I</operand_encoding>
-                <description>Conditional long jump to RIP-relative address. Condition: Less Or Equal. Takes 6 bytes.</description>
+                <description>Conditional long jump to RIP-relative address. Condition: Less Or Equal (in signed sense). Takes 6 bytes.</description>
             </variant>
             <variant>
                 <opcode>75</opcode>
