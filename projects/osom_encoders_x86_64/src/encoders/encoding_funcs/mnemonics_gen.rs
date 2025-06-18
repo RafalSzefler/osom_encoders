@@ -15,16 +15,16 @@ pub struct InvalidMnemonicError;
 pub enum Mnemonic {
     nop = 1,
     lock = 2,
-    mov = 3,
-    add = 4,
-    cmp = 5,
-    jmp = 6,
-    jcc = 7,
-    ret = 8,
-    sub = 9,
-    xor = 10,
-    call = 11,
-    cpuid = 12,
+    cpuid = 3,
+    ret = 4,
+    mov = 5,
+    add = 6,
+    sub = 7,
+    xor = 8,
+    cmp = 9,
+    jmp = 10,
+    jcc = 11,
+    call = 12,
 }
 
 impl Mnemonic {
@@ -34,16 +34,16 @@ impl Mnemonic {
         match self {
             Self::nop => "nop",
             Self::lock => "lock",
+            Self::cpuid => "cpuid",
+            Self::ret => "ret",
             Self::mov => "mov",
             Self::add => "add",
+            Self::sub => "sub",
+            Self::xor => "xor",
             Self::cmp => "cmp",
             Self::jmp => "jmp",
             Self::jcc => "jcc",
-            Self::ret => "ret",
-            Self::sub => "sub",
-            Self::xor => "xor",
             Self::call => "call",
-            Self::cpuid => "cpuid",
         }
     }
 
@@ -52,16 +52,16 @@ impl Mnemonic {
         match text {
             "nop" => Ok(Self::nop),
             "lock" => Ok(Self::lock),
+            "cpuid" => Ok(Self::cpuid),
+            "ret" => Ok(Self::ret),
             "mov" => Ok(Self::mov),
             "add" => Ok(Self::add),
+            "sub" => Ok(Self::sub),
+            "xor" => Ok(Self::xor),
             "cmp" => Ok(Self::cmp),
             "jmp" => Ok(Self::jmp),
             "jcc" => Ok(Self::jcc),
-            "ret" => Ok(Self::ret),
-            "sub" => Ok(Self::sub),
-            "xor" => Ok(Self::xor),
             "call" => Ok(Self::call),
-            "cpuid" => Ok(Self::cpuid),
 
             _ => Err(InvalidMnemonicError),
         }
