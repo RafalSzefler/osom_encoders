@@ -6,4 +6,4 @@ osom_encoders
 
 This project implements various low level instruct set encoders. At the moment it supports:
 
-* [`osom_encoders_x86_64`](https://rafalszefler.github.io/raf_utils/raf_alloc) encoders for x86_64 architecture.
+* [`osom_encoders_x86_64`](https://rafalszefler.github.io/osom_encoders/osom_encoders_x86_64) encoders for x86_64 architecture.
