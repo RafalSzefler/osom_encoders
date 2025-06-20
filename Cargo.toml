@@ -9,6 +9,9 @@ resolver = "3"
 edition = "2024"
 authors = ["Rafal Szefler <rafael.szefler@gmail.com>"]
 rust-version = "1.85"
+license = "MIT"
+repository = "https://github.com/RafalSzefler/osom_encoders"
+categories = ["compilers", "encoding", "no-std"]
 
 [workspace.dependencies]
 const_format = "0.2"
