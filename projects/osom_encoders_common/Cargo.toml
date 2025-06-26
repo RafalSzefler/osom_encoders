@@ -1,0 +1,20 @@
+[package]
+name = "osom_encoders_common"
+version = "0.1.0"
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+description = "Common utilities for osom_encoders_* projects."
+categories.workspace = true
+keywords = ["osom", "encoders", "cpu", "instructions"]
+
+[lib]
+crate-type = ["lib"]
+
+[dependencies]
+const_format = { workspace = true }
+
+[dev-dependencies]
+rstest = { workspace = true }
