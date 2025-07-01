@@ -10,11 +10,11 @@ pub static ROOT_DIR: LazyLock<PathBuf> = LazyLock::new(|| {
     PathBuf::from_str(src_dir).unwrap()
 });
 
-pub static BUILD_DIR: LazyLock<PathBuf> = LazyLock::new(|| ROOT_DIR.join("build"));
+pub static DEFAULT_INSTRUCTIONS_XML: LazyLock<PathBuf> = LazyLock::new(|| ROOT_DIR.join("src").join("instructions.xml"));
 
-pub static SRC_DIR: LazyLock<PathBuf> = LazyLock::new(|| ROOT_DIR.join("src"));
+pub static OUT_DIR: LazyLock<PathBuf> = LazyLock::new(|| WORKSPACE_DIR.join("projects").join("osom_encoders_x86_64").join("src"));
 
-pub static ENCODING_DIR: LazyLock<PathBuf> = LazyLock::new(|| SRC_DIR.join("encoders"));
+pub static ENCODING_DIR: LazyLock<PathBuf> = LazyLock::new(|| OUT_DIR.join("encoders"));
 
 pub static ENCODING_OUT_DIR: LazyLock<PathBuf> = LazyLock::new(|| ENCODING_DIR.join("encoding_funcs"));
 

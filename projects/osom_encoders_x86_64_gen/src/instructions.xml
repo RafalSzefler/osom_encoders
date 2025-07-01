@@ -1171,4 +1171,38 @@
         </variant_set>
     </instruction>
 
+    <instruction>
+        <mnemonic>int</mnemonic>
+        <variant_set>
+            <variant>
+                <opcode>CD</opcode>
+                <operands>imm8</operands>
+                <operand_encoding>I</operand_encoding>
+                <description>Generate software interrupt with vector specified by immediate byte.</description>
+            </variant>
+        </variant_set>
+    </instruction>
+
+    <instruction>
+        <mnemonic>int1</mnemonic>
+        <variant_set>
+            <variant>
+                <opcode>F1</opcode>
+                <operand_encoding>ZO</operand_encoding>
+                <description>Generate debug trap. More or less equivalent to `int 1`.</description>
+            </variant>
+        </variant_set>
+    </instruction>
+
+    <instruction>
+        <mnemonic>int3</mnemonic>
+        <variant_set>
+            <variant>
+                <opcode>CC</opcode>
+                <operand_encoding>ZO</operand_encoding>
+                <description>Generate breakpoint trap. More or less equivalent to `int 3`.</description>
+            </variant>
+        </variant_set>
+    </instruction>
+
 </instruction_set>

@@ -28,6 +28,9 @@ pub enum Mnemonic {
     jmp = 13,
     jcc = 14,
     call = 15,
+    int = 16,
+    int1 = 17,
+    int3 = 18,
 }
 
 impl Mnemonic {
@@ -50,6 +53,9 @@ impl Mnemonic {
             Self::jmp => "jmp",
             Self::jcc => "jcc",
             Self::call => "call",
+            Self::int => "int",
+            Self::int1 => "int1",
+            Self::int3 => "int3",
         }
     }
 
@@ -71,6 +77,9 @@ impl Mnemonic {
             "jmp" => Ok(Self::jmp),
             "jcc" => Ok(Self::jcc),
             "call" => Ok(Self::call),
+            "int" => Ok(Self::int),
+            "int1" => Ok(Self::int1),
+            "int3" => Ok(Self::int3),
 
             _ => Err(InvalidMnemonicError),
         }

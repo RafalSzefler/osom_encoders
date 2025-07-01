@@ -39,6 +39,24 @@ pub mod singleton {
     pub const fn encode_cpuid() -> EncodedX86_64Instruction {
         unsafe { EncodedX86_64Instruction::from_array([0x0F, 0xA2]) }
     }
+
+    /// Generate software interrupt with vector specified by immediate byte.
+    #[inline(always)]
+    pub const fn encode_int_imm8(imm8: Immediate8) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_I::encode_I_imm8([0xCD], imm8) }
+    }
+
+    /// Generate debug trap. More or less equivalent to `int 1`.
+    #[inline(always)]
+    pub const fn encode_int1() -> EncodedX86_64Instruction {
+        unsafe { EncodedX86_64Instruction::from_array([0xF1]) }
+    }
+
+    /// Generate breakpoint trap. More or less equivalent to `int 3`.
+    #[inline(always)]
+    pub const fn encode_int3() -> EncodedX86_64Instruction {
+        unsafe { EncodedX86_64Instruction::from_array([0xCC]) }
+    }
 }
 
 /// Holds encoders for variants of `ret` instruction.

@@ -1,13 +1,12 @@
+use std::path::Path;
+
 use crate::{
-    globals::ENCODING_OUT_DIR,
     models::{Instruction, InstructionSet, Operand, OperandEncoding, Variant, VariantProperty},
     rustfmt,
 };
 
-pub fn generate_enc(instruction_set: &InstructionSet) {
-    let enc_output_path = ENCODING_OUT_DIR.join("enc_gen.rs");
-
-    println!("cargo::rerun-if-changed={}", enc_output_path.to_str().unwrap());
+pub fn generate_enc(instruction_set: &InstructionSet, output_dir: &Path) {
+    let enc_output_path = output_dir.join("enc_gen.rs");
 
     let header = crate::globals::AUTO_GENERATED_HEADER.as_str();
     let prelude = "

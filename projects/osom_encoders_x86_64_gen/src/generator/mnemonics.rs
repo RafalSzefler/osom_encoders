@@ -1,10 +1,11 @@
-use std::collections::HashSet;
+use std::{collections::HashSet, path::Path};
 
-use crate::{globals::ENCODING_OUT_DIR, models::InstructionSet, rustfmt};
+use crate::{models::InstructionSet, rustfmt};
 
-pub fn generate_mnemonics_enum(instruction_set: &InstructionSet) {
-    let output_path = ENCODING_OUT_DIR.join("mnemonics_gen.rs");
-    println!("cargo::rerun-if-changed={}", output_path.to_str().unwrap());
+pub fn generate_mnemonics_enum(instruction_set: &InstructionSet, output_dir: &Path) {
+    let output_path = output_dir.join("mnemonics_gen.rs");
+
+    println!("Generating mnemonics to {}", output_path.to_str().unwrap());
 
     let mnemonics = instruction_set
         .instructions
