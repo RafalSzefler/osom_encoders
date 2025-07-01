@@ -27,7 +27,10 @@ fn main() -> ExitCode {
     println!("Generating encoders to {}", output_dir.to_str().unwrap());
 
     if !output_dir.exists() {
-        println!("Output directory does not exist. Is [{}] path correct?", output_dir.to_str().unwrap());
+        println!(
+            "Output directory does not exist. Is [{}] path correct?",
+            output_dir.to_str().unwrap()
+        );
         return ExitCode::FAILURE;
     }
 
