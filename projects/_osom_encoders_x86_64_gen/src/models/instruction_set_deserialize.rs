@@ -119,6 +119,26 @@ where
     Ok(s.to_string())
 }
 
+pub(super) fn deserialize_string<'de, D>(value: D) -> Result<String, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let text = String::deserialize(value)?;
+    let s = text.trim();
+
+    if s.is_empty() {
+        return Ok(String::new());
+    }
+
+    for chr in s.chars() {
+        if !chr.is_alphanumeric() {
+            return Err(serde::de::Error::custom(format!("Invalid alphanumeric string: {}", s)));
+        }
+    }
+
+    Ok(s.to_string())
+}
+
 pub(super) fn deserialize_operands<'de, D>(value: D) -> Result<Vec<Operand>, D::Error>
 where
     D: Deserializer<'de>,

@@ -1,7 +1,7 @@
 [workspace]
 members = [
+    "projects/_osom_encoders_x86_64_gen",
     "projects/osom_encoders_common",
-    "projects/osom_encoders_x86_64_gen",
     "projects/osom_encoders_x86_64",
 ]
 resolver = "3"

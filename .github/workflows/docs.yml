@@ -33,7 +33,7 @@ jobs:
       - name: Clean docs folder
         run: cargo clean --doc
       - name: Build docs
-        run: cargo doc -r --no-deps --workspace --exclude="*_impl" --exclude="*_macros" --exclude="*_tests"
+        run: cargo doc -r --no-deps --workspace --exclude="_*"
         env:
           RUSTFLAGS: --cfg docsrs
           RUSTDOCFLAGS: --cfg docsrs

@@ -21,18 +21,18 @@ use osom_encoders_x86_64::models::*;
 #[case(255, &[0xCD, 0xFF])]
 fn test_encode_int_imm8(#[case] imm8: u8, #[case] expected: &[u8]) {
     let imm8 = Immediate8::from_u8(imm8);
-    let instr = singleton::encode_int_imm8(imm8);
+    let instr = int::encode_int_imm8(imm8);
     assert_encoded_instruction_eq(expected, &instr);
 }
 
 #[test]
 fn test_encode_int1() {
-    let instr = singleton::encode_int1();
+    let instr = int::encode_int_1();
     assert_encoded_instruction_eq(&[0xF1], &instr);
 }
 
 #[test]
 fn test_encode_int3() {
-    let instr = singleton::encode_int3();
+    let instr = int::encode_int_3();
     assert_encoded_instruction_eq(&[0xCC], &instr);
 }

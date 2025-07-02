@@ -1,5 +1,5 @@
 [package]
-name = "osom_encoders_x86_64_gen"
+name = "_osom_encoders_x86_64_gen"
 version = "0.1.0"
 edition.workspace = true
 authors.workspace = true

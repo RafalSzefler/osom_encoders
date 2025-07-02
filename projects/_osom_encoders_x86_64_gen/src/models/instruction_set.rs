@@ -76,7 +76,7 @@ pub struct Variant {
     #[serde(deserialize_with = "super::deserialize_opcode")]
     pub opcode: Vec<u8>,
 
-    #[serde(deserialize_with = "super::deserialize_alpha_string", default = "String::new")]
+    #[serde(deserialize_with = "super::deserialize_string", default = "String::new")]
     pub name: String,
 
     pub extended_opcode: Option<u8>,

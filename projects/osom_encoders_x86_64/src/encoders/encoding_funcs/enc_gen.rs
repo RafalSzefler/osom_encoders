@@ -40,24 +40,6 @@ pub mod singleton {
         unsafe { EncodedX86_64Instruction::from_array([0x0F, 0xA2]) }
     }
 
-    /// Generate software interrupt with vector specified by immediate byte.
-    #[inline(always)]
-    pub const fn encode_int_imm8(imm8: Immediate8) -> EncodedX86_64Instruction {
-        unsafe { utils::enc_I::encode_I_imm8([0xCD], imm8) }
-    }
-
-    /// Generate debug trap. More or less equivalent to `int 1`.
-    #[inline(always)]
-    pub const fn encode_int1() -> EncodedX86_64Instruction {
-        unsafe { EncodedX86_64Instruction::from_array([0xF1]) }
-    }
-
-    /// Generate breakpoint trap. More or less equivalent to `int 3`.
-    #[inline(always)]
-    pub const fn encode_int3() -> EncodedX86_64Instruction {
-        unsafe { EncodedX86_64Instruction::from_array([0xCC]) }
-    }
-
     /// Fast call to privilege level 0 system procedures.
     #[inline(always)]
     pub const fn encode_sysenter() -> EncodedX86_64Instruction {
@@ -1447,5 +1429,28 @@ pub mod call {
     #[inline(always)]
     pub const unsafe fn encode_call_rm64(rm64: GPROrMemory) -> EncodedX86_64Instruction {
         unsafe { utils::enc_M::encode_M_gpr_or_memory([0xFF], 0x02, &rm64, false, false) }
+    }
+}
+
+/// Holds encoders for variants of `int` instruction.
+pub mod int {
+    use super::*;
+
+    /// Generate software interrupt with vector specified by immediate byte.
+    #[inline(always)]
+    pub const fn encode_int_imm8(imm8: Immediate8) -> EncodedX86_64Instruction {
+        unsafe { utils::enc_I::encode_I_imm8([0xCD], imm8) }
+    }
+
+    /// Generate debug trap. More or less equivalent to `int 1`.
+    #[inline(always)]
+    pub const fn encode_int_1() -> EncodedX86_64Instruction {
+        unsafe { EncodedX86_64Instruction::from_array([0xF1]) }
+    }
+
+    /// Generate breakpoint trap. More or less equivalent to `int 3`.
+    #[inline(always)]
+    pub const fn encode_int_3() -> EncodedX86_64Instruction {
+        unsafe { EncodedX86_64Instruction::from_array([0xCC]) }
     }
 }
