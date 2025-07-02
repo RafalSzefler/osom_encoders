@@ -57,6 +57,18 @@ pub mod singleton {
     pub const fn encode_int3() -> EncodedX86_64Instruction {
         unsafe { EncodedX86_64Instruction::from_array([0xCC]) }
     }
+
+    /// Fast call to privilege level 0 system procedures.
+    #[inline(always)]
+    pub const fn encode_sysenter() -> EncodedX86_64Instruction {
+        unsafe { EncodedX86_64Instruction::from_array([0x0F, 0x34]) }
+    }
+
+    /// Fast call to privilege level 0 system procedures. New variant of sysenter for 64-bit mode.
+    #[inline(always)]
+    pub const fn encode_syscall() -> EncodedX86_64Instruction {
+        unsafe { EncodedX86_64Instruction::from_array([0x0F, 0x05]) }
+    }
 }
 
 /// Holds encoders for variants of `ret` instruction.

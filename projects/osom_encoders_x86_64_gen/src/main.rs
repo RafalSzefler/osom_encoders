@@ -1,3 +1,8 @@
+//! The purpose of this project is to generate code for `osom_encoders_x86_64` crate.
+//! We used it instead of doing build scripts so that we don't add unnecessary
+//! dependencies (e.g. xml parser) to `osom_encoders_x86_64` crate.
+//!
+//! It is not supposed to be used directly.
 mod generator;
 mod globals;
 mod models;

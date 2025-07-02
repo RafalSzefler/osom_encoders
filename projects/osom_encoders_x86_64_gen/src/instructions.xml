@@ -1205,4 +1205,26 @@
         </variant_set>
     </instruction>
 
+    <instruction>
+        <mnemonic>sysenter</mnemonic>
+        <variant_set>
+            <variant>
+                <opcode>0F34</opcode>
+                <operand_encoding>ZO</operand_encoding>
+                <description>Fast call to privilege level 0 system procedures.</description>
+            </variant>
+        </variant_set>
+    </instruction>
+
+    <instruction>
+        <mnemonic>syscall</mnemonic>
+        <variant_set>
+            <variant>
+                <opcode>0F05</opcode>
+                <operand_encoding>ZO</operand_encoding>
+                <description>Fast call to privilege level 0 system procedures. New variant of sysenter for 64-bit mode.</description>
+            </variant>
+        </variant_set>
+    </instruction>
+
 </instruction_set>

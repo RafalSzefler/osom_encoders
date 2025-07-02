@@ -31,6 +31,8 @@ pub enum Mnemonic {
     int = 16,
     int1 = 17,
     int3 = 18,
+    sysenter = 19,
+    syscall = 20,
 }
 
 impl Mnemonic {
@@ -56,6 +58,8 @@ impl Mnemonic {
             Self::int => "int",
             Self::int1 => "int1",
             Self::int3 => "int3",
+            Self::sysenter => "sysenter",
+            Self::syscall => "syscall",
         }
     }
 
@@ -80,6 +84,8 @@ impl Mnemonic {
             "int" => Ok(Self::int),
             "int1" => Ok(Self::int1),
             "int3" => Ok(Self::int3),
+            "sysenter" => Ok(Self::sysenter),
+            "syscall" => Ok(Self::syscall),
 
             _ => Err(InvalidMnemonicError),
         }
