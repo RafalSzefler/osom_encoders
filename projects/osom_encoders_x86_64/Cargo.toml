@@ -1,6 +1,6 @@
 [package]
 name = "osom_encoders_x86_64"
-version = "0.1.4"
+version = "0.1.5"
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
