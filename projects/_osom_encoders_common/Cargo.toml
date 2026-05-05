@@ -1,0 +1,9 @@
+[package]
+name = "_osom_encoders_common"
+version = "0.1.0"
+edition.workspace = true
+authors.workspace = true
+rust-version.workspace = true
+license-file.workspace = true
+
+[dependencies]

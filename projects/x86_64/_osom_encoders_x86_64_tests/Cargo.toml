@@ -1,0 +1,13 @@
+[package]
+name = "_osom_encoders_x86_64_tests"
+version = "0.1.0"
+publish = false
+edition.workspace = true
+authors.workspace = true
+rust-version.workspace = true
+license-file.workspace = true
+
+[dependencies]
+region = { version = "3.0" }
+
+osom_encoders_x86_64 = { path = "../osom_encoders_x86_64", version = "0.1.0" }

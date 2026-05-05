@@ -1,0 +1,13 @@
+[package]
+name = "osom_encoders_x86_64"
+version = "0.1.0"
+edition.workspace = true
+authors.workspace = true
+rust-version.workspace = true
+license-file.workspace = true
+
+[dependencies]
+_osom_encoders_common = { path = "../../_osom_encoders_common", version = "0.1.0" }
+
+[dev-dependencies]
+rstest = { workspace = true }

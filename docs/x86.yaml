@@ -1,0 +1,721 @@
+operand_encodings:
+  - id: ZO
+    description: Zero operands.
+  - id: I
+    description: Single immediate operand.
+  - id: MI
+    description: Immediate to memory/register operands.
+  - id: OI
+    description: Immediate to register operands.
+  - id: MR
+    description: Register operand to memory/register operand (or vice versa).
+  - id: M
+    description: Single register or memory operand.
+
+operands:
+  - id: Imm8
+    description: 8-bit immediate value.
+  - id: Imm16
+    description: 16-bit immediate value.
+  - id: Imm32
+    description: 32-bit immediate value.
+  - id: Imm64
+    description: 64-bit immediate value.
+  - id: RM8
+    description: 8-bit general purpose register or memory operand.
+  - id: RM16
+    description: 16-bit general purpose register or memory operand.
+  - id: RM32
+    description: 32-bit general purpose register or memory operand.
+  - id: RM64
+    description: 64-bit general purpose register or memory operand.
+  - id: Reg8
+    description: 8-bit general purpose register.
+  - id: Reg16
+    description: 16-bit general purpose register.
+  - id: Reg32
+    description: 32-bit general purpose register.
+  - id: Reg64
+    description: 64-bit general purpose register.
+  - id: Mem64
+    description: "64-bit memory operand (note: we support 64-bit memories only)"
+
+flags:
+  - id: OSO
+    description: Requires operand size override prefix.
+  - id: RexW
+    description: Requires REX.W prefix.
+
+instruction_groups:
+  - id: 0
+    name: lock
+    variants:
+      - id: 0
+        primary_opcode: F0
+        operand_encoding: ZO
+        description: Lock prefix used for atomic operations.
+
+  - id: 1
+    name: nop
+    variants:
+      - id: 0
+        primary_opcode: 90
+        operand_encoding: ZO
+        description: No operation.
+
+  - id: 2
+    name: cpuid
+    variants:
+      - id: 0
+        primary_opcode: 0FA2
+        operand_encoding: ZO
+        description: CPU identification.
+
+  - id: 3
+    name: sysenter
+    variants:
+      - id: 0
+        primary_opcode: 0F34
+        operand_encoding: ZO
+        description: Fast call to privilege level 0 system procedures.
+
+  - id: 4
+    name: syscall
+    variants:
+      - id: 0
+        primary_opcode: 0F05
+        operand_encoding: ZO
+        description: Fast call to privilege level 0 system procedures. New variant of sysenter for 64-bit mode.
+
+  - id: 5
+    name: ret
+    variants:
+      - id: 0
+        primary_opcode: C3
+        operand_encoding: ZO
+        description: Return to calling procedure.
+      - id: 1
+        primary_opcode: C2
+        operand_encoding: I
+        operands: [Imm16]
+        description: Pop [16-bit immediate] bytes from stack and return to calling procedure.
+
+  - id: 6
+    name: mov
+    variants:
+      - id: 0
+        primary_opcode: C6
+        extended_opcode: 0
+        operand_encoding: MI
+        operands: [RM8, Imm8]
+        description: Move 8-bit immediate to 8-bit register or memory.
+      - id: 1
+        primary_opcode: C7
+        extended_opcode: 0
+        operand_encoding: MI
+        operands: [RM16, Imm16]
+        description: Move 16-bit immediate to 16-bit register or memory.
+      - id: 2
+        primary_opcode: C7
+        extended_opcode: 0
+        operand_encoding: MI
+        operands: [RM32, Imm32]
+        description: Move 32-bit immediate to 32-bit register or memory.
+      - id: 3
+        primary_opcode: C7
+        extended_opcode: 0
+        operand_encoding: MI
+        operands: [RM64, Imm32]
+        description: Move 32-bit immediate to 64-bit register or memory, sign extended.
+      - id: 4
+        primary_opcode: B0
+        operand_encoding: OI
+        operands: [Reg8, Imm8]
+        description: Move 8-bit immediate to 8-bit register.
+      - id: 5
+        primary_opcode: B8
+        operand_encoding: OI
+        operands: [Reg16, Imm16]
+        description: Move 16-bit immediate to 16-bit register.
+      - id: 6
+        primary_opcode: B8
+        operand_encoding: OI
+        operands: [Reg32, Imm32]
+        description: Move 32-bit immediate to 32-bit register.
+      - id: 7
+        primary_opcode: B8
+        operand_encoding: OI
+        operands: [Reg64, Imm64]
+        description: Move 64-bit immediate to 64-bit register.
+      - id: 8
+        primary_opcode: 88
+        operand_encoding: MR
+        operands: [RM8, Reg8]
+        description: Move 8-bit register to 8-bit register or memory.
+      - id: 9
+        primary_opcode: 89
+        operand_encoding: MR
+        operands: [RM16, Reg16]
+        description: Move 16-bit register to 16-bit register or memory.
+      - id: 10
+        primary_opcode: 89
+        operand_encoding: MR
+        operands: [RM32, Reg32]
+        description: Move 32-bit register to 32-bit register or memory.
+      - id: 11
+        primary_opcode: 89
+        operand_encoding: MR
+        operands: [RM64, Reg64]
+        description: Move 64-bit register to 64-bit register or memory.
+      - id: 12
+        primary_opcode: 8A
+        operand_encoding: MR
+        operands: [Reg8, RM8]
+        description: Move 8-bit register or memory to 8-bit register.
+      - id: 13
+        primary_opcode: 8B
+        operand_encoding: MR
+        operands: [Reg16, RM16]
+        description: Move 16-bit register or memory to 16-bit register.
+      - id: 14
+        primary_opcode: 8B
+        operand_encoding: MR
+        operands: [Reg32, RM32]
+        description: Move 32-bit register or memory to 32-bit register.
+      - id: 15
+        primary_opcode: 8B
+        operand_encoding: MR
+        operands: [Reg64, RM64]
+        description: Move 64-bit register or memory to 64-bit register.
+
+  - id: 7
+    name: add
+    variants:
+      - id: 0
+        primary_opcode: 04
+        name: AL_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: Add 8-bit immediate to AL register.
+      - id: 1
+        primary_opcode: 05
+        name: AX_Imm16
+        operand_encoding: I
+        operands: [Imm16]
+        description: Add 16-bit immediate to AX register.
+        flags: [OSO]
+      - id: 2
+        primary_opcode: 05
+        name: EAX_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: Add 32-bit immediate to EAX register.
+      - id: 3
+        primary_opcode: 05
+        name: RAX_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: Add 32-bit immediate to RAX register (sign-extended to 64 bits).
+        flags: [RexW]
+      - id: 4
+        primary_opcode: 80
+        extended_opcode: 0
+        operand_encoding: MI
+        operands: [RM8, Imm8]
+        description: Add 8-bit immediate to 8-bit register or memory.
+      - id: 5
+        primary_opcode: 81
+        extended_opcode: 0
+        operand_encoding: MI
+        operands: [RM16, Imm16]
+        description: Add 16-bit immediate to 16-bit register or memory.
+        flags: [OSO]
+      - id: 6
+        primary_opcode: 81
+        extended_opcode: 0
+        operand_encoding: MI
+        operands: [RM32, Imm32]
+        description: Add 32-bit immediate to 32-bit register or memory.
+      - id: 7
+        primary_opcode: 81
+        extended_opcode: 0
+        operand_encoding: MI
+        operands: [RM64, Imm32]
+        description: Add 32-bit immediate to 64-bit register or memory (sign-extended to 64 bits).
+        flags: [RexW]
+      - id: 8
+        primary_opcode: 83
+        extended_opcode: 0
+        operand_encoding: MI
+        operands: [RM16, Imm8]
+        description: Add 8-bit immediate (sign-extended) to 16-bit register or memory.
+        flags: [OSO]
+      - id: 9
+        primary_opcode: 83
+        extended_opcode: 0
+        operand_encoding: MI
+        operands: [RM32, Imm8]
+        description: Add 8-bit immediate (sign-extended) to 32-bit register or memory.
+      - id: 10
+        primary_opcode: 83
+        extended_opcode: 0
+        operand_encoding: MI
+        operands: [RM64, Imm8]
+        description: Add 8-bit immediate (sign-extended) to 64-bit register or memory.
+        flags: [RexW]
+      - id: 11
+        primary_opcode: 00
+        operand_encoding: MR
+        operands: [RM8, Reg8]
+        description: Add 8-bit register to 8-bit register or memory.
+      - id: 12
+        primary_opcode: 01
+        operand_encoding: MR
+        operands: [RM16, Reg16]
+        description: Add 16-bit register to 16-bit register or memory.
+        flags: [OSO]
+      - id: 13
+        primary_opcode: 01
+        operand_encoding: MR
+        operands: [RM32, Reg32]
+        description: Add 32-bit register to 32-bit register or memory.
+      - id: 14
+        primary_opcode: 01
+        operand_encoding: MR
+        operands: [RM64, Reg64]
+        description: Add 64-bit register to 64-bit register or memory.
+        flags: [RexW]
+      - id: 15
+        primary_opcode: 02
+        operand_encoding: MR
+        operands: [Reg8, RM8]
+        description: Add 8-bit register or memory to 8-bit register.
+      - id: 16
+        primary_opcode: 03
+        operand_encoding: MR
+        operands: [Reg16, RM16]
+        description: Add 16-bit register or memory to 16-bit register.
+        flags: [OSO]
+      - id: 17
+        primary_opcode: 03
+        operand_encoding: MR
+        operands: [Reg32, RM32]
+        description: Add 32-bit register or memory to 32-bit register.
+      - id: 18
+        primary_opcode: 03
+        operand_encoding: MR
+        operands: [Reg64, RM64]
+        description: Add 64-bit register or memory to 64-bit register.
+        flags: [RexW]
+
+  - id: 8
+    name: jmp
+    variants:
+      - id: 0
+        primary_opcode: EB
+        operand_encoding: I
+        operands: [Imm8]
+        description: Short jump to RIP-relative address. Takes 2 bytes only.
+      - id: 1
+        primary_opcode: E9
+        operand_encoding: I
+        operands: [Imm32]
+        description: Long jump to RIP-relative address. Takes 5 bytes.
+      - id: 2
+        primary_opcode: FF
+        extended_opcode: 4
+        operand_encoding: M
+        operands: [RM64]
+        description: Jump to 64-bit register or memory.
+
+  - id: 9
+    name: jcc
+    variants:
+      - id: 0
+        primary_opcode: 77
+        name: A_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: "Conditional short jump to RIP-relative address. Condition: Above (in unsigned sense). Takes 2 bytes."
+      - id: 1
+        primary_opcode: 0F87
+        name: A_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: "Conditional long jump to RIP-relative address. Condition: Above (in unsigned sense). Takes 6 bytes."
+      - id: 2
+        primary_opcode: 73
+        name: AE_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: "Conditional short jump to RIP-relative address. Condition: Above Or Equal (in unsigned sense). Takes 2 bytes."
+      - id: 3
+        primary_opcode: 0F83
+        name: AE_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: "Conditional long jump to RIP-relative address. Condition: Above Or Equal (in unsigned sense). Takes 6 bytes."
+      - id: 4
+        primary_opcode: 72
+        name: B_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: "Conditional short jump to RIP-relative address. Condition: Below (in unsigned sense). Takes 2 bytes."
+      - id: 5
+        primary_opcode: 0F82
+        name: B_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: "Conditional long jump to RIP-relative address. Condition: Below (in unsigned sense). Takes 6 bytes."
+      - id: 6
+        primary_opcode: 76
+        name: BE_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: "Conditional short jump to RIP-relative address. Condition: Below Or Equal (in unsigned sense). Takes 2 bytes."
+      - id: 7
+        primary_opcode: 0F86
+        name: BE_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: "Conditional long jump to RIP-relative address. Condition: Below Or Equal (in unsigned sense). Takes 6 bytes."
+      - id: 8
+        primary_opcode: 74
+        name: E_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: "Conditional short jump to RIP-relative address. Condition: Equal. Takes 2 bytes."
+      - id: 9
+        primary_opcode: 0F84
+        name: E_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: "Conditional long jump to RIP-relative address. Condition: Equal. Takes 6 bytes."
+      - id: 10
+        primary_opcode: 7F
+        name: G_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: "Conditional short jump to RIP-relative address. Condition: Greater (in signed sense). Takes 2 bytes."
+      - id: 11
+        primary_opcode: 0F8F
+        name: G_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: "Conditional long jump to RIP-relative address. Condition: Greater (in signed sense). Takes 6 bytes."
+      - id: 12
+        primary_opcode: 7D
+        name: GE_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: "Conditional short jump to RIP-relative address. Condition: Greater Or Equal (in signed sense). Takes 2 bytes."
+      - id: 13
+        primary_opcode: 0F8D
+        name: GE_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: "Conditional long jump to RIP-relative address. Condition: Greater Or Equal (in signed sense). Takes 6 bytes."
+      - id: 14
+        primary_opcode: 7C
+        name: L_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: "Conditional short jump to RIP-relative address. Condition: Less (in signed sense). Takes 2 bytes."
+      - id: 15
+        primary_opcode: 0F8C
+        name: L_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: "Conditional long jump to RIP-relative address. Condition: Less (in signed sense). Takes 6 bytes."
+      - id: 16
+        primary_opcode: 7E
+        name: LE_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: "Conditional short jump to RIP-relative address. Condition: Less Or Equal (in signed sense). Takes 2 bytes."
+      - id: 17
+        primary_opcode: 0F8E
+        name: LE_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: "Conditional long jump to RIP-relative address. Condition: Less Or Equal (in signed sense). Takes 6 bytes."
+      - id: 18
+        primary_opcode: 75
+        name: NE_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: "Conditional short jump to RIP-relative address. Condition: Not Equal. Takes 2 bytes."
+      - id: 19
+        primary_opcode: 0F85
+        name: NE_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: "Conditional long jump to RIP-relative address. Condition: Not Equal. Takes 6 bytes."
+      - id: 20
+        primary_opcode: 71
+        name: NO_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: "Conditional short jump to RIP-relative address. Condition: No Overflow. Takes 2 bytes."
+      - id: 21
+        primary_opcode: 0F81
+        name: NO_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: "Conditional long jump to RIP-relative address. Condition: No Overflow. Takes 6 bytes."
+      - id: 22
+        primary_opcode: 7B
+        name: NP_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: "Conditional short jump to RIP-relative address. Condition: No Parity. Takes 2 bytes."
+      - id: 23
+        primary_opcode: 0F8B
+        name: NP_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: "Conditional long jump to RIP-relative address. Condition: No Parity. Takes 6 bytes."
+      - id: 24
+        primary_opcode: 79
+        name: NS_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: "Conditional short jump to RIP-relative address. Condition: No Sign. Takes 2 bytes."
+      - id: 25
+        primary_opcode: 0F89
+        name: NS_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: "Conditional long jump to RIP-relative address. Condition: No Sign. Takes 6 bytes."
+      - id: 26
+        primary_opcode: 70
+        name: O_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: "Conditional short jump to RIP-relative address. Condition: Overflow. Takes 2 bytes."
+      - id: 27
+        primary_opcode: 0F80
+        name: O_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: "Conditional long jump to RIP-relative address. Condition: Overflow. Takes 6 bytes."
+      - id: 28
+        primary_opcode: 7A
+        name: P_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: "Conditional short jump to RIP-relative address. Condition: Parity. Takes 2 bytes."
+      - id: 29
+        primary_opcode: 0F8A
+        name: P_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: "Conditional long jump to RIP-relative address. Condition: Parity. Takes 6 bytes."
+      - id: 30
+        primary_opcode: 7A
+        name: PE_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: "Conditional short jump to RIP-relative address. Condition: Parity Even. Takes 2 bytes."
+      - id: 31
+        primary_opcode: 0F8A
+        name: PE_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: "Conditional long jump to RIP-relative address. Condition: Parity Even. Takes 6 bytes."
+      - id: 32
+        primary_opcode: 7B
+        name: PO_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: "Conditional short jump to RIP-relative address. Condition: Parity Odd. Takes 2 bytes."
+      - id: 33
+        primary_opcode: 0F8B
+        name: PO_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: "Conditional long jump to RIP-relative address. Condition: Parity Odd. Takes 6 bytes."
+      - id: 34
+        primary_opcode: 78
+        name: S_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: "Conditional short jump to RIP-relative address. Condition: Sign. Takes 2 bytes."
+      - id: 35
+        primary_opcode: 0F88
+        name: S_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: "Conditional long jump to RIP-relative address. Condition: Sign. Takes 6 bytes."
+      - id: 36
+        primary_opcode: 72
+        name: C_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: "Conditional short jump to RIP-relative address. Condition: Carry. Takes 2 bytes."
+      - id: 37
+        primary_opcode: 0F82
+        name: C_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: "Conditional long jump to RIP-relative address. Condition: Carry. Takes 6 bytes."
+      - id: 38
+        primary_opcode: 73
+        name: NC_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: "Conditional short jump to RIP-relative address. Condition: Not Carry. Takes 2 bytes."
+      - id: 39
+        primary_opcode: 0F83
+        name: NC_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: "Conditional long jump to RIP-relative address. Condition: Not Carry. Takes 6 bytes."
+
+  - id: 10
+    name: call
+    variants:
+      - id: 0
+        primary_opcode: E8
+        operand_encoding: I
+        operands: [Imm32]
+        description: Call to RIP-relative address.
+      - id: 1
+        primary_opcode: FF
+        extended_opcode: 2
+        operand_encoding: M
+        operands: [RM64]
+        description: Call to address in 64-bit register or memory.
+
+  - id: 11
+    name: cmp
+    variants:
+      - id: 0
+        primary_opcode: 3C
+        name: AL_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: Compare 8-bit immediate with AL register.
+      - id: 1
+        primary_opcode: 3D
+        name: AX_Imm16
+        operand_encoding: I
+        operands: [Imm16]
+        flags: [OSO]
+        description: Compare 16-bit immediate with AX register.
+      - id: 2
+        primary_opcode: 3D
+        name: EAX_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: Compare 32-bit immediate with EAX register.
+      - id: 3
+        primary_opcode: 3D
+        name: RAX_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        flags: [RexW]
+        description: Compare 32-bit immediate sign-extended with RAX register.
+      - id: 4
+        primary_opcode: 80
+        extended_opcode: 7
+        operand_encoding: MI
+        operands: [RM8, Imm8]
+        description: Compare 8-bit immediate with 8-bit register or memory.
+      - id: 5
+        primary_opcode: 81
+        extended_opcode: 7
+        operand_encoding: MI
+        operands: [RM16, Imm16]
+        description: Compare 16-bit immediate with 16-bit register or memory.
+      - id: 6
+        primary_opcode: 81
+        extended_opcode: 7
+        operand_encoding: MI
+        operands: [RM32, Imm32]
+        description: Compare 32-bit immediate with 32-bit register or memory.
+      - id: 7
+        primary_opcode: 81
+        extended_opcode: 7
+        operand_encoding: MI
+        operands: [RM64, Imm32]
+        description: Compare 32-bit immediate with 64-bit register or memory.
+      - id: 8
+        primary_opcode: 83
+        extended_opcode: 7
+        operand_encoding: MI
+        operands: [RM16, Imm8]
+        description: Compare 8-bit immediate (sign-extended) with 16-bit register or memory.
+      - id: 9
+        primary_opcode: 83
+        extended_opcode: 7
+        operand_encoding: MI
+        operands: [RM32, Imm8]
+        description: Compare 8-bit immediate (sign-extended) with 32-bit register or memory.
+      - id: 10
+        primary_opcode: 83
+        extended_opcode: 7
+        operand_encoding: MI
+        operands: [RM64, Imm8]
+        description: Compare 8-bit immediate (sign-extended) with 64-bit register or memory.
+      - id: 11
+        primary_opcode: 38
+        operand_encoding: MR
+        operands: [RM8, Reg8]
+        description: Compare 8-bit register with 8-bit register or memory.
+      - id: 12
+        primary_opcode: 39
+        operand_encoding: MR
+        operands: [RM16, Reg16]
+        description: Compare 16-bit register with 16-bit register or memory.
+      - id: 13
+        primary_opcode: 39
+        operand_encoding: MR
+        operands: [RM32, Reg32]
+        description: Compare 32-bit register with 32-bit register or memory.
+      - id: 14
+        primary_opcode: 39
+        operand_encoding: MR
+        operands: [RM64, Reg64]
+        description: Compare 64-bit register with 64-bit register or memory.
+      - id: 15
+        primary_opcode: 3A
+        operand_encoding: MR
+        operands: [Reg8, RM8]
+        description: Compare 8-bit register or memory with 8-bit register.
+      - id: 16
+        primary_opcode: 3B
+        operand_encoding: MR
+        operands: [Reg16, RM16]
+        description: Compare 16-bit register or memory with 16-bit register.
+      - id: 17
+        primary_opcode: 3B
+        operand_encoding: MR
+        operands: [Reg32, RM32]
+        description: Compare 32-bit register or memory with 32-bit register.
+      - id: 18
+        primary_opcode: 3B
+        operand_encoding: MR
+        operands: [Reg64, RM64]
+        description: Compare 64-bit register or memory with 64-bit register.
+
+  - id: 12
+    name: lea
+    variants:
+      - id: 0
+        primary_opcode: 8D
+        operand_encoding: MR
+        operands: [Reg16, Mem64]
+        flags: [OSO]
+        description: Load effective address from memory into 16-bit register.
+      - id: 1
+        primary_opcode: 8D
+        operand_encoding: MR
+        operands: [Reg32, Mem64]
+        description: Load effective address from memory into 32-bit register.
+      - id: 2
+        primary_opcode: 8D
+        operand_encoding: MR
+        operands: [Reg64, Mem64]
+        flags: [RexW]
+        description: Load effective address from memory into 64-bit register.
