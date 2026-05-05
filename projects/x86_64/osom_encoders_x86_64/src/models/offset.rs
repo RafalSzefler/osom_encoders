@@ -41,6 +41,30 @@ impl Offset {
             Self::Bit32(imm32) => imm32,
         }
     }
+
+    /// Creates a new [`Offset`] out of raw `i8`.
+    #[inline]
+    pub const fn from_i8(value: i8) -> Self {
+        Self::Bit8(Immediate8::from_i8(value))
+    }
+
+    /// Creates a new [`Offset`] out of raw `u8`.
+    #[inline]
+    pub const fn from_u8(value: u8) -> Self {
+        Self::Bit8(Immediate8::from_u8(value))
+    }
+
+    /// Creates a new [`Offset`] out of raw `i32`.
+    #[inline]
+    pub const fn from_i32(value: i32) -> Self {
+        Self::Bit32(Immediate32::from_i32(value))
+    }
+
+    /// Creates a new [`Offset`] out of raw `u32`.
+    #[inline]
+    pub const fn from_u32(value: u32) -> Self {
+        Self::Bit32(Immediate32::from_u32(value))
+    }
 }
 
 impl From<Immediate32> for Offset {
