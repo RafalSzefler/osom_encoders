@@ -1,5 +1,6 @@
 use rstest::rstest;
 
+use osom_encoders_x86_64::constants::*;
 use osom_encoders_x86_64::encoders::*;
 use osom_encoders_x86_64::models::*;
 
@@ -12,6 +13,7 @@ fn test_jcc_short_a(#[case] imm8: i8, #[case] expected: &[u8]) {
     let imm8 = Immediate8::from_i8(imm8);
     let instr = unsafe { jcc::encode_a_imm8(imm8) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_SHORT_LENGTH);
 }
 
 #[rstest]
@@ -22,6 +24,7 @@ fn test_jcc_short_ae(#[case] imm8: i8, #[case] expected: &[u8]) {
     let imm8 = Immediate8::from_i8(imm8);
     let instr = unsafe { jcc::encode_ae_imm8(imm8) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_SHORT_LENGTH);
 }
 
 #[rstest]
@@ -32,6 +35,7 @@ fn test_jcc_short_b(#[case] imm8: i8, #[case] expected: &[u8]) {
     let imm8 = Immediate8::from_i8(imm8);
     let instr = unsafe { jcc::encode_b_imm8(imm8) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_SHORT_LENGTH);
 }
 
 #[rstest]
@@ -42,6 +46,7 @@ fn test_jcc_short_be(#[case] imm8: i8, #[case] expected: &[u8]) {
     let imm8 = Immediate8::from_i8(imm8);
     let instr = unsafe { jcc::encode_be_imm8(imm8) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_SHORT_LENGTH);
 }
 
 #[rstest]
@@ -52,6 +57,7 @@ fn test_jcc_short_e(#[case] imm8: i8, #[case] expected: &[u8]) {
     let imm8 = Immediate8::from_i8(imm8);
     let instr = unsafe { jcc::encode_e_imm8(imm8) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_SHORT_LENGTH);
 }
 
 #[rstest]
@@ -72,6 +78,7 @@ fn test_jcc_short_ge(#[case] imm8: i8, #[case] expected: &[u8]) {
     let imm8 = Immediate8::from_i8(imm8);
     let instr = unsafe { jcc::encode_ge_imm8(imm8) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_SHORT_LENGTH);
 }
 
 #[rstest]
@@ -82,6 +89,7 @@ fn test_jcc_short_l(#[case] imm8: i8, #[case] expected: &[u8]) {
     let imm8 = Immediate8::from_i8(imm8);
     let instr = unsafe { jcc::encode_l_imm8(imm8) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_SHORT_LENGTH);
 }
 
 #[rstest]
@@ -92,6 +100,7 @@ fn test_jcc_short_le(#[case] imm8: i8, #[case] expected: &[u8]) {
     let imm8 = Immediate8::from_i8(imm8);
     let instr = unsafe { jcc::encode_le_imm8(imm8) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_SHORT_LENGTH);
 }
 
 #[rstest]
@@ -102,6 +111,7 @@ fn test_jcc_short_ne(#[case] imm8: i8, #[case] expected: &[u8]) {
     let imm8 = Immediate8::from_i8(imm8);
     let instr = unsafe { jcc::encode_ne_imm8(imm8) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_SHORT_LENGTH);
 }
 
 #[rstest]
@@ -112,6 +122,7 @@ fn test_jcc_short_no(#[case] imm8: i8, #[case] expected: &[u8]) {
     let imm8 = Immediate8::from_i8(imm8);
     let instr = unsafe { jcc::encode_no_imm8(imm8) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_SHORT_LENGTH);
 }
 
 #[rstest]
@@ -122,6 +133,7 @@ fn test_jcc_short_np(#[case] imm8: i8, #[case] expected: &[u8]) {
     let imm8 = Immediate8::from_i8(imm8);
     let instr = unsafe { jcc::encode_np_imm8(imm8) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_SHORT_LENGTH);
 }
 
 #[rstest]
@@ -132,6 +144,7 @@ fn test_jcc_short_ns(#[case] imm8: i8, #[case] expected: &[u8]) {
     let imm8 = Immediate8::from_i8(imm8);
     let instr = unsafe { jcc::encode_ns_imm8(imm8) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_SHORT_LENGTH);
 }
 
 #[rstest]
@@ -142,6 +155,7 @@ fn test_jcc_short_o(#[case] imm8: i8, #[case] expected: &[u8]) {
     let imm8 = Immediate8::from_i8(imm8);
     let instr = unsafe { jcc::encode_o_imm8(imm8) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_SHORT_LENGTH);
 }
 
 #[rstest]
@@ -152,6 +166,7 @@ fn test_jcc_short_p(#[case] imm8: i8, #[case] expected: &[u8]) {
     let imm8 = Immediate8::from_i8(imm8);
     let instr = unsafe { jcc::encode_p_imm8(imm8) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_SHORT_LENGTH);
 }
 
 #[rstest]
@@ -162,6 +177,7 @@ fn test_jcc_short_s(#[case] imm8: i8, #[case] expected: &[u8]) {
     let imm8 = Immediate8::from_i8(imm8);
     let instr = unsafe { jcc::encode_s_imm8(imm8) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_SHORT_LENGTH);
 }
 
 // Test cases for JCC instructions (long jumps)
@@ -173,6 +189,7 @@ fn test_jcc_long_a(#[case] imm32: i32, #[case] expected: &[u8]) {
     let imm32 = Immediate32::from_i32(imm32);
     let instr = unsafe { jcc::encode_a_imm32(imm32) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_LONG_LENGTH);
 }
 
 #[rstest]
@@ -183,6 +200,7 @@ fn test_jcc_long_ae(#[case] imm32: i32, #[case] expected: &[u8]) {
     let imm32 = Immediate32::from_i32(imm32);
     let instr = unsafe { jcc::encode_ae_imm32(imm32) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_LONG_LENGTH);
 }
 
 #[rstest]
@@ -193,6 +211,7 @@ fn test_jcc_long_b(#[case] imm32: i32, #[case] expected: &[u8]) {
     let imm32 = Immediate32::from_i32(imm32);
     let instr = unsafe { jcc::encode_b_imm32(imm32) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_LONG_LENGTH);
 }
 
 #[rstest]
@@ -203,6 +222,7 @@ fn test_jcc_long_be(#[case] imm32: i32, #[case] expected: &[u8]) {
     let imm32 = Immediate32::from_i32(imm32);
     let instr = unsafe { jcc::encode_be_imm32(imm32) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_LONG_LENGTH);
 }
 
 #[rstest]
@@ -213,6 +233,7 @@ fn test_jcc_long_e(#[case] imm32: i32, #[case] expected: &[u8]) {
     let imm32 = Immediate32::from_i32(imm32);
     let instr = unsafe { jcc::encode_e_imm32(imm32) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_LONG_LENGTH);
 }
 
 #[rstest]
@@ -223,6 +244,7 @@ fn test_jcc_long_g(#[case] imm32: i32, #[case] expected: &[u8]) {
     let imm32 = Immediate32::from_i32(imm32);
     let instr = unsafe { jcc::encode_g_imm32(imm32) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_LONG_LENGTH);
 }
 
 #[rstest]
@@ -233,6 +255,7 @@ fn test_jcc_long_ge(#[case] imm32: i32, #[case] expected: &[u8]) {
     let imm32 = Immediate32::from_i32(imm32);
     let instr = unsafe { jcc::encode_ge_imm32(imm32) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_LONG_LENGTH);
 }
 
 #[rstest]
@@ -243,6 +266,7 @@ fn test_jcc_long_l(#[case] imm32: i32, #[case] expected: &[u8]) {
     let imm32 = Immediate32::from_i32(imm32);
     let instr = unsafe { jcc::encode_l_imm32(imm32) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_LONG_LENGTH);
 }
 
 #[rstest]
@@ -253,6 +277,7 @@ fn test_jcc_long_le(#[case] imm32: i32, #[case] expected: &[u8]) {
     let imm32 = Immediate32::from_i32(imm32);
     let instr = unsafe { jcc::encode_le_imm32(imm32) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_LONG_LENGTH);
 }
 
 #[rstest]
@@ -263,6 +288,7 @@ fn test_jcc_long_ne(#[case] imm32: i32, #[case] expected: &[u8]) {
     let imm32 = Immediate32::from_i32(imm32);
     let instr = unsafe { jcc::encode_ne_imm32(imm32) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_LONG_LENGTH);
 }
 
 #[rstest]
@@ -273,6 +299,7 @@ fn test_jcc_long_no(#[case] imm32: i32, #[case] expected: &[u8]) {
     let imm32 = Immediate32::from_i32(imm32);
     let instr = unsafe { jcc::encode_no_imm32(imm32) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_LONG_LENGTH);
 }
 
 #[rstest]
@@ -283,6 +310,7 @@ fn test_jcc_long_np(#[case] imm32: i32, #[case] expected: &[u8]) {
     let imm32 = Immediate32::from_i32(imm32);
     let instr = unsafe { jcc::encode_np_imm32(imm32) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_LONG_LENGTH);
 }
 
 #[rstest]
@@ -293,6 +321,7 @@ fn test_jcc_long_ns(#[case] imm32: i32, #[case] expected: &[u8]) {
     let imm32 = Immediate32::from_i32(imm32);
     let instr = unsafe { jcc::encode_ns_imm32(imm32) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_LONG_LENGTH);
 }
 
 #[rstest]
@@ -303,6 +332,7 @@ fn test_jcc_long_o(#[case] imm32: i32, #[case] expected: &[u8]) {
     let imm32 = Immediate32::from_i32(imm32);
     let instr = unsafe { jcc::encode_o_imm32(imm32) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_LONG_LENGTH);
 }
 
 #[rstest]
@@ -313,6 +343,7 @@ fn test_jcc_long_p(#[case] imm32: i32, #[case] expected: &[u8]) {
     let imm32 = Immediate32::from_i32(imm32);
     let instr = unsafe { jcc::encode_p_imm32(imm32) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_LONG_LENGTH);
 }
 
 #[rstest]
@@ -323,4 +354,29 @@ fn test_jcc_long_s(#[case] imm32: i32, #[case] expected: &[u8]) {
     let imm32 = Immediate32::from_i32(imm32);
     let instr = unsafe { jcc::encode_s_imm32(imm32) };
     assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_LONG_LENGTH);
+}
+
+#[rstest]
+#[case(-1, &[0x77, 0xFF])] // JA
+#[case(0, &[0x77, 0x00])]
+#[case(1, &[0x77, 0x01])]
+fn test_jcc_short_a_patch(#[case] imm8: i8, #[case] expected: &[u8]) {
+    let imm8 = Immediate8::from_i8(imm8);
+    let mut instr = unsafe { jcc::encode_a_imm8(0u8.into()) };
+    instr.as_slice_mut()[JCC_SHORT_IMM8_OFFSET..].copy_from_slice(&imm8.encode());
+    assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_SHORT_LENGTH);
+}
+
+#[rstest]
+#[case(-1, &[0x0F, 0x88, 0xFF, 0xFF, 0xFF, 0xFF])] // JS
+#[case(0, &[0x0F, 0x88, 0x00, 0x00, 0x00, 0x00])]
+#[case(1, &[0x0F, 0x88, 0x01, 0x00, 0x00, 0x00])]
+fn test_jcc_long_s_patch(#[case] imm32: i32, #[case] expected: &[u8]) {
+    let imm32 = Immediate32::from_i32(imm32);
+    let mut instr = unsafe { jcc::encode_s_imm32(0.into()) };
+    instr.as_slice_mut()[JCC_LONG_IMM32_OFFSET..].copy_from_slice(&imm32.encode());
+    assert_eq!(instr.as_slice(), expected);
+    assert_eq!(instr.as_slice().len(), JCC_LONG_LENGTH);
 }

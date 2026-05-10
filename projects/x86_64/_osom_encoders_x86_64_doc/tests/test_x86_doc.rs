@@ -3,9 +3,9 @@ use _osom_encoders_x86_64_doc::{OperandEncodingId, OperandId, X86Doc};
 #[test]
 fn test_x86_doc() {
     let x86_doc = X86Doc::create();
-    assert_eq!(x86_doc.operand_encodings.len(), 6);
+    assert_eq!(x86_doc.operand_encodings.len(), 7);
     assert_eq!(x86_doc.operands.len(), 13);
-    assert_eq!(x86_doc.instruction_groups.len(), 13);
+    assert_eq!(x86_doc.instruction_groups.len(), 18);
 
     let lock_group = x86_doc
         .instruction_groups
