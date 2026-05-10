@@ -6,7 +6,6 @@ use super::core::{OPERAND_SIZE_OVERRIDE_PREFIX, REX_B};
 ///
 /// The caller has to ensure that the operands are valid,
 /// in particular the function does not check register sizes.
-#[warn(warnings)]
 pub const unsafe fn encode(opcode: [u8; 1], gpr: GPR) -> EncodedX86_64Instruction {
     debug_assert!(!gpr.size().equals(Size::Bit8));
     debug_assert!(!gpr.size().equals(Size::Bit32));
