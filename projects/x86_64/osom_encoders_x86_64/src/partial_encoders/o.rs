@@ -11,7 +11,7 @@ pub const unsafe fn encode(opcode: [u8; 1], gpr: GPR) -> EncodedX86_64Instructio
     debug_assert!(!gpr.size().equals(Size::Bit32));
     let mut encoded_instruction = EncodedX86_64Instruction::new();
     if gpr.size().equals(Size::Bit16) {
-        encoded_instruction.push_array([OPERAND_SIZE_OVERRIDE_PREFIX]);
+        encoded_instruction.push_array([OPERAND_SIZE_OVERRIDE_PREFIX.get()]);
     }
     if gpr.is_extended() {
         encoded_instruction.push_array([REX_B.get()]);

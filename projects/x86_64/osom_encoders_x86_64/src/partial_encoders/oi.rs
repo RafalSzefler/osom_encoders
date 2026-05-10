@@ -31,7 +31,7 @@ pub const unsafe fn encode_reg8_imm8(opcode: u8, gpr: GPR, imm8: Immediate8) -> 
 /// in particular the function does not check register sizes.
 pub const unsafe fn encode_reg16_imm16(opcode: u8, gpr: GPR, imm16: Immediate16) -> EncodedX86_64Instruction {
     debug_assert!(gpr.size().equals(Size::Bit16));
-    let mut encoded_instruction = EncodedX86_64Instruction::from_array([OPERAND_SIZE_OVERRIDE_PREFIX]);
+    let mut encoded_instruction = EncodedX86_64Instruction::from_array([OPERAND_SIZE_OVERRIDE_PREFIX.get()]);
     if gpr.is_extended() {
         encoded_instruction.push_array([REX_B.get()]);
     }

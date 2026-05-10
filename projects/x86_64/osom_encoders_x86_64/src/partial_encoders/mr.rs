@@ -18,7 +18,7 @@ pub const unsafe fn encode<const N: usize>(
     unsafe {
         let mut result_instr = EncodedX86_64Instruction::new();
         if gpr.size().equals(Size::Bit16) {
-            result_instr.push_array([OPERAND_SIZE_OVERRIDE_PREFIX]);
+            result_instr.push_array([OPERAND_SIZE_OVERRIDE_PREFIX.get()]);
         }
 
         match gpr_or_memory {
@@ -92,7 +92,7 @@ pub const unsafe fn encode<const N: usize>(
 pub const unsafe fn encode_mem<const N: usize>(opcode: [u8; N], memory: Memory, gpr: GPR) -> EncodedX86_64Instruction {
     let mut result_instr = EncodedX86_64Instruction::new();
     if gpr.size().equals(Size::Bit16) {
-        result_instr.push_array([OPERAND_SIZE_OVERRIDE_PREFIX]);
+        result_instr.push_array([OPERAND_SIZE_OVERRIDE_PREFIX.get()]);
     }
 
     let ext = memory.base_index_is_extended();

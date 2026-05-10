@@ -13,7 +13,7 @@ pub const unsafe fn encode_imm8<const N: usize>(opcode: [u8; N], imm8: Immediate
 /// Encodes I encoding with an 16-bit immediate value and operand size override.
 #[inline]
 pub const unsafe fn encode_imm16_oso<const N: usize>(opcode: [u8; N], imm16: Immediate16) -> EncodedX86_64Instruction {
-    let mut instr = EncodedX86_64Instruction::from_array([OPERAND_SIZE_OVERRIDE_PREFIX]);
+    let mut instr = EncodedX86_64Instruction::from_array([OPERAND_SIZE_OVERRIDE_PREFIX.get()]);
     instr.push_array(opcode);
     instr.push_array(imm16.encode());
     instr

@@ -21,7 +21,7 @@ pub const unsafe fn encode_gpr_or_memory<const N: usize>(
         match gpr_or_memory {
             GPROrMemory::GPR { gpr } => {
                 if bit16_requires_oso_prefix && gpr.size().equals(Size::Bit16) {
-                    result_instr.push_array([OPERAND_SIZE_OVERRIDE_PREFIX]);
+                    result_instr.push_array([OPERAND_SIZE_OVERRIDE_PREFIX.get()]);
                 }
 
                 let rex = {

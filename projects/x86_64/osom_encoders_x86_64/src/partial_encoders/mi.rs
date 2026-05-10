@@ -67,7 +67,7 @@ pub const unsafe fn encode_rm16_imm16<const N: usize>(
     unsafe {
         gpr_size_is_valid(gpr_or_memory, Size::Bit16);
         let mut instr = EncodedX86_64Instruction::new();
-        instr.push_array([OPERAND_SIZE_OVERRIDE_PREFIX]);
+        instr.push_array([OPERAND_SIZE_OVERRIDE_PREFIX.get()]);
         instr.push_slice(encode_gpr_or_memory(opcode, extended_opcode, gpr_or_memory, true, false).as_slice());
         instr.push_array(imm16.encode());
         instr
@@ -92,7 +92,7 @@ pub const unsafe fn encode_rm16_imm8<const N: usize>(
     unsafe {
         gpr_size_is_valid(gpr_or_memory, Size::Bit16);
         let mut instr = EncodedX86_64Instruction::new();
-        instr.push_array([OPERAND_SIZE_OVERRIDE_PREFIX]);
+        instr.push_array([OPERAND_SIZE_OVERRIDE_PREFIX.get()]);
         instr.push_slice(encode_gpr_or_memory(opcode, extended_opcode, gpr_or_memory, true, false).as_slice());
         instr.push_array(imm8.encode());
         instr

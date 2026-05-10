@@ -7,7 +7,13 @@ use crate::models::{Memory, Size};
 
 use crate::models::{GPR, Offset, Scale};
 
-pub const OPERAND_SIZE_OVERRIDE_PREFIX: u8 = 0x66;
+pub const OPERAND_SIZE_OVERRIDE_PREFIX: NonZero<u8> = const {
+    match NonZero::new(0x66) {
+        Some(value) => value,
+        None => panic!("OPERAND_SIZE_OVERRIDE_PREFIX is not a valid NonZero<u8>"),
+    }
+};
+
 pub const REX: NonZero<u8> = rex(0, 0, 0, 0);
 pub const REX_W: NonZero<u8> = rex(1, 0, 0, 0);
 pub const REX_R: NonZero<u8> = rex(0, 1, 0, 0);
