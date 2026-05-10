@@ -38,12 +38,3 @@ mod encoded_instruction;
 pub use encoded_instruction::*;
 
 mod const_checks;
-
-/// Asserts that an encoded instruction matches the expected bytes.
-///
-/// # Panics
-///
-/// Panics if the encoded bytes of `actual` do not equal `expected`.
-pub fn assert_encoded_instruction_eq(expected: &[u8], actual: &EncodedX86_64Instruction) {
-    assert_eq!(expected, actual.as_slice());
-}

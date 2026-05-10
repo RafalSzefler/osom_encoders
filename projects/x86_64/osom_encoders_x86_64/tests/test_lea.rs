@@ -7,14 +7,14 @@ use osom_encoders_x86_64::models::*;
 #[case(GPR::AX, Memory::Based { base: GPR::RDX, offset: Offset::from_i8(4) }, &[0x66, 0x8D, 0x42, 0x04])]
 fn test_lea_reg16_m(#[case] reg16: GPR, #[case] m: Memory, #[case] expected: &[u8]) {
     let instr = unsafe { lea::encode_reg16_mem64(reg16, m) };
-    assert_encoded_instruction_eq(expected, &instr);
+    assert_eq!(instr.as_slice(), expected);
 }
 
 #[rstest]
 #[case(GPR::EAX, Memory::Based { base: GPR::RDX, offset: Offset::from_i8(4) }, &[0x8D, 0x42, 0x04])]
 fn test_lea_reg32_m(#[case] reg32: GPR, #[case] m: Memory, #[case] expected: &[u8]) {
     let instr = unsafe { lea::encode_reg32_mem64(reg32, m) };
-    assert_encoded_instruction_eq(expected, &instr);
+    assert_eq!(instr.as_slice(), expected);
 }
 
 #[rstest]
@@ -25,5 +25,5 @@ fn test_lea_reg32_m(#[case] reg32: GPR, #[case] m: Memory, #[case] expected: &[u
 #[case(GPR::R14, Memory::BasedAndScaled { base: GPR::R15, index: GPR::RAX, scale: Scale::Scale2, offset: Offset::from_i32(3) }, &[0x4D, 0x8D, 0xB4, 0x47, 0x03, 0x00, 0x00, 0x00])]
 fn test_lea_reg64_m(#[case] reg64: GPR, #[case] m: Memory, #[case] expected: &[u8]) {
     let instr = unsafe { lea::encode_reg64_mem64(reg64, m) };
-    assert_encoded_instruction_eq(expected, &instr);
+    assert_eq!(instr.as_slice(), expected);
 }

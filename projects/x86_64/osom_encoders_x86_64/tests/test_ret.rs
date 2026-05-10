@@ -6,7 +6,7 @@ use osom_encoders_x86_64::models::*;
 #[test]
 fn test_encode_ret() {
     let instr = unsafe { ret::encode() };
-    assert_encoded_instruction_eq(&[0xC3], &instr);
+    assert_eq!(instr.as_slice(), &[0xC3]);
 }
 
 #[rstest]
@@ -15,5 +15,5 @@ fn test_encode_ret() {
 fn test_encode_ret_imm16(#[case] imm16: u16, #[case] expected: &[u8]) {
     let imm16 = Immediate16::from_u16(imm16);
     let instr = unsafe { ret::encode_imm16(imm16) };
-    assert_encoded_instruction_eq(expected, &instr);
+    assert_eq!(instr.as_slice(), expected);
 }

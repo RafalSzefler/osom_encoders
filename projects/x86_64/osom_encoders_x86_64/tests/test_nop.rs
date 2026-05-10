@@ -2,12 +2,11 @@ use osom_encoders_x86_64::encoders::nop::NopLength;
 use rstest::rstest;
 
 use osom_encoders_x86_64::encoders::*;
-use osom_encoders_x86_64::models::*;
 
 #[test]
 fn test_encode_nop() {
     let instr = unsafe { nop::encode() };
-    assert_encoded_instruction_eq(&[0x90], &instr);
+    assert_eq!(instr.as_slice(), &[0x90]);
 }
 
 #[rstest]
@@ -24,7 +23,7 @@ fn test_encode_nop() {
 fn test_encode_nop_with_length(#[case] length: u8, #[case] expected: &[u8]) {
     let len = NopLength::new(length).unwrap();
     let instr = unsafe { nop::encode_with_len(len) };
-    assert_encoded_instruction_eq(expected, &instr);
+    assert_eq!(instr.as_slice(), expected);
 }
 
 #[rstest]
