@@ -33,8 +33,11 @@ impl EncodedX86_64Instruction {
     /// This function panics if the array is too large.
     #[inline]
     pub const fn from_array<const SIZE: usize>(array: [u8; SIZE]) -> Self {
+        if SIZE == 0 {
+            return Self::new();
+        }
+
         const {
-            assert!(SIZE > 0, "SIZE must be greater than 0");
             assert!(SIZE <= Self::MAX_SIZE, "SIZE must be less than or equal to MAX_SIZE");
         }
         let mut result = Self::new();
@@ -57,8 +60,11 @@ impl EncodedX86_64Instruction {
     /// This function panics if the array is too large.
     #[inline]
     pub(crate) const fn push_array<const SIZE: usize>(&mut self, array: [u8; SIZE]) {
+        if SIZE == 0 {
+            return;
+        }
+
         const {
-            assert!(SIZE > 0, "SIZE must be greater than 0");
             assert!(SIZE <= Self::MAX_SIZE, "SIZE must be less than or equal to MAX_SIZE");
         }
         self.value.push_array(array);

@@ -102,7 +102,7 @@ pub const unsafe fn encode_with_len(len: NopLength) -> EncodedX86_64Instruction 
     use crate::partial_encoders::zo::encode;
     unsafe {
         match len.as_u8() {
-            0 => EncodedX86_64Instruction::new(),
+            0 => encode([]),
             1 => encode([0x90]),
             2 => encode([0x66, 0x90]),
             3 => encode([0x0F, 0x1F, 0x00]),
