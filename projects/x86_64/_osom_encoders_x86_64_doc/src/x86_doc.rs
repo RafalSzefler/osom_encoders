@@ -27,6 +27,9 @@ pub enum OperandEncodingId {
 
     /// Single register or memory operand.
     M,
+
+    /// Register encoded in opcode.
+    O,
 }
 
 /// Represents various operands used by the `X86_64` instruction set.

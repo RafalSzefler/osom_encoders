@@ -3,6 +3,8 @@ operand_encodings:
     description: Zero operands.
   - id: I
     description: Single immediate operand.
+  - id: O
+    description: Register encoded in opcode.
   - id: MI
     description: Immediate to memory/register operands.
   - id: OI
@@ -719,3 +721,308 @@ instruction_groups:
         operands: [Reg64, Mem64]
         flags: [RexW]
         description: Load effective address from memory into 64-bit register.
+
+  - id: 13
+    name: push
+    variants:
+      - id: 0
+        primary_opcode: FF
+        extended_opcode: 6
+        operand_encoding: M
+        operands: [RM64]
+        description: Push 64-bit register or memory onto the stack.
+      - id: 1
+        primary_opcode: 50
+        operand_encoding: O
+        operands: [Reg64]
+        description: Push 64-bit register onto the stack.
+      - id: 2
+        primary_opcode: 6A
+        operand_encoding: I
+        operands: [Imm8]
+        description: Push 8-bit immediate onto the stack (sign-extended).
+      - id: 3
+        primary_opcode: 68
+        operand_encoding: I
+        operands: [Imm16]
+        flags: [OSO]
+        description: Push 16-bit immediate onto the stack (sign-extended).
+      - id: 4
+        primary_opcode: 68
+        operand_encoding: I
+        operands: [Imm32]
+        description: Push 32-bit immediate onto the stack (sign-extended).
+
+  - id: 14
+    name: pop
+    variants:
+      - id: 0
+        primary_opcode: 8F
+        extended_opcode: 0
+        operand_encoding: M
+        operands: [RM64]
+        description: Pop 64-bit value from the stack into register or memory.
+      - id: 1
+        primary_opcode: 58
+        operand_encoding: O
+        operands: [Reg64]
+        description: Pop 64-bit value from the stack into register.
+
+  - id: 15
+    name: sub
+    variants:
+      - id: 0
+        primary_opcode: 2C
+        name: AL_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: Subtract 8-bit immediate from AL register.
+      - id: 1
+        primary_opcode: 2D
+        name: AX_Imm16
+        operand_encoding: I
+        operands: [Imm16]
+        flags: [OSO]
+        description: Subtract 16-bit immediate from AX register.
+      - id: 2
+        primary_opcode: 2D
+        name: EAX_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: Subtract 32-bit immediate from EAX register.
+      - id: 3
+        primary_opcode: 2D
+        name: RAX_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        flags: [RexW]
+        description: Subtract 32-bit immediate from RAX register (sign-extended to 64 bits).
+      - id: 4
+        primary_opcode: 80
+        extended_opcode: 5
+        operand_encoding: MI
+        operands: [RM8, Imm8]
+        description: Subtract 8-bit immediate from 8-bit register or memory.
+      - id: 5
+        primary_opcode: 81
+        extended_opcode: 5
+        operand_encoding: MI
+        operands: [RM16, Imm16]
+        flags: [OSO]
+        description: Subtract 16-bit immediate from 16-bit register or memory.
+      - id: 6
+        primary_opcode: 81
+        extended_opcode: 5
+        operand_encoding: MI
+        operands: [RM32, Imm32]
+        description: Subtract 32-bit immediate from 32-bit register or memory.
+      - id: 7
+        primary_opcode: 81
+        extended_opcode: 5
+        operand_encoding: MI
+        operands: [RM64, Imm32]
+        flags: [RexW]
+        description: Subtract 32-bit immediate from 64-bit register or memory (sign-extended to 64 bits).
+      - id: 8
+        primary_opcode: 83
+        extended_opcode: 5
+        operand_encoding: MI
+        operands: [RM16, Imm8]
+        flags: [OSO]
+        description: Subtract 8-bit immediate (sign-extended) from 16-bit register or memory.
+      - id: 9
+        primary_opcode: 83
+        extended_opcode: 5
+        operand_encoding: MI
+        operands: [RM32, Imm8]
+        description: Subtract 8-bit immediate (sign-extended) from 32-bit register or memory.
+      - id: 10
+        primary_opcode: 83
+        extended_opcode: 5
+        operand_encoding: MI
+        operands: [RM64, Imm8]
+        flags: [RexW]
+        description: Subtract 8-bit immediate (sign-extended) from 64-bit register or memory.
+      - id: 11
+        primary_opcode: 28
+        operand_encoding: MR
+        operands: [RM8, Reg8]
+        description: Subtract 8-bit register from 8-bit register or memory.
+      - id: 12
+        primary_opcode: 29
+        operand_encoding: MR
+        operands: [RM16, Reg16]
+        flags: [OSO]
+        description: Subtract 16-bit register from 16-bit register or memory.
+      - id: 13
+        primary_opcode: 29
+        operand_encoding: MR
+        operands: [RM32, Reg32]
+        description: Subtract 32-bit register from 32-bit register or memory.
+      - id: 14
+        primary_opcode: 29
+        operand_encoding: MR
+        operands: [RM64, Reg64]
+        flags: [RexW]
+        description: Subtract 64-bit register from 64-bit register or memory.
+      - id: 15
+        primary_opcode: 2A
+        operand_encoding: MR
+        operands: [Reg8, RM8]
+        description: Subtract 8-bit register or memory from 8-bit register.
+      - id: 16
+        primary_opcode: 2B
+        operand_encoding: MR
+        operands: [Reg16, RM16]
+        flags: [OSO]
+        description: Subtract 16-bit register or memory from 16-bit register.
+      - id: 17
+        primary_opcode: 2B
+        operand_encoding: MR
+        operands: [Reg32, RM32]
+        description: Subtract 32-bit register or memory from 32-bit register.
+      - id: 18
+        primary_opcode: 2B
+        operand_encoding: MR
+        operands: [Reg64, RM64]
+        flags: [RexW]
+        description: Subtract 64-bit register or memory from 64-bit register.
+
+  - id: 16
+    name: xor
+    variants:
+      - id: 0
+        primary_opcode: 34
+        name: AL_Imm8
+        operand_encoding: I
+        operands: [Imm8]
+        description: Bitwise XOR 8-bit immediate with AL register.
+      - id: 1
+        primary_opcode: 35
+        name: AX_Imm16
+        operand_encoding: I
+        operands: [Imm16]
+        flags: [OSO]
+        description: Bitwise XOR 16-bit immediate with AX register.
+      - id: 2
+        primary_opcode: 35
+        name: EAX_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        description: Bitwise XOR 32-bit immediate with EAX register.
+      - id: 3
+        primary_opcode: 35
+        name: RAX_Imm32
+        operand_encoding: I
+        operands: [Imm32]
+        flags: [RexW]
+        description: Bitwise XOR 32-bit immediate with RAX register (sign-extended to 64 bits).
+      - id: 4
+        primary_opcode: 80
+        extended_opcode: 6
+        operand_encoding: MI
+        operands: [RM8, Imm8]
+        description: Bitwise XOR 8-bit immediate with 8-bit register or memory.
+      - id: 5
+        primary_opcode: 81
+        extended_opcode: 6
+        operand_encoding: MI
+        operands: [RM16, Imm16]
+        flags: [OSO]
+        description: Bitwise XOR 16-bit immediate with 16-bit register or memory.
+      - id: 6
+        primary_opcode: 81
+        extended_opcode: 6
+        operand_encoding: MI
+        operands: [RM32, Imm32]
+        description: Bitwise XOR 32-bit immediate with 32-bit register or memory.
+      - id: 7
+        primary_opcode: 81
+        extended_opcode: 6
+        operand_encoding: MI
+        operands: [RM64, Imm32]
+        flags: [RexW]
+        description: Bitwise XOR 32-bit immediate with 64-bit register or memory (sign-extended to 64 bits).
+      - id: 8
+        primary_opcode: 83
+        extended_opcode: 6
+        operand_encoding: MI
+        operands: [RM16, Imm8]
+        flags: [OSO]
+        description: Bitwise XOR 8-bit immediate (sign-extended) with 16-bit register or memory.
+      - id: 9
+        primary_opcode: 83
+        extended_opcode: 6
+        operand_encoding: MI
+        operands: [RM32, Imm8]
+        description: Bitwise XOR 8-bit immediate (sign-extended) with 32-bit register or memory.
+      - id: 10
+        primary_opcode: 83
+        extended_opcode: 6
+        operand_encoding: MI
+        operands: [RM64, Imm8]
+        flags: [RexW]
+        description: Bitwise XOR 8-bit immediate (sign-extended) with 64-bit register or memory.
+      - id: 11
+        primary_opcode: 30
+        operand_encoding: MR
+        operands: [RM8, Reg8]
+        description: Bitwise XOR 8-bit register with 8-bit register or memory.
+      - id: 12
+        primary_opcode: 31
+        operand_encoding: MR
+        operands: [RM16, Reg16]
+        flags: [OSO]
+        description: Bitwise XOR 16-bit register with 16-bit register or memory.
+      - id: 13
+        primary_opcode: 31
+        operand_encoding: MR
+        operands: [RM32, Reg32]
+        description: Bitwise XOR 32-bit register with 32-bit register or memory.
+      - id: 14
+        primary_opcode: 31
+        operand_encoding: MR
+        operands: [RM64, Reg64]
+        flags: [RexW]
+        description: Bitwise XOR 64-bit register with 64-bit register or memory.
+      - id: 15
+        primary_opcode: 32
+        operand_encoding: MR
+        operands: [Reg8, RM8]
+        description: Bitwise XOR 8-bit register or memory with 8-bit register.
+      - id: 16
+        primary_opcode: 33
+        operand_encoding: MR
+        operands: [Reg16, RM16]
+        flags: [OSO]
+        description: Bitwise XOR 16-bit register or memory with 16-bit register.
+      - id: 17
+        primary_opcode: 33
+        operand_encoding: MR
+        operands: [Reg32, RM32]
+        description: Bitwise XOR 32-bit register or memory with 32-bit register.
+      - id: 18
+        primary_opcode: 33
+        operand_encoding: MR
+        operands: [Reg64, RM64]
+        flags: [RexW]
+        description: Bitwise XOR 64-bit register or memory with 64-bit register.
+
+  - id: 17
+    name: int
+    variants:
+      - id: 0
+        primary_opcode: CD
+        operand_encoding: I
+        operands: [Imm8]
+        description: Generate software interrupt with vector specified by immediate byte.
+      - id: 1
+        primary_opcode: F1
+        name: "1"
+        operand_encoding: ZO
+        description: Generate debug trap. More or less equivalent to `int 1`.
+      - id: 2
+        primary_opcode: CC
+        name: "3"
+        operand_encoding: ZO
+        description: Generate breakpoint trap. More or less equivalent to `int 3`.
