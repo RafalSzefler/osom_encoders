@@ -134,6 +134,13 @@ impl<const CAPACITY: usize> AsRef<[u8]> for FixedBytes<CAPACITY> {
     }
 }
 
+impl<const CAPACITY: usize> AsMut<[u8]> for FixedBytes<CAPACITY> {
+    #[inline(always)]
+    fn as_mut(&mut self) -> &mut [u8] {
+        self.as_slice_mut()
+    }
+}
+
 impl<const CAPACITY: usize> Hash for FixedBytes<CAPACITY> {
     fn hash<H: Hasher>(&self, state: &mut H) {
         self.as_slice().hash(state);
