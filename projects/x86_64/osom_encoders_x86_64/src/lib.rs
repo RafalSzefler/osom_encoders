@@ -6,6 +6,7 @@
 #![allow(clippy::inline_always)]
 #![no_std]
 
+pub mod constants;
 pub mod encoders;
 pub mod models;
 mod partial_encoders;
